@@ -1,8 +1,10 @@
-import React from 'react';
+import './App.css'
+
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
 import Login from './Components/Login'
+import React from 'react';
 import User from './Components/Worker/User'
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
-import './App.css';
 
 function App() {
   return (
