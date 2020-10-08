@@ -1,5 +1,3 @@
-import './App.css'
-
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Login from './Components/Login'

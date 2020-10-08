@@ -1,19 +1,18 @@
-import {
-  AppBar,
-  Button,
-  CssBaseline,
-  Grid,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
-
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import CreateUser from './CreateUser'
-import MenuIcon from "@material-ui/icons/Menu";
-import Proccess from './Proccess'
-import React from "react";
+import AppBar from '@material-ui/core/AppBar'
+import Box from '@material-ui/core/Box'
+import Button from '@material-ui/core/Button'
 //import ShowUsers from "./DisplayUsers/ShowUsers";
+import ConsentForm from './Consent/ConsentForm'
+//import CreateUser from './CreateUser'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Grid from '@material-ui/core/Grid'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from "@material-ui/icons/Menu";
+//import Proccess from './Proccess'
+import React from "react";
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
 import UserDrawer from "./UserDrawer";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -112,11 +111,13 @@ export default function User() {
             [classes.contentShift]: open,
           })}
         >
-          <Grid item xs={1} sm={1} md={3} lg={4}></Grid>
-          <Grid item xs={11} sm={10} md={6} lg={4}>
-            <Proccess />
+          <Grid item xs={1} sm={1} md={3} lg={3}></Grid>
+          <Grid item xs={11} sm={10} md={6} lg={6}>
+          
+            <ConsentForm/>
+            
           </Grid>
-          <Grid item xs={false} sm={1} md={3} lg={4}></Grid>
+          <Grid item xs={false} sm={1} md={3} lg={3}></Grid>
         </Grid>
       </Grid>
     </React.Fragment>
