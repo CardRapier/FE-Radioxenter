@@ -1,18 +1,15 @@
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableFooter,
-  TableHead,
-  TablePagination,
-  TableRow,
-} from "@material-ui/core";
-
+import Paper from "@material-ui/core/Paper"
 import React from "react";
 import Row from "./Row";
-import TablePaginationActions from "./TablePaginationActions";
+import Table from "@material-ui/core/Table"
+import TableBody from "@material-ui/core/TableBody"
+import TableCell from "@material-ui/core/TableCell"
+import TableContainer from "@material-ui/core/TableContainer"
+import TableFooter from "@material-ui/core/TableFooter"
+import TableHead from "@material-ui/core/TableHead"
+import TablePagination from "@material-ui/core/TablePagination"
+import TablePaginationActions from "../TablePaginationActions";
+import TableRow from "@material-ui/core/TableRow"
 
 function createData(
   code,

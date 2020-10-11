@@ -1,14 +1,23 @@
-import { Grid, Input, InputLabel } from "@material-ui/core";
-
+import Grid from "@material-ui/core/Grid";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
 import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  dataRow: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 export default function UserData(props) {
+  const classes = useStyles();
   const { row } = props;
 
   return (
     <React.Fragment>
       <Grid container direction="column">
-        <Grid item container>
+        <Grid item container className={classes.dataRow}>
           <Grid item xs={4}>
             <InputLabel htmlFor="component-disabled">Direccion</InputLabel>
             <Input disabled id="component-disabled" value={row.address} />
@@ -26,7 +35,7 @@ export default function UserData(props) {
             <Input disabled id="component-disabled" value={row.birth} />
           </Grid>
         </Grid>
-        <Grid item container>
+        <Grid item container className={classes.dataRow}>
           <Grid item xs={4}>
             <InputLabel htmlFor="component-disabled">Telefono</InputLabel>
             <Input disabled id="component-disabled" value={row.telephone} />
@@ -42,7 +51,7 @@ export default function UserData(props) {
             <Input disabled id="component-disabled" value={row.city} />
           </Grid>
         </Grid>
-        <Grid item container>
+        <Grid item container className={classes.dataRow}>
           <Grid item xs={4}>
             <InputLabel htmlFor="component-disabled">Sexo</InputLabel>
             <Input disabled id="component-disabled" value={row.sex} />

@@ -27,9 +27,9 @@ export default function Proccess() {
       <Grid container direction={"column"}>
         <Grid container item className={classes.titlebutton} spacing={4}>
           <Grid item>
-            <Typography
+          <Typography
               component="h1"
-              variant="h4"
+              variant="h5"
               align="left"
               color="textPrimary"
               gutterBottom

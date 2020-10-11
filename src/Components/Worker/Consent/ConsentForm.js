@@ -4,6 +4,7 @@ import React from "react";
 import { Text } from "./ConsentText.js";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+
 const useStyles = makeStyles((theme) => ({
   title: {
     padding: theme.spacing(4, 0, 4),
@@ -12,8 +13,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4, 0, 4),
   },
   border: {
-      border: '1px solid',
-  }
+    border: "1px solid",
+  },
+  signature: {
+    height: "45mm",
+    width: "120mm",
+    border: "1px solid #d3d3d3",
+    backgroundColor: "#FFFFFF ",
+  },
 }));
 
 export default function ConsentForm() {
@@ -43,12 +50,7 @@ export default function ConsentForm() {
           <Grid item>
             <div
               id="imageBox"
-              className="boxed"
-              style={{
-                height: "45mm",
-                width: "120mm",
-                border: "1px solid #d3d3d3",
-              }}
+              className={classes.signature}
             ></div>
           </Grid>
         </Grid>
@@ -60,11 +62,17 @@ export default function ConsentForm() {
           spacing={4}
         >
           <Grid item>
-            <Button variant="contained" color="primary" id="btnStartStopWizard" onClick={window.wizardEventController.start_stop} value="Start Wizard">
+            <Button
+              variant="contained"
+              color="primary"
+              id="btnStartStopWizard"
+              onClick={window.wizardEventController.start_stop}
+              value="Start Wizard"
+            >
               Continuar
             </Button>
           </Grid>
-          
+
           <Grid item>
             <Button variant="contained" color="primary">
               Volver

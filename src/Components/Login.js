@@ -3,10 +3,16 @@ import { Button, Grid, TextField, makeStyles } from "@material-ui/core";
 import React from "react";
 
 const useStyles = makeStyles((theme) => ({
+  image: {
+    padding: theme.spacing(4, 0, 4),
+  },
+  grid: {
+    minHeight: "80vh"
+  },
   root: {
     "& .MuiTextField-root": {
       margin: theme.spacing(1),
-      width: "25ch",
+      width: "35ch",
     },
   },
 }));
@@ -21,11 +27,11 @@ export default function Login() {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{ minHeight: "100vh" }}
+        className={classes.grid}
       >
-        <img src="http://radioxenter.com/images/header_logo.png" alt="new" />
+        <img src="http://radioxenter.com/images/header_logo.png" alt="new" className={classes.image} />
 
-        <Grid item xs={3}>
+        <Grid item xs={12}>
           <TextField
             required
             id="outlined"
@@ -33,6 +39,9 @@ export default function Login() {
             defaultValue=""
             variant="outlined"
           />
+
+          </Grid>
+          <Grid item xs={12}>
           <TextField
             id="outlined-password-input"
             label="Password"
@@ -40,12 +49,14 @@ export default function Login() {
             autoComplete="current-password"
             variant="outlined"
           />
-          <Grid item xs={12}>
+          
+        </Grid>
+
+        <Grid item xs={3} justify="flex-end">
             <Button variant="contained" color="primary">
               Ingresar
             </Button>
           </Grid>
-        </Grid>
       </Grid>
     </form>
   );

@@ -1,7 +1,9 @@
-import { IconButton, makeStyles, useTheme } from "@material-ui/core";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@material-ui/icons";
+import { makeStyles, useTheme } from "@material-ui/core/styles"
 
 import FirstPageIcon from "@material-ui/icons/FirstPage";
+import IconButton from '@material-ui/core/IconButton'
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 import LastPageIcon from "@material-ui/icons/LastPage";
 import PropTypes from "prop-types";
 import React from 'react'

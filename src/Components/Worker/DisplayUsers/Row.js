@@ -1,22 +1,20 @@
-import {
-  Box,
-  Button,
-  Collapse,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
-
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import Collapse from "@material-ui/core/Collapse";
+import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import PropTypes from "prop-types";
 import React from "react";
-import UserData from './UserData'
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
+import UserData from "./UserData";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useRowStyles = makeStyles((theme) => ({
   root: {
@@ -24,8 +22,13 @@ const useRowStyles = makeStyles((theme) => ({
       borderBottom: "unset",
     },
   },
+  tableRow: {
+    marginTop: theme.spacing(2),
+    marginBottom: 2,
+  },
+
   button: {
-    flexGrow: 1,
+    marginRight: 2,
   },
 }));
 
@@ -58,7 +61,7 @@ export default function Row(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
-              <UserData row={row}/>
+              <UserData row={row} />
             </Box>
 
             <Box margin={1}>
@@ -83,21 +86,28 @@ export default function Row(props) {
                       <TableCell align="right">{historyRow.price}</TableCell>
                     </TableRow>
                   ))}
-
-                  <TableRow>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                    >
-                      Editar
-                    </Button>
-                    <Button variant="contained" color="primary">
-                      Facturar
-                    </Button>
-                  </TableRow>
                 </TableBody>
               </Table>
+
+              <Grid
+                container
+                justify="flex-end"
+                alignItems="center"
+                className={classes.tableRow}
+                spacing={4}
+                xs={12}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                >
+                  Editar
+                </Button>
+                <Button variant="contained" color="primary">
+                  Facturar
+                </Button>
+              </Grid>
             </Box>
           </Collapse>
         </TableCell>

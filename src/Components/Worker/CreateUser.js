@@ -4,14 +4,14 @@ import {
 } from "@material-ui/pickers";
 
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { Button } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import MomentUtils from "@date-io/moment";
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import moment from 'moment'
+import moment from "moment";
 
 const optionsTypeDocument = ["CI", "TI", "CC", "DNI"];
 const optionsSex = ["Masculino", "Femenino"];
@@ -29,14 +29,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4, 0, 2),
   },
   citypadding: {
-      padding: theme.spacing(2,0,0),
+    padding: theme.spacing(2, 0, 0),
   },
   button: {
-    marginRight: 4     
+    marginRight: 4,
   },
   buttons: {
-    marginTop: theme.spacing(4)
-  }
+    marginTop: theme.spacing(4),
+  },
 }));
 
 export default function CreateUser() {
@@ -50,7 +50,7 @@ export default function CreateUser() {
   const [inputGender, setInputGender] = React.useState("");
   const [city, setCity] = React.useState("");
   const [inputCity, setInputCity] = React.useState("");
-  const [date, setDate] = React.useState(moment())
+  const [date, setDate] = React.useState(moment());
 
   const handleDateChange = (date) => {
     setDate(date);
@@ -61,9 +61,9 @@ export default function CreateUser() {
       <Grid container direction={"column"}>
         <Grid container item className={classes.title} spacing={4}>
           <Grid item>
-            <Typography
+          <Typography
               component="h1"
-              variant="h4"
+              variant="h5"
               align="left"
               color="textPrimary"
               gutterBottom
@@ -221,7 +221,6 @@ export default function CreateUser() {
                       fullWidth
                     />
                   )}
-
                   className={classes.citypadding}
                 />
               </Grid>
@@ -247,9 +246,27 @@ export default function CreateUser() {
             </Grid>
 
             <Grid container item justify="flex-end" className={classes.buttons}>
-                <Button className={classes.button} variant="contained" color="primary">Crear</Button>
-                <Button className={classes.button} variant="contained" color="primary">Limpiar</Button>
-                <Button className={classes.button} variant="contained" color="primary">Cancelar</Button>
+              <Button
+                className={classes.button}
+                variant="contained"
+                color="primary"
+              >
+                Crear
+              </Button>
+              <Button
+                className={classes.button}
+                variant="contained"
+                color="primary"
+              >
+                Limpiar
+              </Button>
+              <Button
+                className={classes.button}
+                variant="contained"
+                color="primary"
+              >
+                Cancelar
+              </Button>
             </Grid>
           </Grid>
         </Grid>
