@@ -65,14 +65,21 @@ export default function ConsentForm() {
             <Button
               variant="contained"
               color="primary"
-              id="btnStartStopWizard"
-              onClick={window.wizardEventController.start_stop}
-              value="Start Wizard"
             >
               Continuar
             </Button>
           </Grid>
-
+          <Grid item>
+            <Button
+              variant="contained"
+              color="primary"
+              id="btnStartStopWizard"
+              onClick={window.wizardEventController.start_stop}
+              value="Start Wizard"
+            >
+              Firmar
+            </Button>
+          </Grid>
           <Grid item>
             <Button variant="contained" color="primary">
               Volver

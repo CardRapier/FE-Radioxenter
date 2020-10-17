@@ -1,5 +1,6 @@
 import { Button, Grid, TextField, makeStyles } from "@material-ui/core";
 
+import { Link } from "react-router-dom";
 import React from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -7,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4, 0, 4),
   },
   grid: {
-    minHeight: "80vh"
+    minHeight: "80vh",
   },
   root: {
     "& .MuiTextField-root": {
@@ -29,7 +30,11 @@ export default function Login() {
         justify="center"
         className={classes.grid}
       >
-        <img src="http://radioxenter.com/images/header_logo.png" alt="new" className={classes.image} />
+        <img
+          src="http://radioxenter.com/images/header_logo.png"
+          alt="new"
+          className={classes.image}
+        />
 
         <Grid item xs={12}>
           <TextField
@@ -39,9 +44,8 @@ export default function Login() {
             defaultValue=""
             variant="outlined"
           />
-
-          </Grid>
-          <Grid item xs={12}>
+        </Grid>
+        <Grid item xs={12}>
           <TextField
             id="outlined-password-input"
             label="Password"
@@ -49,14 +53,18 @@ export default function Login() {
             autoComplete="current-password"
             variant="outlined"
           />
-          
         </Grid>
 
         <Grid item xs={3} justify="flex-end">
-            <Button variant="contained" color="primary">
-              Ingresar
-            </Button>
-          </Grid>
+          <Button
+            component={Link}
+            to="/Empleado/"
+            variant="contained"
+            color="primary"
+          >
+            Ingresar
+          </Button>
+        </Grid>
       </Grid>
     </form>
   );

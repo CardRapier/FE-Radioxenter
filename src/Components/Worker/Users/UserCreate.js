@@ -1,3 +1,4 @@
+import { FormControlLabel, Switch } from "@material-ui/core";
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
@@ -6,6 +7,7 @@ import {
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import { Link } from "react-router-dom";
 import MomentUtils from "@date-io/moment";
 import React from "react";
 import TextField from "@material-ui/core/TextField";
@@ -34,12 +36,12 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginRight: 4,
   },
-  buttons: {
-    marginTop: theme.spacing(4),
+  marginT: {
+    marginTop: theme.spacing(3),
   },
 }));
 
-export default function CreateUser() {
+export default function UserCreate() {
   const classes = useStyles();
 
   const [typeDocument, settypeDocument] = React.useState("");
@@ -51,6 +53,7 @@ export default function CreateUser() {
   const [city, setCity] = React.useState("");
   const [inputCity, setInputCity] = React.useState("");
   const [date, setDate] = React.useState(moment());
+  const [disability, setDisability] = React.useState(false);
 
   const handleDateChange = (date) => {
     setDate(date);
@@ -61,7 +64,7 @@ export default function CreateUser() {
       <Grid container direction={"column"}>
         <Grid container item className={classes.title} spacing={4}>
           <Grid item>
-          <Typography
+            <Typography
               component="h1"
               variant="h5"
               align="left"
@@ -224,7 +227,7 @@ export default function CreateUser() {
                   className={classes.citypadding}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={6} sm={3}>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
                   <Grid container>
                     <KeyboardDatePicker
@@ -243,10 +246,26 @@ export default function CreateUser() {
                   </Grid>
                 </MuiPickersUtilsProvider>
               </Grid>
+              <Grid item xs={6} sm={3}>
+                <FormControlLabel className={classes.marginT}
+                  control={
+                    <Switch
+                      checked={disability}
+                      onChange={() => setDisability(!disability)}
+                      name="disability"
+                      color="primary"
+                    />
+                  }
+                  label="Discapacitado"
+                  labelPlacement="start"
+                />
+              </Grid>
             </Grid>
 
-            <Grid container item justify="flex-end" className={classes.buttons}>
+            <Grid container item justify="flex-end" className={classes.marginT}>
               <Button
+                component={Link}
+                to="/Empleado/Parentesco"
                 className={classes.button}
                 variant="contained"
                 color="primary"

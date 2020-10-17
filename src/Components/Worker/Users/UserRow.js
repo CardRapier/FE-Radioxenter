@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import React from "react";
 import Table from "@material-ui/core/Table";
@@ -32,7 +33,7 @@ const useRowStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Row(props) {
+export default function UserRow(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
@@ -104,7 +105,10 @@ export default function Row(props) {
                 >
                   Editar
                 </Button>
-                <Button variant="contained" color="primary">
+                <Button component={Link}
+              to={{pathname: "/Empleado/CrearFactura", data: row}}
+              variant="contained"
+              color="primary" >
                   Facturar
                 </Button>
               </Grid>
@@ -116,7 +120,7 @@ export default function Row(props) {
   );
 }
 
-Row.propTypes = {
+UserRow.propTypes = {
   row: PropTypes.shape({
     calories: PropTypes.number.isRequired,
     carbs: PropTypes.number.isRequired,

@@ -1,19 +1,23 @@
+import {Route, Switch} from "react-router-dom";
+
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import ConsentForm from "./Consent/ConsentForm";
-import CreateUser from './CreateUser'
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import Proccess from './Proccess'
+import Proccess from "./Process/Proccess";
 import React from "react";
-import Receipt from './Receipt/Receipts'
-import ShowUsers from "./DisplayUsers/ShowUsers";
+import ReceiptCreate from "./Receipt/ReceiptCreate";
+import ReceiptKinship from "./Receipt/ReceiptKinship";
+import Receipts from "./Receipt/Receipts";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import UserDrawer from "./UserDrawer";
+import UserCreate from "./Users/UserCreate";
+import UserDrawer from "./EmployeeDrawer";
+import UserShow from "./Users/UserShow";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -62,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function User() {
+export default function Employee() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -113,7 +117,40 @@ export default function User() {
         >
           <Grid item xs={1} sm={1} md={3} lg={3}></Grid>
           <Grid item xs={11} sm={10} md={6} lg={6}>
-            <Receipt />
+            <Switch>
+              <Route exact path="/Empleado" component={UserShow} />
+              <Route
+                exact
+                path="/Empleado/CrearUsuario"
+                component={UserCreate}
+              />
+              <Route
+                exact
+                path="/Empleado/Parentesco"
+                component={ReceiptKinship}
+              />
+              <Route
+                exact
+                path="/Empleado/Procesos"
+                component={Proccess}
+              />
+              <Route
+                exact
+                path="/Empleado/CrearFactura"
+                component={ReceiptCreate}
+              />
+              <Route
+                exact
+                path="/Empleado/Facturas"
+                component={Receipts}
+              />
+              <Route
+                exact
+                path="/Empleado/Consentimiento"
+                component={ConsentForm}
+              />
+              
+            </Switch>
           </Grid>
           <Grid item xs={false} sm={1} md={3} lg={3}></Grid>
         </Grid>

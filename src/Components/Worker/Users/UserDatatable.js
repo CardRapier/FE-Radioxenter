@@ -1,6 +1,5 @@
 import Paper from "@material-ui/core/Paper"
 import React from "react";
-import Row from "./Row";
 import Table from "@material-ui/core/Table"
 import TableBody from "@material-ui/core/TableBody"
 import TableCell from "@material-ui/core/TableCell"
@@ -10,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead"
 import TablePagination from "@material-ui/core/TablePagination"
 import TablePaginationActions from "../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow"
+import UserRow from "./UserRow";
 
 function createData(
   code,
@@ -148,7 +148,7 @@ const rows = [
   ),
 ];
 
-export default function DataTableUser() {
+export default function UserDatatable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =
@@ -181,7 +181,7 @@ export default function DataTableUser() {
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => (
-            <Row key={row.code} row={row} />
+            <UserRow key={row.code} row={row} />
           ))}
 
           {emptyRows > 0 && (

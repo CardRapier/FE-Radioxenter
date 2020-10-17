@@ -1,9 +1,10 @@
 import Button from "@material-ui/core/Button";
-import DataTableUser from "./DataTableUser";
 import Grid from "@material-ui/core/Grid";
+import { Link } from "react-router-dom";
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import UserDatatable from "./UserDatatable";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -22,15 +23,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ShowUsers() {
+export default function UserShow() {
   const classes = useStyles();
   return (
     <React.Fragment>
       <Grid container direction={"column"}>
         <Grid container item className={classes.titlebutton} spacing={4}>
-        <Grid item xs={3}></Grid>
+          <Grid item xs={3}></Grid>
           <Grid item xs={4}>
-          <Typography
+            <Typography
               component="h1"
               variant="h5"
               align="left"
@@ -41,7 +42,12 @@ export default function ShowUsers() {
             </Typography>
           </Grid>
           <Grid item xs={5}>
-            <Button variant="contained" color="primary">
+            <Button
+              component={Link}
+              to="/Empleado/CrearUsuario"
+              variant="contained"
+              color="primary"
+            >
               Crear
             </Button>
           </Grid>
@@ -58,7 +64,7 @@ export default function ShowUsers() {
         </Grid>
         <Grid container item spacing={4}>
           <Grid item className={classes.margintop4}>
-            <DataTableUser />
+            <UserDatatable />
           </Grid>
         </Grid>
       </Grid>

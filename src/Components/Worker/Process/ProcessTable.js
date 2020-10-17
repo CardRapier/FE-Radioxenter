@@ -1,6 +1,6 @@
 import Paper from "@material-ui/core/Paper";
+import ProcessRow from "./ProcessRow";
 import React from "react";
-import Row from "./Row";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -28,7 +28,7 @@ const rows = [
   createData(3, "Leonardo ALegre", "55891566","10:56", "Mail"),
 ];
 
-export default function TableProcess() {
+export default function ProcessTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =
@@ -49,7 +49,7 @@ export default function TableProcess() {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Nombre</TableCell>
+            <TableCell>Codigo</TableCell>
             <TableCell>Documento</TableCell>
             <TableCell>Hora</TableCell>
             <TableCell>Entrega</TableCell>
@@ -60,12 +60,11 @@ export default function TableProcess() {
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => (
-            <Row key={row.code} row={row} />
+            <ProcessRow key={row.code} row={row} />
           ))}
 
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
             </TableRow>
           )}
         </TableBody>
