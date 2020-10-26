@@ -58,7 +58,7 @@ export default function Login() {
         <Grid item xs={3} justify="flex-end">
           <Button
             component={Link}
-            to="/Empleado/"
+            to="/Administrador/"
             variant="contained"
             color="primary"
           >

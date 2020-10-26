@@ -7,7 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer"
 import TableFooter from "@material-ui/core/TableFooter"
 import TableHead from "@material-ui/core/TableHead"
 import TablePagination from "@material-ui/core/TablePagination"
-import TablePaginationActions from "../TablePaginationActions";
+import TablePaginationActions from "../../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow"
 import UserRow from "./UserRow";
 
@@ -154,7 +154,7 @@ export default function UserDatatable() {
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage) => {
     setPage(newPage);
   };
 

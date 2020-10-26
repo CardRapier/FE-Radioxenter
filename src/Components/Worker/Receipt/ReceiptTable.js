@@ -8,7 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer"
 import TableFooter from "@material-ui/core/TableFooter"
 import TableHead from "@material-ui/core/TableHead"
 import TablePagination from "@material-ui/core/TablePagination"
-import TablePaginationActions from "../TablePaginationActions";
+import TablePaginationActions from "../../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow"
 
 function createData(code, document, date) {

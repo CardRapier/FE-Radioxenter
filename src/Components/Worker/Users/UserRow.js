@@ -6,7 +6,6 @@ import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import {Link} from "react-router-dom";
-import PropTypes from "prop-types";
 import React from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -96,7 +95,6 @@ export default function UserRow(props) {
                 alignItems="center"
                 className={classes.tableRow}
                 spacing={4}
-                xs={12}
               >
                 <Button
                   variant="contained"
@@ -119,21 +117,3 @@ export default function UserRow(props) {
     </React.Fragment>
   );
 }
-
-UserRow.propTypes = {
-  row: PropTypes.shape({
-    calories: PropTypes.number.isRequired,
-    carbs: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    protein: PropTypes.number.isRequired,
-  }).isRequired,
-};
