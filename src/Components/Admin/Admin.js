@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Admin() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const { services, packages } = data.props;
+  const { services, packages, entities, agreements, employees, doctors } = data.props;
   return (
     <React.Fragment>
       <CssBaseline />
@@ -115,6 +115,28 @@ export default function Admin() {
               exact
               path="/Administrador/Paquetes"
               render={() => <AdminShow data={packages} />}
+            />
+            <Route
+              exact
+              path="/Administrador/Entidades"
+              render={() => <AdminShow data={entities} />}
+            />
+            <Route
+              exact
+              path="/Administrador/Convenios"
+              render={() => <AdminShow data={agreements} />}
+            />
+
+            <Route
+              exact
+              path="/Administrador/Empleados"
+              render={() => <AdminShow data={employees} />}
+            />
+
+            <Route
+              exact
+              path="/Administrador/Doctores"
+              render={() => <AdminShow data={doctors} />}
             />
           </Grid>
           <Grid item xs={false} sm={1} md={3} lg={2}></Grid>

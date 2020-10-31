@@ -1,7 +1,11 @@
+import AgreementsDescription from './Descriptions/AgreementsDescription'
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Collapse from "@material-ui/core/Collapse";
 import Divider from "@material-ui/core/Divider";
+import DoctorsDescription from "./Descriptions/DoctorsDescription"
+import EmployeesDescription from "./Descriptions/EmployeesDescription"
+import EntitiesDescription from "./Descriptions/EntitiesDescription"
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -61,6 +65,19 @@ export default function AdminRow(props) {
 
                   case "Paquetes":
                     return <PackageDescription row={row} />;
+
+                  case "Entidades":
+                  return <EntitiesDescription row={row} />;
+
+                  case "Convenios":
+                  return <AgreementsDescription row={row} />;
+
+                  case "Empleados":
+                  return <EmployeesDescription row={row} />;
+
+                  case "Doctores":
+                  return <DoctorsDescription row={row} />;
+
                   default:
                     return "";
                 }
