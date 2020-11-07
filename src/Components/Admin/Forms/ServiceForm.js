@@ -123,6 +123,7 @@ export default function ServiceForm(props) {
                   label="Iva"
                   name="iva_servicio"
                   component={TextFormField}
+                  type="number"
                 />
               </Grid>
             </Grid>

@@ -37,6 +37,13 @@ export const service_schema = yup.object({
     .min(1000, "Debe ser igual o mayor a 1000")
     .typeError("Debe ser un numero")
     .integer("Debe ser un numero entero"),
+  iva_servicio: yup
+    .number()
+    .required("Campo requerido")
+    .min(0, "Debe ser igual o mayor a 0")
+    .max(100, "Debe ser menor o igual a 100")
+    .typeError("Debe ser un numero")
+    .integer("Debe ser un numero entero"),
 });
 
 export const package_schema = yup.object({
@@ -52,6 +59,6 @@ export const package_schema = yup.object({
 
 export const agreement_schema = yup.object({});
 
-export const doctor_schema = yup.object({})
+export const doctor_schema = yup.object({});
 
-export const employee_schema = yup.object({})
+export const employee_schema = yup.object({});
