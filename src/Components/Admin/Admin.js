@@ -5,6 +5,7 @@ import AgreementForm from "./Forms/AgreementForm";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import DoctorForm from "./Forms/DoctorForm";
 import EmployeeForm from "./Forms/EmployeeForm";
 import EntityForm from "./Forms/EntityForm";
 import Grid from "@material-ui/core/Grid";
@@ -188,6 +189,12 @@ export default function Admin() {
               exact
               path="/Administrador/Doctores"
               render={() => <AdminShow data={doctors} />}
+            />
+
+            <Route
+              exact
+              path="/Administrador/CrearDoctor"
+              component={DoctorForm}
             />
           </Grid>
           <Grid item xs={false} sm={1} md={3}></Grid>

@@ -1,4 +1,4 @@
-import { Field, FieldArray, Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 
 import BackDropLoading from "../../BackDropLoading";
 import Chip from "@material-ui/core/Chip";
@@ -82,7 +82,7 @@ export default function AgreementForm(props) {
                 <Grid item xs={6}>
                   <Field
                     required
-                    format="MM/DD/yyyy"
+                    format="DD/MM/yyyy"
                     component={KeyboardDatePicker}
                     label="Fecha Inicial"
                     name="fecha_inicial_convenio"
@@ -92,7 +92,7 @@ export default function AgreementForm(props) {
                 <Grid item xs={6}>
                   <Field
                     required
-                    format="MM/DD/yyyy"
+                    format="DD/MM/yyyy"
                     component={KeyboardDatePicker}
                     label="Fecha Final"
                     name="fecha_final_convenio"
@@ -130,7 +130,7 @@ export default function AgreementForm(props) {
                       </div>
                     )}
                   >
-                    {services === undefined
+                    {services !== undefined
                       ? services.map((service) => (
                           <MenuItem value={service.cod_servicio}>
                             {service.nombre_servicio}

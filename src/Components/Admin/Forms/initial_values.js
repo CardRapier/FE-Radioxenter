@@ -39,6 +39,27 @@ export const agreement_initial_values = {
   precios_servicios: [],
 };
 
-export const doctor_initial_values = {};
+export const doctor_initial_values = {
+  nombres_doctor: "",
+  apellidos_doctor: "",
+  direccion_doctor: "",
+  telefono_doctor: "",
+  documento_doctor: "",
+  cod_tipo_documento: 1,
+  cod_tipo_pref_entrega: 1,
+  correo_doctor: "",
+};
 
-export const employee_initial_values = {};
+export const employee_initial_values = {
+  nombres_empleado: "",
+  apellidos_empleado: "",
+  cod_tipo_documento: 1,
+  documento_empleado: "",
+  direccion_empleado: "",
+  correo_empleado: "",
+  fnacimiento_empleado: moment(),
+  telefono_empleado: "",
+  usuario_empleado: "",
+  cod_tipo_empleado: 1,
+  contrasenia_empleado: "",
+};

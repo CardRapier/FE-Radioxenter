@@ -1,15 +1,16 @@
-import Paper from "@material-ui/core/Paper"
+import Paper from "@material-ui/core/Paper";
 import React from "react";
-import Table from "@material-ui/core/Table"
-import TableBody from "@material-ui/core/TableBody"
-import TableCell from "@material-ui/core/TableCell"
-import TableContainer from "@material-ui/core/TableContainer"
-import TableFooter from "@material-ui/core/TableFooter"
-import TableHead from "@material-ui/core/TableHead"
-import TablePagination from "@material-ui/core/TablePagination"
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableFooter from "@material-ui/core/TableFooter";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../../TablePaginationActions";
-import TableRow from "@material-ui/core/TableRow"
+import TableRow from "@material-ui/core/TableRow";
 import UserRow from "./UserRow";
+import { api_users } from "../../../api_app";
 
 function createData(
   code,
@@ -150,10 +151,15 @@ const rows = [
 
 export default function UserDatatable() {
   const [page, setPage] = React.useState(0);
+  const [users, setUsers] = React.useState([]);
+  React.useEffect(() => {
+    api_users.get("/").then((res) => {
+      setUsers(res.data.respuesta);
+    });
+  }, []);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
+    rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
   const handleChangePage = (newPage) => {
     setPage(newPage);
   };
@@ -178,8 +184,8 @@ export default function UserDatatable() {
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
+            ? users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : users
           ).map((row) => (
             <UserRow key={row.code} row={row} />
           ))}

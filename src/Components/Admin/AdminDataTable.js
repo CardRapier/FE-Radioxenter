@@ -240,8 +240,6 @@ export default function AdminDataTable(props) {
       setRows(rowsDoctors);
     }
   }, [data.title]);
-
-  console.log(rows);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =

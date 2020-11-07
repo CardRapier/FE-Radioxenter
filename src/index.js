@@ -8,7 +8,6 @@ require("dotenv").config();
 
 ReactDOM.render(
   <React.Fragment>
-    {process.env.REACT_APP_API_ROUTE}
     <App />
   </React.Fragment>,
   document.getElementById("root")

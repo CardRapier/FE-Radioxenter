@@ -1,5 +1,4 @@
 import { Field, Form, Formik } from "formik";
-import { api_packages, api_services } from "../../../api_app";
 
 import BackDropLoading from "../../BackDropLoading";
 import Chip from "@material-ui/core/Chip";
@@ -12,6 +11,7 @@ import React from "react";
 import { Select } from "formik-material-ui";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
+import { api_services } from "../../../api_app";
 import { package_initial_values } from "./initial_values";
 import { package_schema } from "./validation_schemas";
 import { useStyles } from "./styles";
@@ -38,9 +38,7 @@ export default function ServiceForm(props) {
       enableReinitialize
       validationSchema={package_schema}
       initialValues={data === undefined ? package_initial_values : data}
-      onSubmit={(values, { setSubmitting, resetForm }) => {
-        console.log(values);
-      }}
+      onSubmit={(values, { setSubmitting, resetForm }) => {}}
     >
       {({ resetForm, isSubmitting, errors }) => (
         <Form>
@@ -99,7 +97,7 @@ export default function ServiceForm(props) {
                     </div>
                   )}
                 >
-                  {services === undefined
+                  {services !== undefined
                     ? services.map((service) => (
                         <MenuItem value={service.cod_servicio}>
                           {service.nombre_servicio}

@@ -9,7 +9,6 @@ import { SnackbarProvider } from "notistack";
 function App() {
   return (
     <SnackbarProvider maxSnack={3}>
-      {process.env.REACT_APP_API_ROUTE}
       <BrowserRouter>
         <Switch>
           <Route path="/Empleado" component={Employee} />

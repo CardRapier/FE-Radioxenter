@@ -1,18 +1,15 @@
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Collapse from "@material-ui/core/Collapse";
+import { Divider } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import React from "react";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Typography from "@material-ui/core/Typography";
 import UserData from "./UserData";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -50,12 +47,14 @@ export default function UserRow(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.document}
+          {row.documento_usuario}
         </TableCell>
-        <TableCell align="right">{row.name}</TableCell>
-        <TableCell align="right">{row.email}</TableCell>
-        <TableCell align="right">{row.cellphone}</TableCell>
-        <TableCell align="right">{row.gender}</TableCell>
+        <TableCell align="right">
+          {row.nombres_usuario + " " + row.apellidos_usuario}
+        </TableCell>
+        <TableCell align="right">{row.correo_usuario}</TableCell>
+        <TableCell align="right">{row.telefono_usuario}</TableCell>
+        <TableCell align="right">{row.genero_usuario}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -63,32 +62,8 @@ export default function UserRow(props) {
             <Box margin={1}>
               <UserData row={row} />
             </Box>
-
+            <Divider />
             <Box margin={1}>
-              <Typography variant="h6" gutterBottom component="div">
-                Historial
-              </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Fecha</TableCell>
-                    <TableCell>Servicios</TableCell>
-                    <TableCell align="right">Valor</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.price}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-
               <Grid
                 container
                 justify="flex-end"
@@ -103,10 +78,12 @@ export default function UserRow(props) {
                 >
                   Editar
                 </Button>
-                <Button component={Link}
-              to={{pathname: "/Empleado/CrearFactura", data: row}}
-              variant="contained"
-              color="primary" >
+                <Button
+                  component={Link}
+                  to={{ pathname: "/Empleado/CrearFactura", data: row }}
+                  variant="contained"
+                  color="primary"
+                >
                   Facturar
                 </Button>
               </Grid>
