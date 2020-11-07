@@ -5,6 +5,7 @@ import AgreementForm from "./Forms/AgreementForm";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import EmployeeForm from "./Forms/EmployeeForm";
 import EntityForm from "./Forms/EntityForm";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
@@ -175,6 +176,12 @@ export default function Admin() {
               exact
               path="/Administrador/Empleados"
               render={() => <AdminShow data={employees} />}
+            />
+
+            <Route
+              exact
+              path="/Administrador/CrearEmpleado"
+              component={EmployeeForm}
             />
 
             <Route

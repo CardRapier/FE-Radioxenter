@@ -99,11 +99,13 @@ export default function ServiceForm(props) {
                     </div>
                   )}
                 >
-                  {services.map((service) => (
-                    <MenuItem value={service.cod_servicio}>
-                      {service.nombre_servicio}
-                    </MenuItem>
-                  ))}
+                  {services === undefined
+                    ? services.map((service) => (
+                        <MenuItem value={service.cod_servicio}>
+                          {service.nombre_servicio}
+                        </MenuItem>
+                      ))
+                    : ""}
                 </Field>
                 <FormHelperText>{errors.servicios}</FormHelperText>
               </Grid>

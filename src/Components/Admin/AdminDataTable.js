@@ -267,7 +267,7 @@ export default function AdminDataTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(rowsPerPage > 0
+          {(rows !== undefined && rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => {
