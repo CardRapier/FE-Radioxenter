@@ -10,6 +10,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow";
+import { api_services } from "../../api_app";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -205,7 +206,18 @@ const rowsEmployees = [
   ),
 ];
 
-const rowsDoctors = [createDoctors(1, "Wilson Vargas", "Calle 123c 56 - 51", "4895126", "10123155", "CC", "Correo", "oswall@gmail.com")];
+const rowsDoctors = [
+  createDoctors(
+    1,
+    "Wilson Vargas",
+    "Calle 123c 56 - 51",
+    "4895126",
+    "10123155",
+    "CC",
+    "Correo",
+    "oswall@gmail.com"
+  ),
+];
 
 export default function AdminDataTable(props) {
   const classes = useStyles();
@@ -213,7 +225,9 @@ export default function AdminDataTable(props) {
   const [rows, setRows] = React.useState([]);
   React.useEffect(() => {
     if (data.title === "Servicios") {
-      setRows(rowsServices);
+      api_services.get("/").then((res) => {
+        setRows(res.data.respuesta);
+      });
     } else if (data.title === "Paquetes") {
       setRows(rowsPackages);
     } else if (data.title === "Entidades") {
@@ -223,10 +237,11 @@ export default function AdminDataTable(props) {
     } else if (data.title === "Empleados") {
       setRows(rowsEmployees);
     } else if (data.title === "Doctores") {
-      setRows(rowsDoctors)
+      setRows(rowsDoctors);
     }
-  });
-  console.log(rows[0]);
+  }, [data.title]);
+
+  console.log(rows);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =
@@ -309,15 +324,11 @@ export default function AdminDataTable(props) {
                   />
                 );
 
-                case "Doctores":
+              case "Doctores":
                 return (
                   <AdminRow
                     key={row.code}
-                    tableCells={[
-                      row.name,
-                      row.telephone,
-                      row.email
-                    ]}
+                    tableCells={[row.name, row.telephone, row.email]}
                     row={row}
                     data={data}
                   />
@@ -326,8 +337,12 @@ export default function AdminDataTable(props) {
               default:
                 return (
                   <AdminRow
-                    key={row.code}
-                    tableCells={[row.name, row.price, row.iva]}
+                    key={row.cod_servicio}
+                    tableCells={[
+                      row.nombre_servicio,
+                      row.precio_servicio,
+                      row.iva_servicio,
+                    ]}
                     row={row}
                     data={data}
                   />

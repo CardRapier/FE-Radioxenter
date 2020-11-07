@@ -1,14 +1,18 @@
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AdminDrawer from "./AdminDrawer";
 import AdminShow from "./AdminShow";
+import AgreementForm from "./Forms/AgreementForm";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import EntityForm from "./Forms/EntityForm";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import PackageForm from "./Forms/PackageForm";
 import React from "react";
 import { Route } from "react-router-dom";
+import ServiceForm from "./Forms/ServiceForm";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import clsx from "clsx";
@@ -62,7 +66,14 @@ const useStyles = makeStyles((theme) => ({
 export default function Admin() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const { services, packages, entities, agreements, employees, doctors } = data.props;
+  const {
+    services,
+    packages,
+    entities,
+    agreements,
+    employees,
+    doctors,
+  } = data.props;
   return (
     <React.Fragment>
       <CssBaseline />
@@ -104,27 +115,60 @@ export default function Admin() {
             [classes.contentShift]: open,
           })}
         >
-          <Grid item xs={1} sm={1} md={3} lg={2}></Grid>
-          <Grid item xs={11} sm={10} md={6} lg={8}>
+          <Grid item xs={1} sm={1} md={3}></Grid>
+          <Grid item xs={11} sm={10} md={6}>
             <Route
               exact
               path="/Administrador"
               render={() => <AdminShow data={services} />}
             />
+
+            <Route
+              exact
+              path="/Administrador/CrearServicio"
+              component={ServiceForm}
+            />
+
+            <Route
+              exact
+              path="/Administrador/EditarServicio"
+              component={ServiceForm}
+            />
+
             <Route
               exact
               path="/Administrador/Paquetes"
               render={() => <AdminShow data={packages} />}
             />
+
+            <Route
+              exact
+              path="/Administrador/CrearPaquete"
+              component={PackageForm}
+            />
+
             <Route
               exact
               path="/Administrador/Entidades"
               render={() => <AdminShow data={entities} />}
             />
+
+            <Route
+              exact
+              path="/Administrador/CrearEntidad"
+              component={EntityForm}
+            />
+
             <Route
               exact
               path="/Administrador/Convenios"
               render={() => <AdminShow data={agreements} />}
+            />
+
+            <Route
+              exact
+              path="/Administrador/CrearConvenio"
+              component={AgreementForm}
             />
 
             <Route
@@ -139,7 +183,7 @@ export default function Admin() {
               render={() => <AdminShow data={doctors} />}
             />
           </Grid>
-          <Grid item xs={false} sm={1} md={3} lg={2}></Grid>
+          <Grid item xs={false} sm={1} md={3}></Grid>
         </Grid>
       </Grid>
     </React.Fragment>

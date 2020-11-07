@@ -5,7 +5,7 @@ export default function ServiceDescription(props) {
   const { row } = props;
   return (
     <Typography variant="h6" gutterBottom component="div">
-      {row.description}
+      {row.descripcion_servicio}
     </Typography>
   );
 }

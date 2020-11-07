@@ -1,4 +1,4 @@
-import {Route, Switch} from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AppBar from "@material-ui/core/AppBar";
@@ -115,44 +115,29 @@ export default function Employee() {
             [classes.contentShift]: open,
           })}
         >
-          <Grid item xs={1} sm={1} md={3} lg={3}></Grid>
-          <Grid item xs={11} sm={10} md={6} lg={6}>
-            <Switch>
-              <Route exact path="/Empleado" component={UserShow} />
-              <Route
-                exact
-                path="/Empleado/CrearUsuario"
-                component={UserCreate}
-              />
-              <Route
-                exact
-                path="/Empleado/Parentesco"
-                component={ReceiptKinship}
-              />
-              <Route
-                exact
-                path="/Empleado/Procesos"
-                component={Proccess}
-              />
-              <Route
-                exact
-                path="/Empleado/CrearFactura"
-                component={ReceiptCreate}
-              />
-              <Route
-                exact
-                path="/Empleado/Facturas"
-                component={Receipts}
-              />
-              <Route
-                exact
-                path="/Empleado/Consentimiento"
-                component={ConsentForm}
-              />
-              
-            </Switch>
+          <Grid item xs={1} sm={1} md={3}></Grid>
+          <Grid item xs={11} sm={10} md={6}>
+            <Route exact path="/Empleado" component={UserShow} />
+            <Route exact path="/Empleado/CrearUsuario" component={UserCreate} />
+            <Route
+              exact
+              path="/Empleado/Parentesco"
+              component={ReceiptKinship}
+            />
+            <Route exact path="/Empleado/Procesos" component={Proccess} />
+            <Route
+              exact
+              path="/Empleado/CrearFactura"
+              component={ReceiptCreate}
+            />
+            <Route exact path="/Empleado/Facturas" component={Receipts} />
+            <Route
+              exact
+              path="/Empleado/Consentimiento"
+              component={ConsentForm}
+            />
           </Grid>
-          <Grid item xs={false} sm={1} md={3} lg={3}></Grid>
+          <Grid item xs={false} sm={1} md={3}></Grid>
         </Grid>
       </Grid>
     </React.Fragment>

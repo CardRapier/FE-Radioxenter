@@ -1,0 +1,175 @@
+import { Field, FieldArray, Form, Formik } from "formik";
+
+import BackDropLoading from "../../BackDropLoading";
+import Chip from "@material-ui/core/Chip";
+import FormButtons from "../../FormButtons";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Grid from "@material-ui/core/Grid";
+import InputLabel from "@material-ui/core/InputLabel";
+import { KeyboardDatePicker } from "formik-material-ui-pickers";
+import MenuItem from "@material-ui/core/MenuItem";
+import MomentUtils from "@date-io/moment";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import React from "react";
+import { Select } from "formik-material-ui";
+import TextFormField from "../../Form/TextFormField";
+import Typography from "@material-ui/core/Typography";
+import { agreement_initial_values } from "./initial_values";
+import { agreement_schema } from "./validation_schemas";
+import { api_services } from "../../../api_app";
+import { useStyles } from "./styles";
+
+export default function AgreementForm(props) {
+  const classes = useStyles();
+  const [data, setData] = React.useState(undefined);
+  const [services, setServices] = React.useState([]);
+  React.useEffect(() => {
+    api_services.get("/").then((res) => {
+      setServices(res.data.respuesta);
+    });
+  }, []);
+
+  React.useEffect(() => {
+    if (props.location.hasOwnProperty("data")) {
+      setData(props.location.data);
+    }
+  }, [props.location]);
+
+  return (
+    <MuiPickersUtilsProvider utils={MomentUtils}>
+      <Formik
+        enableReinitialize
+        validationSchema={agreement_schema}
+        initialValues={data === undefined ? agreement_initial_values : data}
+        onSubmit={(values, { setSubmitting, resetForm }) => {
+          values.fecha_inicial_convenio = values.fecha_inicial_convenio.format(
+            "DD/MM/YYYY"
+          );
+          values.fecha_final_convenio = values.fecha_final_convenio.format(
+            "DD/MM/YYYY"
+          );
+          console.log(values);
+        }}
+      >
+        {({ resetForm, isSubmitting, errors, values }) => (
+          <Form>
+            <Grid container direction="column">
+              <Grid item container className={classes.title}>
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  align="left"
+                  color="textPrimary"
+                  gutterBottom
+                >
+                  {data === undefined ? "Crear" : "Editar"} Convenio
+                </Typography>
+              </Grid>
+              <Grid item container>
+                <Field
+                  required
+                  label="Entidad"
+                  name="cod_entidad"
+                  select
+                  component={TextFormField}
+                >
+                  <MenuItem value={0}>Compensar</MenuItem>
+                  <MenuItem value={1}>Famisanar</MenuItem>
+                </Field>
+              </Grid>
+
+              <Grid item container className={classes.paddingTop3} spacing={3}>
+                <Grid item xs={6}>
+                  <Field
+                    required
+                    format="MM/DD/yyyy"
+                    component={KeyboardDatePicker}
+                    label="Fecha Inicial"
+                    name="fecha_inicial_convenio"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    required
+                    format="MM/DD/yyyy"
+                    component={KeyboardDatePicker}
+                    label="Fecha Final"
+                    name="fecha_final_convenio"
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid
+                item
+                container
+                justify="center"
+                className={classes.services}
+              >
+                <Grid item xs={12}>
+                  <InputLabel id="servicios_label">Servicios</InputLabel>
+                  <Field
+                    name={`cod_servicios`}
+                    component={Select}
+                    multiple
+                    fullWidth
+                    renderValue={(selected) => (
+                      <div className={classes.chips}>
+                        {selected.map((value) => (
+                          <Chip
+                            key={value}
+                            label={services
+                              .filter(
+                                (service) => service.cod_servicio === value
+                              )
+                              .map((x) => x.nombre_servicio)}
+                            className={classes.chip}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  >
+                    {services.map((service) => (
+                      <MenuItem value={service.cod_servicio}>
+                        {service.nombre_servicio}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                  <FormHelperText>{errors.servicios}</FormHelperText>
+                </Grid>
+
+                <Grid item xs={12}>
+                  {values.cod_servicios.map((code, index) => {
+                    return (
+                      <div key={index}>
+                        <Field
+                          required
+                          label={`Precio ${services
+                            .filter((service) => service.cod_servicio === code)
+                            .map((x) => x.nombre_servicio)}`}
+                          name={`precios_servicios.${index}`}
+                          component={TextFormField}
+                          type={"number"}
+                        />
+                      </div>
+                    );
+                  })}
+                </Grid>
+              </Grid>
+              <pre>{JSON.stringify(values, null, 2)}</pre>
+
+              <FormButtons
+                to={"/Administrador/Paquetes"}
+                data={data}
+                isSubmitting={isSubmitting}
+                resetForm={() => resetForm}
+              />
+            </Grid>
+            <BackDropLoading isSubmitting={isSubmitting} />
+          </Form>
+        )}
+      </Formik>
+    </MuiPickersUtilsProvider>
+  );
+}
