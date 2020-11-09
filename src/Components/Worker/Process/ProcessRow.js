@@ -1,14 +1,14 @@
 import Box from "@material-ui/core/Box";
-import Collapse from "@material-ui/core/Collapse"
-import IconButton from "@material-ui/core/IconButton"
+import Collapse from "@material-ui/core/Collapse";
+import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import ProcessData from "./ProccesData";
 import PropTypes from "prop-types";
 import React from "react";
-import TableCell from "@material-ui/core/TableCell"
-import TableRow from "@material-ui/core/TableRow"
-import { makeStyles } from "@material-ui/core/styles"
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useRowStyles = makeStyles((theme) => ({
   root: {
@@ -35,12 +35,10 @@ export default function ProcessRow(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
-          {row.name}
-        </TableCell>
-        <TableCell align="right">{row.document}</TableCell>
-        <TableCell align="right">{row.date}</TableCell>
-        <TableCell align="right">{row.pref_shipment}</TableCell>
+        <TableCell>{row.name}</TableCell>
+        <TableCell>{row.document}</TableCell>
+        <TableCell>{row.date}</TableCell>
+        <TableCell>{row.pref_shipment}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>

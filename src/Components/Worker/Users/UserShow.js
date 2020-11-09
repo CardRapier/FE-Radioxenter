@@ -62,7 +62,7 @@ export default function UserShow() {
             <TextField id="nombre" label="Nombre" variant="outlined" />
           </Grid>
         </Grid>
-        <Grid container item spacing={4}>
+        <Grid container item spacing={4} justify="center" alignItems="center">
           <Grid item className={classes.margintop4}>
             <UserDatatable />
           </Grid>

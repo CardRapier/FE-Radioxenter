@@ -40,7 +40,7 @@ export default function Receipts() {
             <TextField id="documento" label="Documento" variant="outlined" />
           </Grid>
         </Grid>
-        <Grid container item spacing={4}>
+        <Grid container item spacing={4} justify="center" alignItems="center">
           <Grid item className={classes.tableMargin}>
             <ReceiptTable />
           </Grid>

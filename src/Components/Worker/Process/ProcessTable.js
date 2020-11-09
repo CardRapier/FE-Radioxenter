@@ -18,14 +18,14 @@ function createData(code, name, document, date, pref_shipment) {
     document,
     date,
     pref_shipment,
-    services: ['panoramica', 'carpograma', 'senos paranasales'],
+    services: ["panoramica", "carpograma", "senos paranasales"],
   };
 }
 
 const rows = [
   createData(1, "Santiago Guzman", "1019147849", "10:50", "Mail"),
-  createData(2, "Santiago COrrea", "52159357","10:55", "Fisicamente"),
-  createData(3, "Leonardo ALegre", "55891566","10:56", "Mail"),
+  createData(2, "Santiago COrrea", "52159357", "10:55", "Fisicamente"),
+  createData(3, "Leonardo ALegre", "55891566", "10:56", "Mail"),
 ];
 
 export default function ProcessTable() {
@@ -49,10 +49,10 @@ export default function ProcessTable() {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Codigo</TableCell>
+            <TableCell>Nombre</TableCell>
             <TableCell>Documento</TableCell>
             <TableCell>Hora</TableCell>
-            <TableCell>Entrega</TableCell>
+            <TableCell>Preferencia de Entrega</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -64,8 +64,7 @@ export default function ProcessTable() {
           ))}
 
           {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-            </TableRow>
+            <TableRow style={{ height: 53 * emptyRows }}></TableRow>
           )}
         </TableBody>
         <TableFooter>
