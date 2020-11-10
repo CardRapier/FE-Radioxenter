@@ -48,7 +48,10 @@ export default function AgreementForm(props) {
           values.fecha_final_convenio = values.fecha_final_convenio.format(
             "DD/MM/YYYY"
           );
-          console.log(values);
+
+          setTimeout(function () {
+            setSubmitting(false);
+          }, 2000);
         }}
       >
         {({ resetForm, isSubmitting, errors, values }) => (

@@ -38,7 +38,11 @@ export default function ServiceForm(props) {
       enableReinitialize
       validationSchema={package_schema}
       initialValues={data === undefined ? package_initial_values : data}
-      onSubmit={(values, { setSubmitting, resetForm }) => {}}
+      onSubmit={(values, { setSubmitting, resetForm }) => {
+        setTimeout(function () {
+          setSubmitting(false);
+        }, 2000);
+      }}
     >
       {({ resetForm, isSubmitting, errors }) => (
         <Form>

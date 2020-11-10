@@ -42,9 +42,9 @@ export default function DoctorForm(props) {
       validationSchema={doctor_schema}
       initialValues={data === undefined ? employee_initial_values : data}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        if (data === undefined) {
-        } else {
-        }
+        setTimeout(function () {
+          setSubmitting(false);
+        }, 2000);
       }}
     >
       {({ resetForm, isSubmitting, values }) => (

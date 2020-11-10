@@ -35,46 +35,9 @@ export default function EntityForm(props) {
       validationSchema={entity_schema}
       initialValues={data === undefined ? entity_initial_values : data}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        if (data === undefined) {
-          setSubmitting(true);
-          api_entities
-            .post("/", values)
-            .then(function (response) {
-              setSubmitting(false);
-              enqueueSnackbar("Se ha creado exitosamente!", {
-                variant: "success",
-              });
-              resetForm({});
-            })
-            .catch(function (error) {
-              setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo.",
-                {
-                  variant: "error",
-                }
-              );
-            });
-        } else {
-          setSubmitting(true);
-          api_entities
-            .put("/", values)
-            .then(function (response) {
-              setSubmitting(false);
-              enqueueSnackbar("Los cambios han sido exitosos!", {
-                variant: "success",
-              });
-            })
-            .catch(function (error) {
-              setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo.",
-                {
-                  variant: "error",
-                }
-              );
-            });
-        }
+        setTimeout(function () {
+          setSubmitting(false);
+        }, 2000);
       }}
     >
       {({ resetForm, isSubmitting, values }) => (
