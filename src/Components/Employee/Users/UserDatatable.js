@@ -1,3 +1,11 @@
+import {
+  api_cities,
+  api_sex,
+  api_type_document,
+  api_type_shipment,
+  api_users,
+} from "../../../api_app";
+
 import Paper from "@material-ui/core/Paper";
 import React from "react";
 import Table from "@material-ui/core/Table";
@@ -10,157 +18,53 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow";
 import UserRow from "./UserRow";
-import { api_users } from "../../../api_app";
-
-function createData(
-  code,
-  name,
-  telephone,
-  address,
-  document,
-  type_document,
-  ocupation,
-  birth,
-  city,
-  sex,
-  email,
-  gender,
-  cellphone,
-  pref_shipment
-) {
-  return {
-    code,
-    name,
-    telephone,
-    address,
-    document,
-    type_document,
-    ocupation,
-    birth,
-    city,
-    sex,
-    email,
-    gender,
-    cellphone,
-    pref_shipment,
-    history: [
-      { date: "2020-01-05", customerId: "Paquete 1", price: 3 },
-      { date: "2020-01-02", customerId: "Paquete 2", price: 1 },
-    ],
-  };
-}
-
-const rows = [
-  createData(
-    1,
-    "Sanrtiago Guzman",
-    "3102068794",
-    "Calle 157a#98a - 54",
-    "101947849",
-    "CC",
-    "Studen",
-    "27/02/199",
-    "Bogota",
-    "Masculine",
-    "CARDRAPIER@HOTMAIL.COM",
-    "Masculine",
-    "3102068794",
-    "Emaul"
-  ),
-  createData(
-    2,
-    "Leonardo Alegre",
-    "3102068784",
-    "Calle 157a#98a - 54",
-    "101947849",
-    "CC",
-    "Studen",
-    "27/02/1999",
-    "Bogota",
-    "Masculine",
-    "leo@HOTMAIL.COM",
-    "Masculine",
-    "3102068784",
-    "Emaul"
-  ),
-  createData(
-    3,
-    "Sanrtiago Correa",
-    "31020687",
-    "Calle 157a#98a - 54",
-    "101947849",
-    "CC",
-    "Studen",
-    "27/02/199",
-    "Bogota",
-    "Masculine",
-    "CARDR@HOTMAIL.COM",
-    "Masculine",
-    "31020687",
-    "Emaul"
-  ),
-  createData(
-    4,
-    "Fabian TIrado",
-    "3102068794",
-    "Calle 157a#98a - 54",
-    "101947849",
-    "CC",
-    "Student",
-    "27/02/199",
-    "Bogota",
-    "Masculine",
-    "CA@HOTMAIL.COM",
-    "Masculine",
-    "3102068794",
-    "Emaul"
-  ),
-  createData(
-    5,
-    "Juanes Gomez",
-    "3102068794",
-    "Calle 157a#98a - 54",
-    "101947849",
-    "CC",
-    "Studen",
-    "27/02/2020",
-    "Bogota",
-    "Masculine",
-    "CARDRAPIER@HOTMAIL.COM",
-    "Masculine",
-    "3102068794",
-    "Emaul"
-  ),
-  createData(
-    6,
-    "Santiago Guzman",
-    "3102068794",
-    "Calle 157a#98a - 54",
-    "101947849",
-    "CC",
-    "Studen",
-    "27/02/199",
-    "Bogota",
-    "Masculine",
-    "CARDRAPIER@gmail.COM",
-    "Masculine",
-    "3102068794",
-    "Emaul"
-  ),
-];
 
 export default function UserDatatable() {
-  const [page, setPage] = React.useState(0);
   const [users, setUsers] = React.useState([]);
+  const [data, setData] = React.useState({});
   React.useEffect(() => {
     api_users.get("/").then((res) => {
       setUsers(res.data.respuesta);
     });
+    api_type_document.get("/").then((res) => {
+      setData((prevState) => ({
+        data: {
+          ...prevState.data,
+          type_document: res.data.respuesta,
+        },
+      }));
+    });
+    api_cities.get("/").then((res) => {
+      setData((prevState) => ({
+        data: {
+          ...prevState.data,
+          cities: res.data.respuesta,
+        },
+      }));
+    });
+    api_sex.get("/").then((res) => {
+      setData((prevState) => ({
+        data: {
+          ...prevState.data,
+          sex: res.data.respuesta,
+        },
+      }));
+    });
+
+    api_type_shipment.get("/").then((res) => {
+      setData((prevState) => ({
+        data: {
+          ...prevState.data,
+          type_shipment: res.data.respuesta,
+        },
+      }));
+    });
   }, []);
+  const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
-  const handleChangePage = (newPage) => {
+  const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
@@ -187,7 +91,7 @@ export default function UserDatatable() {
             ? users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : users
           ).map((row) => (
-            <UserRow key={row.code} row={row} />
+            <UserRow key={row.cod_usuario} row={row} fetched_data={data} />
           ))}
 
           {emptyRows > 0 && (
@@ -199,9 +103,8 @@ export default function UserDatatable() {
         <TableFooter>
           <TableRow>
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-              colSpan={3}
-              count={rows.length}
+              rowsPerPageOptions={[5, 10, 25, { label: "Todas", value: -1 }]}
+              count={users.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

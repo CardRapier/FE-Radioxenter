@@ -27,3 +27,15 @@ export const api_type_employee = axios.create({
 export const api_users = axios.create({
   baseURL: process.env.REACT_APP_API_ROUTE + "/api/usuarios/",
 });
+
+export const api_login = axios.create({
+  baseURL: process.env.REACT_APP_API_ROUTE + "/api/login/",
+});
+
+export const api_sex = axios.create({
+  baseURL: process.env.REACT_APP_API_ROUTE + "/api/sexos/",
+});
+
+export const api_cities = axios.create({
+  baseURL: process.env.REACT_APP_API_ROUTE + "/api/ciudades/",
+});

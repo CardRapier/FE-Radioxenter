@@ -14,8 +14,8 @@ import React from "react";
 import { Select } from "formik-material-ui";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
-import { agreement_initial_values } from "./initial_values";
-import { agreement_schema } from "./validation_schemas";
+import { agreement_initial_values } from "./initial_values_admin";
+import { agreement_schema } from "./validation_schemas_admin";
 import { api_services } from "../../../api_app";
 import { useStyles } from "./styles";
 

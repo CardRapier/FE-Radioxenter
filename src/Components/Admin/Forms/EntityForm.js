@@ -9,8 +9,8 @@ import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
 import { api_entities } from "../../../api_app";
 import { api_type_receipt } from "../../../api_app";
-import { entity_initial_values } from "./initial_values";
-import { entity_schema } from "./validation_schemas";
+import { entity_initial_values } from "./initial_values_admin";
+import { entity_schema } from "./validation_schemas_admin";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
 

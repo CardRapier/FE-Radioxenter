@@ -11,12 +11,12 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import React from "react";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
-import { doctor_schema } from "./validation_schemas";
-import { employee_initial_values } from "./initial_values";
+import { employee_initial_values } from "./initial_values_admin";
+import { employee_schema } from "./validation_schemas_admin";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
 
-export default function DoctorForm(props) {
+export default function EmployeeForm(props) {
   const classes = useStyles();
   const [data, setData] = React.useState(undefined);
   const [type_employee, setTypeEmployee] = React.useState([]);
@@ -39,7 +39,7 @@ export default function DoctorForm(props) {
   return (
     <Formik
       enableReinitialize
-      validationSchema={doctor_schema}
+      validationSchema={employee_schema}
       initialValues={data === undefined ? employee_initial_values : data}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         setTimeout(function () {

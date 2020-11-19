@@ -243,7 +243,7 @@ export default function AdminDataTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, props.data.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -357,14 +357,16 @@ export default function AdminDataTable(props) {
         <TableFooter>
           <TableRow>
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+              rowsPerPageOptions={[5, 10, 25, { label: "Todas", value: -1 }]}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
                 inputProps: { "aria-label": "rows per page" },
                 native: true,
+                labelRowsPerPage: "Filas por pagina",
               }}
+              labelRowsPerPage="Filas por pagina"
               onChangePage={handleChangePage}
               onChangeRowsPerPage={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}

@@ -30,10 +30,9 @@ const useRowStyles = makeStyles((theme) => ({
 }));
 
 export default function UserRow(props) {
-  const { row } = props;
+  const { row, fetched_data } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
-
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
@@ -60,7 +59,7 @@ export default function UserRow(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
-              <UserData row={row} />
+              <UserData row={row} fetched_data={fetched_data} />
             </Box>
             <Divider />
             <Box margin={1}>
@@ -75,6 +74,8 @@ export default function UserRow(props) {
                   variant="contained"
                   color="primary"
                   className={classes.button}
+                  component={Link}
+                  to={{ pathname: "/Empleado/EditarUsuario", data: row }}
                 >
                   Editar
                 </Button>

@@ -7,8 +7,8 @@ import React from "react";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
 import { api_services } from "../../../api_app";
-import { service_initial_values } from "./initial_values";
-import { service_schema } from "./validation_schemas";
+import { service_initial_values } from "./initial_values_admin";
+import { service_schema } from "./validation_schemas_admin";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
 
@@ -39,7 +39,6 @@ export default function ServiceForm(props) {
                 variant: "success",
               });
               resetForm({});
-              console.log(response);
             })
             .catch(function (error) {
               setSubmitting(false);
@@ -49,7 +48,6 @@ export default function ServiceForm(props) {
                   variant: "error",
                 }
               );
-              console.log(error.response);
             });
         } else {
           setSubmitting(true);
@@ -60,7 +58,6 @@ export default function ServiceForm(props) {
               enqueueSnackbar("Los cambios han sido exitosos!", {
                 variant: "success",
               });
-              console.log(response);
             })
             .catch(function (error) {
               setSubmitting(false);

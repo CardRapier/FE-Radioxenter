@@ -15,8 +15,8 @@ import ReceiptKinship from "./Receipt/ReceiptKinship";
 import Receipts from "./Receipt/Receipts";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import UserCreate from "./Users/UserCreate";
 import UserDrawer from "./EmployeeDrawer";
+import UserForm from "./Users/UserForm";
 import UserShow from "./Users/UserShow";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -118,7 +118,8 @@ export default function Employee() {
           <Grid item xs={1} sm={1} md={3}></Grid>
           <Grid item xs={11} sm={10} md={6}>
             <Route exact path="/Empleado" component={UserShow} />
-            <Route exact path="/Empleado/CrearUsuario" component={UserCreate} />
+            <Route exact path="/Empleado/CrearUsuario" component={UserForm} />
+            <Route exact path="/Empleado/EditarUsuario" component={UserForm} />
             <Route
               exact
               path="/Empleado/Parentesco"

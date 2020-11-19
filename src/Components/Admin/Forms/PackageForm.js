@@ -12,8 +12,8 @@ import { Select } from "formik-material-ui";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
 import { api_services } from "../../../api_app";
-import { package_initial_values } from "./initial_values";
-import { package_schema } from "./validation_schemas";
+import { package_initial_values } from "./initial_values_admin";
+import { package_schema } from "./validation_schemas_admin";
 import { useStyles } from "./styles";
 
 export default function ServiceForm(props) {

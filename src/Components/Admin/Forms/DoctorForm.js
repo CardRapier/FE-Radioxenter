@@ -8,8 +8,8 @@ import { MenuItem } from "@material-ui/core";
 import React from "react";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
-import { doctor_initial_values } from "./initial_values";
-import { doctor_schema } from "./validation_schemas";
+import { doctor_initial_values } from "./initial_values_admin";
+import { doctor_schema } from "./validation_schemas_admin";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
 
