@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AdminShow(props) {
   const classes = useStyles();
+  const [query, setQuery] = React.useState({ query: "" });
   const data = props.data;
   return (
     <React.Fragment>
@@ -67,6 +68,10 @@ export default function AdminShow(props) {
               variant="outlined"
               size="small"
               type="search"
+              value={query.query}
+              onChange={(event, index, value) =>
+                setQuery({ query: event.target.value })
+              }
             />
           </Grid>
         </Grid>
@@ -74,7 +79,10 @@ export default function AdminShow(props) {
         <Grid container item spacing={4} justify="center" alignItems="center">
           <Grid item className={classes.margintop}>
             <Grid item xs={12}>
-              <AdminDataTable data={data} />
+              <AdminDataTable
+                data={data}
+                filter={{ query: query.query, id: data.filter.id }}
+              />
             </Grid>
           </Grid>
         </Grid>

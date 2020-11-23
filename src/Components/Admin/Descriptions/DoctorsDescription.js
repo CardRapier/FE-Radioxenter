@@ -1,31 +1,41 @@
-import Grid from '@material-ui/core/Grid'
-import Input from "@material-ui/core/Input"
-import InputLabel from "@material-ui/core/InputLabel"
-import React from "react"
-import {makeStyles} from "@material-ui/core/styles"
+import Grid from "@material-ui/core/Grid";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-    row: {
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(2),
-    },
-  }));
+  row: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(2),
+  },
+}));
 
-export default function DoctorsDescription (props) {
-    const { row } = props;
-    const classes = useStyles();
+export default function DoctorsDescription(props) {
+  const { row, data } = props;
+  const classes = useStyles();
 
-    return (
-        <Grid container direction="column" justify="center" alignItems="strech">
+  return (
+    <Grid container direction="column" justify="center" alignItems="strech">
       <Grid item container className={classes.row}>
         <Grid item xs={1} />
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Preferencia Entrega</InputLabel>
+          <InputLabel htmlFor="component-disabled">
+            Preferencia Entrega
+          </InputLabel>
           <Input
             fullWidth
             disabled
             id="component-disabled"
-            value={row.type_pref_shipment}
+            value={
+              data !== undefined && data.type_shipments !== undefined
+                ? data.type_shipments.find(
+                    (element) =>
+                      element.cod_tipo_pref_entrega ===
+                      row.cod_tipo_pref_entrega
+                  ).nombre_tipo_pref_entrega
+                : row.cod_tipo_pref_entrega
+            }
           />
         </Grid>
         <Grid item xs={5}>
@@ -34,7 +44,7 @@ export default function DoctorsDescription (props) {
             fullWidth
             disabled
             id="component-disabled"
-            value={row.address}
+            value={row.direccion_doctor}
           />
         </Grid>
       </Grid>
@@ -46,14 +56,26 @@ export default function DoctorsDescription (props) {
             fullWidth
             disabled
             id="component-disabled"
-            value={row.document}
+            value={row.documento_doctor}
           />
         </Grid>
         <Grid item xs={5}>
           <InputLabel htmlFor="component-disabled">Tipo Documento</InputLabel>
-          <Input fullWidth disabled id="component-disabled" value={row.type_document} />
+          <Input
+            fullWidth
+            disabled
+            id="component-disabled"
+            value={
+              data !== undefined && data.type_documents !== undefined
+                ? data.type_documents.find(
+                    (element) =>
+                      element.cod_tipo_documento === row.cod_tipo_documento
+                  ).nombre_tipo_documento
+                : row.cod_tipo_documento
+            }
+          />
         </Grid>
       </Grid>
     </Grid>
-    )
+  );
 }

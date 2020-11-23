@@ -48,10 +48,7 @@ export default function ConsentForm() {
           <Typography variant="body1">{text}</Typography>
 
           <Grid item>
-            <div
-              id="imageBox"
-              className={classes.signature}
-            ></div>
+            <div id="imageBox" className={classes.signature}></div>
           </Grid>
         </Grid>
         <Grid
@@ -62,19 +59,16 @@ export default function ConsentForm() {
           spacing={4}
         >
           <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-            >
+            <Button variant="contained" color="primary">
               Continuar
             </Button>
           </Grid>
           <Grid item>
+            {/*onClick={window.wizardEventController.start_stop}*/}
             <Button
               variant="contained"
               color="primary"
               id="btnStartStopWizard"
-              onClick={window.wizardEventController.start_stop}
               value="Start Wizard"
             >
               Firmar

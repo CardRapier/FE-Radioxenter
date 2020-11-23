@@ -54,7 +54,7 @@ export default function FormButtons(props) {
             type="submit"
             disabled={isSubmitting}
           >
-            {data === undefined ? "Crear" : "Editar"}
+            {data === undefined ? "Crear" : "Guardar"}
           </Button>
         </Grid>
       </Grid>

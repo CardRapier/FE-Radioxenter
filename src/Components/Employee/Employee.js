@@ -1,10 +1,11 @@
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import ConsentForm from "./Consent/ConsentForm";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -18,6 +19,7 @@ import Typography from "@material-ui/core/Typography";
 import UserDrawer from "./EmployeeDrawer";
 import UserForm from "./Users/UserForm";
 import UserShow from "./Users/UserShow";
+import auth from "../Auth/auth";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -69,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Employee() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [redirect, setRedirect] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -102,6 +105,16 @@ export default function Employee() {
               ></Typography>
               <Button color="inherit">
                 <AccountCircleIcon />
+              </Button>
+              <Button
+                color="inherit"
+                onClick={() => {
+                  auth.logout(() => {
+                    setRedirect(true);
+                  });
+                }}
+              >
+                <ExitToAppIcon />
               </Button>
             </Toolbar>
           </AppBar>
@@ -141,6 +154,11 @@ export default function Employee() {
           <Grid item xs={false} sm={1} md={3}></Grid>
         </Grid>
       </Grid>
+      {redirect === true && localStorage.getItem("authenticated") ? (
+        <Redirect to={"/"} />
+      ) : (
+        ""
+      )}
     </React.Fragment>
   );
 }

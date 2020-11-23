@@ -1,11 +1,13 @@
 class Auth {
   constructor() {
-    localStorage.setItem("authenticated", false);
+    if (localStorage.getItem("authenticated") === undefined) {
+      localStorage.setItem("authenticated", false);
+    }
   }
 
   login(callback, data) {
     this.authenticated = true;
-    localStorage.setItem("user", data.user);
+    localStorage.setItem("user", JSON.stringify(data.user));
     localStorage.setItem("token", data.token);
 
     if (data.user.cod_tipo_empleado === 1) {

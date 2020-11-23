@@ -24,7 +24,7 @@ export default function EmployeesDescription(props) {
             fullWidth
             disabled
             id="component-disabled"
-            value={row.address}
+            value={row.direccion_empleado}
           />
         </Grid>
         <Grid item xs={5}>
@@ -33,7 +33,7 @@ export default function EmployeesDescription(props) {
             fullWidth
             disabled
             id="component-disabled"
-            value={row.birth_date}
+            value={row.fnacimiento_empleado}
           />
         </Grid>
       </Grid>
@@ -45,12 +45,17 @@ export default function EmployeesDescription(props) {
             fullWidth
             disabled
             id="component-disabled"
-            value={row.telephone}
+            value={row.telefono_empleado}
           />
         </Grid>
         <Grid item xs={5}>
           <InputLabel htmlFor="component-disabled">Correo</InputLabel>
-          <Input fullWidth disabled id="component-disabled" value={row.email} />
+          <Input
+            fullWidth
+            disabled
+            id="component-disabled"
+            value={row.correo_empleado}
+          />
         </Grid>
       </Grid>
     </Grid>

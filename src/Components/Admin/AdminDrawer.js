@@ -14,6 +14,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import PermContactCalendarIcon from "@material-ui/icons/PermContactCalendar";
 import React from "react";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import ViewCompactIcon from "@material-ui/icons/ViewCompact";
 import { useTheme } from "@material-ui/core/styles";
 
@@ -108,6 +109,13 @@ export default function AdminDrawer(props) {
               <PermContactCalendarIcon />
             </ListItemIcon>
             <ListItemText primary={"Doctores"} />
+          </ListItem>
+
+          <ListItem button component={Link} key={"Empleado"} to="/Empleado">
+            <ListItemIcon>
+              <SupervisorAccountIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Cambiar a Modulo Empleado"} />
           </ListItem>
         </List>
         <Divider />

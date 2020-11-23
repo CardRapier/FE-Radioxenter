@@ -7,7 +7,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 
 export default function PackageDescription(props) {
-  const { row } = props;
+  const { row, data } = props;
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom component="div">
@@ -23,13 +23,15 @@ export default function PackageDescription(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {row.services.map((service) => (
-            <TableRow key={service.code}>
+          {data.packages.map((element) => (
+            <TableRow key={element.cod_servicio}>
               <TableCell component="th" scope="row">
-                {service.name}
+                {element.Servicio.nombre_servicio}
               </TableCell>
-              <TableCell>{service.price}</TableCell>
-              <TableCell align="right">{service.iva}</TableCell>
+              <TableCell>{element.Servicio.precio_servicio}</TableCell>
+              <TableCell align="right">
+                {element.Servicio.iva_servicio} %
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

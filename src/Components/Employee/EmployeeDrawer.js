@@ -12,6 +12,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import React from "react";
 import ReceiptIcon from "@material-ui/icons/Receipt";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import { useTheme } from "@material-ui/core/styles";
 
 export default function EmployeeDrawer(props) {
@@ -77,6 +78,18 @@ export default function EmployeeDrawer(props) {
               <ClearAllIcon />
             </ListItemIcon>
             <ListItemText primary={"Consent"} />
+          </ListItem>
+
+          <ListItem
+            button
+            component={Link}
+            key={"Administrador"}
+            to="/Administrador"
+          >
+            <ListItemIcon>
+              <SupervisorAccountIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Cambiar a modulo Administrador"} />
           </ListItem>
         </List>
         <Divider />

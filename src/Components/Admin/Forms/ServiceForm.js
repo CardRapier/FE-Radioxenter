@@ -16,7 +16,6 @@ export default function ServiceForm(props) {
   const classes = useStyles();
   const [data, setData] = React.useState(undefined);
   const { enqueueSnackbar } = useSnackbar();
-
   React.useEffect(() => {
     if (props.location.hasOwnProperty("data")) {
       setData(props.location.data);
@@ -39,6 +38,7 @@ export default function ServiceForm(props) {
                 variant: "success",
               });
               resetForm({});
+              console.log(response);
             })
             .catch(function (error) {
               setSubmitting(false);

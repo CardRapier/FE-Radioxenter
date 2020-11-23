@@ -95,7 +95,6 @@ export default function Login() {
                 type="password"
               />
             </Grid>
-            <pre>{JSON.stringify(values, null, 2)}</pre>
             <Grid item xs={3} justify="flex-end">
               <Button
                 variant="contained"

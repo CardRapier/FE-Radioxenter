@@ -160,7 +160,6 @@ export default function DoctorForm(props) {
                 />
               </Grid>
             </Grid>
-            <pre>{JSON.stringify(values, null, 2)}</pre>
             <Grid
               item
               container

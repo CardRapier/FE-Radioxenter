@@ -1,5 +1,10 @@
 import { Field, Form, Formik } from "formik";
-import { api_type_document, api_type_employee } from "../../../api_app";
+import {
+  api_employees,
+  api_register,
+  api_type_document,
+  api_type_employee,
+} from "../../../api_app";
 
 import BackDropLoading from "../../BackDropLoading";
 import FormButtons from "../../FormButtons";
@@ -25,10 +30,9 @@ export default function EmployeeForm(props) {
   React.useEffect(() => {
     api_type_employee.get("/").then((res) => {
       setTypeEmployee(res.data.respuesta);
-    });
-
-    api_type_document.get("/").then((res) => {
-      setTypeDocument(res.data.respuesta);
+      api_type_document.get("/").then((res) => {
+        setTypeDocument(res.data.respuesta);
+      });
     });
   }, []);
   React.useEffect(() => {
@@ -42,9 +46,50 @@ export default function EmployeeForm(props) {
       validationSchema={employee_schema}
       initialValues={data === undefined ? employee_initial_values : data}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        setTimeout(function () {
-          setSubmitting(false);
-        }, 2000);
+        if (data === undefined) {
+          setSubmitting(true);
+          api_register
+            .post("/", values)
+            .then(function (response) {
+              setSubmitting(false);
+              enqueueSnackbar("Se ha creado exitosamente!", {
+                variant: "success",
+              });
+              resetForm({});
+              console.log(response);
+            })
+            .catch(function (error) {
+              setSubmitting(false);
+              enqueueSnackbar(
+                "Ha habido un error, revise los datos e intente de nuevo.",
+                {
+                  variant: "error",
+                }
+              );
+            });
+        } else {
+          delete values.createdAt;
+          delete values.updatedAt;
+          setSubmitting(true);
+          api_employees
+            .put("/", values)
+            .then(function (response) {
+              setSubmitting(false);
+              enqueueSnackbar("Los cambios han sido exitosos!", {
+                variant: "success",
+              });
+            })
+            .catch(function (error) {
+              setSubmitting(false);
+              enqueueSnackbar(
+                "Ha habido un error, revise los datos e intente de nuevo." +
+                  error.response,
+                {
+                  variant: "error",
+                }
+              );
+            });
+        }
       }}
     >
       {({ resetForm, isSubmitting, values }) => (
@@ -199,7 +244,6 @@ export default function EmployeeForm(props) {
                 </MuiPickersUtilsProvider>
               </Grid>
             </Grid>
-            <pre>{JSON.stringify(values, null, 2)}</pre>
             <Grid
               item
               container
@@ -208,7 +252,7 @@ export default function EmployeeForm(props) {
               className={classes.buttons}
             >
               <FormButtons
-                to={"/Administrador/Doctores"}
+                to={"/Administrador/Empleados"}
                 data={data}
                 isSubmitting={isSubmitting}
                 resetForm={() => resetForm}

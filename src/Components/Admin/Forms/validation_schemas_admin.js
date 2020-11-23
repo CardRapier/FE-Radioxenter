@@ -21,7 +21,8 @@ export const entity_schema = yup.object({
   cedula_contacto: yup
     .number()
     .integer("Debe ser un numero entero")
-    .positive("Debe ser positivo"),
+    .positive("Debe ser positivo")
+    .nullable(),
   telefono_contacto: yup.string(),
   correo_contacto: yup.string().email("Debe ser un correo"),
   cod_forma_de_pago_entidad: yup.number().required("Campo requerido"),

@@ -1,6 +1,17 @@
+import React, { useRef } from "react";
+import {
+  api_agreements,
+  api_doctors,
+  api_employees,
+  api_entities,
+  api_packages,
+  api_services,
+  api_type_document,
+  api_type_employee,
+} from "../../api_app";
+
 import AdminRow from "./AdminRow";
 import Paper from "@material-ui/core/Paper";
-import React from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -10,7 +21,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow";
-import { api_services } from "../../api_app";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -22,228 +32,73 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function createDataServices(code, name, price, iva, description) {
-  return {
-    code,
-    name,
-    price,
-    iva,
-    description,
-  };
-}
-
-function createDataPackages(code, name, price, services) {
-  return {
-    code,
-    name,
-    price,
-    services,
-  };
-}
-
-function createDataEntity(
-  code,
-  social_name,
-  commercial_name,
-  nit,
-  address,
-  telephone,
-  method_payment,
-  type_receipt,
-  agent_name,
-  agent_document,
-  agent_telephone,
-  agent_email,
-  contact_name,
-  contact_document,
-  contact_telephone,
-  contact_email
-) {
-  return {
-    code,
-    social_name,
-    commercial_name,
-    nit,
-    address,
-    telephone,
-    method_payment,
-    type_receipt,
-    agent_name,
-    agent_document,
-    agent_telephone,
-    agent_email,
-    contact_name,
-    contact_document,
-    contact_telephone,
-    contact_email,
-  };
-}
-
-function createAgreements(code, entity, services, dates) {
-  return {
-    code,
-    entity,
-    services,
-    dates,
-  };
-}
-
-function createEmployees(
-  code,
-  name,
-  document,
-  address,
-  birth_date,
-  telephone,
-  employee_type,
-  email,
-  user,
-  type_document
-) {
-  return {
-    code,
-    name,
-    document,
-    address,
-    birth_date,
-    telephone,
-    employee_type,
-    email,
-    user,
-    type_document,
-  };
-}
-
-function createDoctors(
-  code,
-  name,
-  address,
-  telephone,
-  document,
-  type_document,
-  type_pref_shipment,
-  email
-) {
-  return {
-    code,
-    name,
-    address,
-    telephone,
-    document,
-    type_document,
-    type_pref_shipment,
-    email,
-  };
-}
-
-const rowsServices = [
-  createDataServices(1, "Periapical", 12000, 0, "Periapical"),
-  createDataServices(2, "Coronal", 12000, 0, "Coronal"),
-  createDataServices(3, "Oclusal", 25000, 0, "Oclusal"),
-  createDataServices(4, "Carpograma", 25000, 0, "Carpograma"),
-  createDataServices(5, "Orto 3 Completo", 90000, 0, "Orto 3 Completo"),
-];
-
-const rowsPackages = [
-  createDataPackages(1, "Orto 2 Completo", 80000, [
-    rowsServices[0],
-    rowsServices[2],
-    rowsServices[3],
-  ]),
-  createDataPackages(2, "Orto 3 Completo", 90000, [
-    rowsServices[0],
-    rowsServices[1],
-    rowsServices[2],
-    rowsServices[3],
-  ]),
-];
-
-const rowsEntities = [
-  createDataEntity(
-    1,
-    "Compensar",
-    "Compensar",
-    "12340020-300",
-    "Ak 68 ## 49A - 47",
-    "3077001",
-    "Mensual",
-    "Electronica",
-    "Carlos Mauricio Vasques Paez",
-    "79'541.640",
-    "3077001",
-    "compensar@compensar.com",
-    "Carlos Mauricio Vasques Paez",
-    "79'541.640",
-    "3077001",
-    "compensar@compensar.com"
-  ),
-];
-
-const rowsAgreements = [
-  createAgreements(
-    1,
-    rowsEntities[0],
-    [rowsServices[1], rowsServices[4]],
-    [
-      { initial: "27/02/2021", final: "28/02/2022" },
-      { initial: "27/02/2021", final: "28/02/2022" },
-    ]
-  ),
-];
-
-const rowsEmployees = [
-  createEmployees(
-    1,
-    "Carlos Santana",
-    "52159357",
-    "Calle 159 a 12c",
-    "30/12/2000",
-    "310789456",
-    "Administrador",
-    "carlosSantana@gmail.com",
-    "CSantana",
-    "CC"
-  ),
-];
-
-const rowsDoctors = [
-  createDoctors(
-    1,
-    "Wilson Vargas",
-    "Calle 123c 56 - 51",
-    "4895126",
-    "10123155",
-    "CC",
-    "Correo",
-    "oswall@gmail.com"
-  ),
-];
-
 export default function AdminDataTable(props) {
   const classes = useStyles();
-  const data = props.data;
+  const { data, filter } = props;
   const [rows, setRows] = React.useState([]);
+  const [subdata, setSubData] = React.useState(undefined);
+  const [example, setExample] = React.useState(undefined);
   React.useEffect(() => {
     if (data.title === "Servicios") {
       api_services.get("/").then((res) => {
         setRows(res.data.respuesta);
       });
     } else if (data.title === "Paquetes") {
-      setRows(rowsPackages);
+      api_packages.get("/").then((res) => {
+        setRows(res.data.respuesta);
+      });
     } else if (data.title === "Entidades") {
-      setRows(rowsEntities);
+      api_entities.get("/").then((res) => {
+        setRows(res.data.respuesta);
+      });
     } else if (data.title === "Convenios") {
-      setRows(rowsAgreements);
+      api_agreements.get("/").then((res) => {
+        setRows(res.data.respuesta);
+        setExample(res.data.respuesta);
+        api_entities.get("/").then((res) => {
+          let entities = res.data.respuesta;
+          setRows((row) =>
+            row.map((element) => ({
+              ...element,
+              razon_social_entidad: entities.find(
+                (entity) => entity.cod_entidad === element.cod_entidad
+              ).razon_social_entidad,
+            }))
+          );
+
+          api_services.get("/").then((res) => {
+            setSubData((subdata) => ({
+              ...subdata,
+              services: res.data.respuesta,
+            }));
+          });
+        });
+      });
     } else if (data.title === "Empleados") {
-      setRows(rowsEmployees);
+      api_type_employee.get("/").then((res) => {
+        setSubData({ type_employees: res.data.respuesta });
+        api_type_document.get("/").then((res) => {
+          setSubData((subdata) => ({
+            ...subdata,
+            type_documents: res.data.respuesta,
+          }));
+          api_employees.get("/").then((res) => {
+            setRows(res.data.respuesta);
+          });
+        });
+      });
     } else if (data.title === "Doctores") {
-      setRows(rowsDoctors);
+      api_doctors.get("/").then((res) => {
+        setRows(res.data.respuesta);
+      });
     }
   }, [data.title]);
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -253,7 +108,8 @@ export default function AdminDataTable(props) {
     setPage(0);
   };
 
-  return (
+  return (rows !== undefined && subdata !== undefined) ||
+    data.title !== "Convenios" ? (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table" className={classes.table}>
         <TableHead>
@@ -265,21 +121,28 @@ export default function AdminDataTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(rows !== undefined && rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+          {(rowsPerPage > 0
+            ? rows
+                .filter((row) =>
+                  row[filter.id]
+                    .toString()
+                    .toLowerCase()
+                    .includes(filter.query.toLowerCase())
+                )
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => {
             switch (data.title) {
               case "Entidades":
                 return (
                   <AdminRow
-                    key={row.code}
+                    key={row.cod_entidad}
                     tableCells={[
-                      row.social_name,
-                      row.commercial_name,
-                      row.nit,
-                      row.address,
-                      row.telephone,
+                      row.razon_social_entidad,
+                      row.nombre_comercial_entidad,
+                      row.nit_entidad,
+                      row.direccion_entidad,
+                      row.telefono_entidad,
                     ]}
                     row={row}
                     data={data}
@@ -288,8 +151,8 @@ export default function AdminDataTable(props) {
               case "Paquetes":
                 return (
                   <AdminRow
-                    key={row.code}
-                    tableCells={[row.name, row.price]}
+                    key={row.cod_paquete}
+                    tableCells={[row.nombre_paquete, row.precio_paquete]}
                     row={row}
                     data={data}
                   />
@@ -297,10 +160,23 @@ export default function AdminDataTable(props) {
               case "Convenios":
                 return (
                   <AdminRow
-                    key={row.code}
+                    key={row.cod_convenio}
                     tableCells={[
-                      row.entity.commercial_name,
-                      row.services.map((service) => service.name + " - "),
+                      row.razon_social_entidad,
+                      subdata !== undefined && subdata.services !== undefined
+                        ? subdata.services
+                            .filter(
+                              (element) =>
+                                element.cod_servicio === row.cod_servicio
+                            )
+                            .map((service, index) => {
+                              if (index > 0) {
+                                return service.nombre_servicio + " - ";
+                              } else {
+                                return service.nombre_servicio;
+                              }
+                            })
+                        : "",
                     ]}
                     row={row}
                     data={data}
@@ -309,13 +185,27 @@ export default function AdminDataTable(props) {
               case "Empleados":
                 return (
                   <AdminRow
-                    key={row.code}
+                    key={row.cod_empleado}
                     tableCells={[
-                      row.name,
-                      row.document,
-                      row.type_document,
-                      row.user,
-                      row.employee_type,
+                      row.nombres_empleado + " " + row.apellidos_empleado,
+                      row.documento_empleado,
+                      subdata !== "undefined" &&
+                      subdata.type_documents !== "undefined"
+                        ? subdata.type_documents.find(
+                            (element) =>
+                              element.cod_tipo_documento ===
+                              row.cod_tipo_documento
+                          ).nombre_tipo_documento
+                        : row.cod_tipo_documento,
+                      row.usuario_empleado,
+                      subdata !== "undefined" &&
+                      subdata.type_employees !== "undefined"
+                        ? subdata.type_employees.find(
+                            (element) =>
+                              element.cod_tipo_empleado ===
+                              row.cod_tipo_empleado
+                          ).nombre_tipo_empleado
+                        : row.cod_tipo_empleado,
                     ]}
                     row={row}
                     data={data}
@@ -325,8 +215,12 @@ export default function AdminDataTable(props) {
               case "Doctores":
                 return (
                   <AdminRow
-                    key={row.code}
-                    tableCells={[row.name, row.telephone, row.email]}
+                    key={row.cod_doctor}
+                    tableCells={[
+                      row.nombres_doctor + " " + row.apellidos_doctor,
+                      row.telefono_doctor,
+                      row.correo_doctor,
+                    ]}
                     row={row}
                     data={data}
                   />
@@ -364,7 +258,6 @@ export default function AdminDataTable(props) {
               SelectProps={{
                 inputProps: { "aria-label": "rows per page" },
                 native: true,
-                labelRowsPerPage: "Filas por pagina",
               }}
               labelRowsPerPage="Filas por pagina"
               onChangePage={handleChangePage}
@@ -375,5 +268,7 @@ export default function AdminDataTable(props) {
         </TableFooter>
       </Table>
     </TableContainer>
+  ) : (
+    ""
   );
 }

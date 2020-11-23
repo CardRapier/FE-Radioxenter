@@ -1,3 +1,5 @@
+import { Redirect, Route } from "react-router-dom";
+
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AdminDrawer from "./AdminDrawer";
 import AdminShow from "./AdminShow";
@@ -8,15 +10,16 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import DoctorForm from "./Forms/DoctorForm";
 import EmployeeForm from "./Forms/EmployeeForm";
 import EntityForm from "./Forms/EntityForm";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import PackageForm from "./Forms/PackageForm";
 import React from "react";
-import { Route } from "react-router-dom";
 import ServiceForm from "./Forms/ServiceForm";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import auth from "../Auth/auth";
 import clsx from "clsx";
 import data from "./admin-data";
 import { makeStyles } from "@material-ui/core/styles";
@@ -67,6 +70,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Admin() {
   const classes = useStyles();
+  const [redirect, setRedirect] = React.useState(false);
+  const [redirectModule, setRedirectModule] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const {
     services,
@@ -102,8 +107,19 @@ export default function Admin() {
                 noWrap
                 className={classes.title}
               ></Typography>
+
               <Button color="inherit">
                 <AccountCircleIcon />
+              </Button>
+              <Button
+                color="inherit"
+                onClick={() => {
+                  auth.logout(() => {
+                    setRedirect(true);
+                  });
+                }}
+              >
+                <ExitToAppIcon />
               </Button>
             </Toolbar>
           </AppBar>
@@ -151,6 +167,12 @@ export default function Admin() {
 
             <Route
               exact
+              path="/Administrador/EditarPaquete"
+              component={PackageForm}
+            />
+
+            <Route
+              exact
               path="/Administrador/Entidades"
               render={() => <AdminShow data={entities} />}
             />
@@ -158,6 +180,12 @@ export default function Admin() {
             <Route
               exact
               path="/Administrador/CrearEntidad"
+              component={EntityForm}
+            />
+
+            <Route
+              exact
+              path="/Administrador/EditarEntidad"
               component={EntityForm}
             />
 
@@ -175,6 +203,12 @@ export default function Admin() {
 
             <Route
               exact
+              path="/Administrador/EditarConvenio"
+              component={AgreementForm}
+            />
+
+            <Route
+              exact
               path="/Administrador/Empleados"
               render={() => <AdminShow data={employees} />}
             />
@@ -182,6 +216,12 @@ export default function Admin() {
             <Route
               exact
               path="/Administrador/CrearEmpleado"
+              component={EmployeeForm}
+            />
+
+            <Route
+              exact
+              path="/Administrador/EditarEmpleado"
               component={EmployeeForm}
             />
 
@@ -196,10 +236,26 @@ export default function Admin() {
               path="/Administrador/CrearDoctor"
               component={DoctorForm}
             />
+
+            <Route
+              exact
+              path="/Administrador/EditarDoctor"
+              component={DoctorForm}
+            />
           </Grid>
           <Grid item xs={false} sm={1} md={3}></Grid>
         </Grid>
       </Grid>
+      {redirect === true && localStorage.getItem("authenticated") ? (
+        <Redirect to={"/"} />
+      ) : (
+        ""
+      )}
+      {redirectModule === true && localStorage.getItem("authenticated") ? (
+        <Redirect to={"/Empleado"} />
+      ) : (
+        ""
+      )}
     </React.Fragment>
   );
 }

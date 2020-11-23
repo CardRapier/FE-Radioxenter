@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 
 export default function AgreementsDescription(props) {
   const { row } = props;
+  console.log(row);
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom component="div">

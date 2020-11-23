@@ -1,11 +1,20 @@
-import AgreementsDescription from './Descriptions/AgreementsDescription'
+import {
+  api_packages,
+  api_period_payments,
+  api_services,
+  api_type_document,
+  api_type_receipt,
+  api_type_shipment,
+} from "../../api_app";
+
+import AgreementsDescription from "./Descriptions/AgreementsDescription";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Collapse from "@material-ui/core/Collapse";
 import Divider from "@material-ui/core/Divider";
-import DoctorsDescription from "./Descriptions/DoctorsDescription"
-import EmployeesDescription from "./Descriptions/EmployeesDescription"
-import EntitiesDescription from "./Descriptions/EntitiesDescription"
+import DoctorsDescription from "./Descriptions/DoctorsDescription";
+import EmployeesDescription from "./Descriptions/EmployeesDescription";
+import EntitiesDescription from "./Descriptions/EntitiesDescription";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -37,6 +46,35 @@ const useStyles = makeStyles((theme) => ({
 export default function AdminRow(props) {
   const { tableCells, row, data } = props;
   const classes = useStyles();
+  const [subdata, setSubData] = React.useState();
+  React.useEffect(() => {
+    if (data.title === "Entidades") {
+      api_period_payments.get("/").then((res) => {
+        setSubData({ periods: res.data.respuesta });
+        api_type_receipt.get("/").then((res) => {
+          setSubData((subdata) => ({
+            ...subdata,
+            type_receipts: res.data.respuesta,
+          }));
+        });
+      });
+    } else if (data.title === "Paquetes") {
+      api_packages.get(`/${row.cod_paquete}/servicios`).then((res) => {
+        setSubData({ packages: res.data.respuesta });
+      });
+    } else if (data.title === "Doctores") {
+      api_type_shipment.get("/").then((res) => {
+        setSubData({ type_shipments: res.data.respuesta });
+        api_type_document.get("/").then((res) => {
+          setSubData((subdata) => ({
+            ...subdata,
+            type_documents: res.data.respuesta,
+          }));
+        });
+      });
+    }
+  }, [data.title]);
+
   const [open, setOpen] = React.useState(false);
   return (
     <React.Fragment>
@@ -50,8 +88,10 @@ export default function AdminRow(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        {tableCells.map((data) => (
-          <TableCell align="center">{data}</TableCell>
+        {tableCells.map((data, index) => (
+          <TableCell key={index} align="center">
+            {data}
+          </TableCell>
         ))}
       </TableRow>
       <TableRow>
@@ -64,19 +104,19 @@ export default function AdminRow(props) {
                     return <ServiceDescription row={row} />;
 
                   case "Paquetes":
-                    return <PackageDescription row={row} />;
+                    return <PackageDescription row={row} data={subdata} />;
 
                   case "Entidades":
-                  return <EntitiesDescription row={row} />;
+                    return <EntitiesDescription row={row} data={subdata} />;
 
                   case "Convenios":
-                  return <AgreementsDescription row={row} />;
+                    return <AgreementsDescription row={row} />;
 
                   case "Empleados":
-                  return <EmployeesDescription row={row} />;
+                    return <EmployeesDescription row={row} />;
 
                   case "Doctores":
-                  return <DoctorsDescription row={row} />;
+                    return <DoctorsDescription row={row} data={subdata} />;
 
                   default:
                     return "";

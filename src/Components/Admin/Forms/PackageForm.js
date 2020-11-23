@@ -1,4 +1,5 @@
 import { Field, Form, Formik } from "formik";
+import { api_packages, api_services } from "../../../api_app";
 
 import BackDropLoading from "../../BackDropLoading";
 import Chip from "@material-ui/core/Chip";
@@ -11,40 +12,111 @@ import React from "react";
 import { Select } from "formik-material-ui";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
-import { api_services } from "../../../api_app";
 import { package_initial_values } from "./initial_values_admin";
 import { package_schema } from "./validation_schemas_admin";
+import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
 
 export default function ServiceForm(props) {
   const classes = useStyles();
   const [data, setData] = React.useState(undefined);
   const [services, setServices] = React.useState([]);
+  const [packages, setPackages] = React.useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+
+  React.useEffect(() => {
+    if (props.location.hasOwnProperty("data")) {
+      setData(props.location.data);
+
+      api_packages
+        .get(`/${props.location.data.cod_paquete}/servicios`)
+        .then((res) => {
+          setData((data) => ({
+            ...data,
+            packages: res.data.respuesta.map((element) => element.cod_servicio),
+          }));
+        });
+    }
+  }, [props.location]);
 
   React.useEffect(() => {
     api_services.get("/").then((res) => {
       setServices(res.data.respuesta);
     });
   }, []);
-
-  React.useEffect(() => {
-    if (props.location.hasOwnProperty("data")) {
-      setData(props.location.data);
-    }
-  }, [props.location]);
-
+  console.log(data);
   return (
     <Formik
       enableReinitialize
       validationSchema={package_schema}
-      initialValues={data === undefined ? package_initial_values : data}
+      initialValues={
+        data === undefined
+          ? package_initial_values
+          : {
+              nombre_paquete: data.nombre_paquete,
+              precio_paquete: data.precio_paquete,
+              servicios: data.packages,
+            }
+      }
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        setTimeout(function () {
-          setSubmitting(false);
-        }, 2000);
+        if (data === undefined) {
+          setSubmitting(true);
+          console.log(values);
+          api_packages
+            .post("/", {
+              nombre_paquete: values.nombre_paquete,
+              precio_paquete: values.precio_paquete,
+            })
+            .then(function (response) {
+              let id_package = response.data.respuesta.cod_paquete;
+              values.servicios.map((servicio) =>
+                api_packages.post(`/${id_package}/servicios/`, {
+                  cod_servicio: servicio,
+                })
+              );
+              console.log(response);
+              setSubmitting(false);
+              enqueueSnackbar("Se ha creado exitosamente!", {
+                variant: "success",
+              });
+              resetForm({});
+            })
+            .catch(function (error) {
+              setSubmitting(false);
+              enqueueSnackbar(
+                "Ha habido un error, revise los datos e intente de nuevo.",
+                {
+                  variant: "error",
+                }
+              );
+            });
+        } else {
+          setSubmitting(true);
+          api_packages
+            .put("/", {
+              nombre_paquete: values.nombre_paquete,
+              precio_paquete: values.precio_paquete,
+            })
+            .then(function (response) {
+              setSubmitting(false);
+              enqueueSnackbar("Los cambios han sido exitosos!", {
+                variant: "success",
+              });
+            })
+            .catch(function (error) {
+              setSubmitting(false);
+              enqueueSnackbar(
+                "Ha habido un error, revise los datos e intente de nuevo." +
+                  error.response,
+                {
+                  variant: "error",
+                }
+              );
+            });
+        }
       }}
     >
-      {({ resetForm, isSubmitting, errors }) => (
+      {({ resetForm, isSubmitting, errors, values }) => (
         <Form>
           <Grid container direction="column">
             <Grid item container className={classes.title}>
@@ -128,6 +200,7 @@ export default function ServiceForm(props) {
               />
             </Grid>
           </Grid>
+          <pre>{JSON.stringify(values, null, 2)}</pre>
           <BackDropLoading isSubmitting={isSubmitting} />
         </Form>
       )}
