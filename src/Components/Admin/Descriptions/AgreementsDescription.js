@@ -7,8 +7,9 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 
 export default function AgreementsDescription(props) {
-  const { row } = props;
+  const { row, data } = props;
   console.log(row);
+  console.log(data);
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom component="div">
@@ -20,19 +21,36 @@ export default function AgreementsDescription(props) {
           <TableRow>
             <TableCell>Nombre</TableCell>
             <TableCell>Precio</TableCell>
-            <TableCell>Fecha Inicial</TableCell>
+            <TableCell>Fecha inicial</TableCell>
             <TableCell>Fecha Final</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {row.services.map((service, i) => (
-            <TableRow key={service.code}>
+          {row.servicios.map((service, i) => (
+            <TableRow
+              key={
+                data.services.find(
+                  (element) => element.cod_servicio === service
+                ).cod_servicio
+              }
+            >
               <TableCell component="th" scope="row">
-                {service.name}
+                {
+                  data.services.find(
+                    (element) => element.cod_servicio === service
+                  ).nombre_servicio
+                }
               </TableCell>
-              <TableCell>{service.price}</TableCell>
-              <TableCell>{row.dates[i].initial}</TableCell>
-              <TableCell>{row.dates[i].final}</TableCell>
+              <TableCell>
+                {
+                  data.services.find(
+                    (element) => element.cod_servicio === service
+                  ).precio_servicio
+                }
+              </TableCell>
+
+              <TableCell>{row.fechas.fecha_inicial_convenio[i]}</TableCell>
+              <TableCell>{row.fechas.fecha_final_convenio[i]}</TableCell>
             </TableRow>
           ))}
         </TableBody>

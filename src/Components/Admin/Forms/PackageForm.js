@@ -200,7 +200,6 @@ export default function ServiceForm(props) {
               />
             </Grid>
           </Grid>
-          <pre>{JSON.stringify(values, null, 2)}</pre>
           <BackDropLoading isSubmitting={isSubmitting} />
         </Form>
       )}

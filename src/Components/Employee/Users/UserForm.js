@@ -101,7 +101,7 @@ export default function UserForm(props) {
           }
         }}
       >
-        {({ resetForm, isSubmitting }) => (
+        {({ resetForm, isSubmitting, values }) => (
           <Form>
             <Grid container direction="column">
               <Grid item container className={classes.title}>

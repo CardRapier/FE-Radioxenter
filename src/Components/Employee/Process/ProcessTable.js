@@ -23,9 +23,9 @@ function createData(code, name, document, date, pref_shipment) {
 }
 
 const rows = [
-  createData(1, "Santiago Guzman", "1019147849", "10:50", "Mail"),
-  createData(2, "Santiago COrrea", "52159357", "10:55", "Fisicamente"),
-  createData(3, "Leonardo ALegre", "55891566", "10:56", "Mail"),
+  createData(1, "Santiago Guzman", "1019147849", "10:50", "Correo"),
+  createData(2, "Santiago Correa", "52159357", "10:55", "Fisicamente"),
+  createData(3, "Leonardo Alegre", "55891566", "10:56", "Correo"),
 ];
 
 export default function ProcessTable() {

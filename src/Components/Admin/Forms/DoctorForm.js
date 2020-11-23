@@ -1,5 +1,9 @@
 import { Field, Form, Formik } from "formik";
-import { api_type_document, api_type_shipment } from "../../../api_app";
+import {
+  api_doctors,
+  api_type_document,
+  api_type_shipment,
+} from "../../../api_app";
 
 import BackDropLoading from "../../BackDropLoading";
 import FormButtons from "../../FormButtons";
@@ -39,9 +43,48 @@ export default function DoctorForm(props) {
       validationSchema={doctor_schema}
       initialValues={data === undefined ? doctor_initial_values : data}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        setTimeout(function () {
-          setSubmitting(false);
-        }, 2000);
+        if (data === undefined) {
+          setSubmitting(true);
+          api_doctors
+            .post("/", values)
+            .then(function (response) {
+              setSubmitting(false);
+              enqueueSnackbar("Se ha creado exitosamente!", {
+                variant: "success",
+              });
+              resetForm({});
+              console.log(response);
+            })
+            .catch(function (error) {
+              setSubmitting(false);
+              enqueueSnackbar(
+                "Ha habido un error, revise los datos e intente de nuevo.",
+                {
+                  variant: "error",
+                }
+              );
+            });
+        } else {
+          setSubmitting(true);
+          api_doctors
+            .put("/", values)
+            .then(function (response) {
+              setSubmitting(false);
+              enqueueSnackbar("Los cambios han sido exitosos!", {
+                variant: "success",
+              });
+            })
+            .catch(function (error) {
+              setSubmitting(false);
+              enqueueSnackbar(
+                "Ha habido un error, revise los datos e intente de nuevo." +
+                  error.response,
+                {
+                  variant: "error",
+                }
+              );
+            });
+        }
       }}
     >
       {({ resetForm, isSubmitting, values }) => (

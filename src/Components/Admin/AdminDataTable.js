@@ -52,7 +52,7 @@ export default function AdminDataTable(props) {
         setRows(res.data.respuesta);
       });
     } else if (data.title === "Convenios") {
-      api_agreements.get("/").then((res) => {
+      api_agreements.get("/Entidad").then((res) => {
         setRows(res.data.respuesta);
         setExample(res.data.respuesta);
         api_entities.get("/").then((res) => {
@@ -61,8 +61,19 @@ export default function AdminDataTable(props) {
             row.map((element) => ({
               ...element,
               razon_social_entidad: entities.find(
-                (entity) => entity.cod_entidad === element.cod_entidad
+                (entity) => entity.cod_entidad === element[0].cod_entidad
               ).razon_social_entidad,
+              servicios: Object.values(element).map(
+                (object) => object.cod_servicio
+              ),
+              fechas: {
+                fecha_inicial_convenio: Object.values(element).map(
+                  (object) => object.fecha_inicial_convenio
+                ),
+                fecha_final_convenio: Object.values(element).map(
+                  (object) => object.fecha_final_convenio
+                ),
+              },
             }))
           );
 
@@ -107,7 +118,7 @@ export default function AdminDataTable(props) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  console.log(rows);
   return (rows !== undefined && subdata !== undefined) ||
     data.title !== "Convenios" ? (
     <TableContainer component={Paper}>
@@ -164,18 +175,14 @@ export default function AdminDataTable(props) {
                     tableCells={[
                       row.razon_social_entidad,
                       subdata !== undefined && subdata.services !== undefined
-                        ? subdata.services
-                            .filter(
-                              (element) =>
-                                element.cod_servicio === row.cod_servicio
+                        ? row.servicios
+                            .map(
+                              (element, index) =>
+                                subdata.services.find(
+                                  (service) => service.cod_servicio === element
+                                ).nombre_servicio
                             )
-                            .map((service, index) => {
-                              if (index > 0) {
-                                return service.nombre_servicio + " - ";
-                              } else {
-                                return service.nombre_servicio;
-                              }
-                            })
+                            .join(" - ")
                         : "",
                     ]}
                     row={row}

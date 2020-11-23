@@ -212,7 +212,6 @@ export default function AgreementForm(props) {
                   })}
                 </Grid>
               </Grid>
-              <pre>{JSON.stringify(values, null, 2)}</pre>
 
               <FormButtons
                 to={"/Administrador/Paquetes"}

@@ -72,6 +72,10 @@ export default function AdminRow(props) {
           }));
         });
       });
+    } else if (data.title === "Convenios") {
+      api_services.get(`/`).then((res) => {
+        setSubData({ services: res.data.respuesta });
+      });
     }
   }, [data.title]);
 
@@ -110,7 +114,7 @@ export default function AdminRow(props) {
                     return <EntitiesDescription row={row} data={subdata} />;
 
                   case "Convenios":
-                    return <AgreementsDescription row={row} />;
+                    return <AgreementsDescription row={row} data={subdata} />;
 
                   case "Empleados":
                     return <EmployeesDescription row={row} />;
