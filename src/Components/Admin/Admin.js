@@ -71,7 +71,6 @@ const useStyles = makeStyles((theme) => ({
 export default function Admin() {
   const classes = useStyles();
   const [redirect, setRedirect] = React.useState(false);
-  const [redirectModule, setRedirectModule] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const {
     services,
@@ -248,11 +247,6 @@ export default function Admin() {
       </Grid>
       {redirect === true && localStorage.getItem("authenticated") ? (
         <Redirect to={"/"} />
-      ) : (
-        ""
-      )}
-      {redirectModule === true && localStorage.getItem("authenticated") ? (
-        <Redirect to={"/Empleado"} />
       ) : (
         ""
       )}

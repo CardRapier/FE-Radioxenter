@@ -77,7 +77,7 @@ export default function AdminRow(props) {
         setSubData({ services: res.data.respuesta });
       });
     }
-  }, [data.title]);
+  }, [data.title, row.cod_paquete]);
 
   const [open, setOpen] = React.useState(false);
   return (

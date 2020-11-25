@@ -21,7 +21,6 @@ export default function ServiceForm(props) {
   const classes = useStyles();
   const [data, setData] = React.useState(undefined);
   const [services, setServices] = React.useState([]);
-  const [packages, setPackages] = React.useState([]);
   const { enqueueSnackbar } = useSnackbar();
 
   React.useEffect(() => {

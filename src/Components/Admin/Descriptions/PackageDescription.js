@@ -7,7 +7,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 
 export default function PackageDescription(props) {
-  const { row, data } = props;
+  const { data } = props;
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom component="div">

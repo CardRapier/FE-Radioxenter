@@ -1,5 +1,3 @@
-import * as yup from "yup";
-
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import { Field, Form, Formik } from "formik";
 
@@ -25,8 +23,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-const login_schema = yup.object({});
 
 export default function Login() {
   const classes = useStyles();

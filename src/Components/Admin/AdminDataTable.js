@@ -1,4 +1,3 @@
-import React, { useRef } from "react";
 import {
   api_agreements,
   api_doctors,
@@ -12,6 +11,7 @@ import {
 
 import AdminRow from "./AdminRow";
 import Paper from "@material-ui/core/Paper";
+import React from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -37,7 +37,6 @@ export default function AdminDataTable(props) {
   const { data, filter } = props;
   const [rows, setRows] = React.useState([]);
   const [subdata, setSubData] = React.useState(undefined);
-  const [example, setExample] = React.useState(undefined);
   React.useEffect(() => {
     if (data.title === "Servicios") {
       api_services.get("/").then((res) => {
@@ -54,7 +53,6 @@ export default function AdminDataTable(props) {
     } else if (data.title === "Convenios") {
       api_agreements.get("/Entidad").then((res) => {
         setRows(res.data.respuesta);
-        setExample(res.data.respuesta);
         api_entities.get("/").then((res) => {
           let entities = res.data.respuesta;
           setRows((row) =>
@@ -240,7 +238,7 @@ export default function AdminDataTable(props) {
                     tableCells={[
                       row.nombre_servicio,
                       row.precio_servicio,
-                      row.iva_servicio,
+                      row.iva_servicio + "%",
                     ]}
                     row={row}
                     data={data}

@@ -11,7 +11,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
 export default function ReceiptServiceTable(props) {
-  const [services, setServices] = React.useState([
+  const [services] = React.useState([
     { name: "Panorámica", price: "20000" },
     { name: "Senos Paranasales", price: "20000" },
     { name: "ATM", price: "20000" },
