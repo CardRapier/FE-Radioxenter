@@ -1,7 +1,6 @@
 import {
   api_packages,
   api_period_payments,
-  api_services,
   api_type_document,
   api_type_receipt,
   api_type_shipment,
@@ -44,42 +43,39 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AdminRow(props) {
-  const { tableCells, row, data } = props;
+  const { tableCells, row, data, subdata } = props;
   const classes = useStyles();
-  const [subdata, setSubData] = React.useState();
+  const [fetchData, setFetchData] = React.useState();
   React.useEffect(() => {
     if (data.title === "Entidades") {
       api_period_payments.get("/").then((res) => {
-        setSubData({ periods: res.data.respuesta });
+        setFetchData({ periods: res.data.respuesta });
         api_type_receipt.get("/").then((res) => {
-          setSubData((subdata) => ({
-            ...subdata,
+          setFetchData((fetchData) => ({
+            ...fetchData,
             type_receipts: res.data.respuesta,
           }));
         });
       });
     } else if (data.title === "Paquetes") {
       api_packages.get(`/${row.cod_paquete}/servicios`).then((res) => {
-        setSubData({ packages: res.data.respuesta });
+        setFetchData({ packages: res.data.respuesta });
       });
     } else if (data.title === "Doctores") {
       api_type_shipment.get("/").then((res) => {
-        setSubData({ type_shipments: res.data.respuesta });
+        setFetchData({ type_shipments: res.data.respuesta });
         api_type_document.get("/").then((res) => {
-          setSubData((subdata) => ({
-            ...subdata,
+          setFetchData((fetchData) => ({
+            ...fetchData,
             type_documents: res.data.respuesta,
           }));
         });
-      });
-    } else if (data.title === "Convenios") {
-      api_services.get(`/`).then((res) => {
-        setSubData({ services: res.data.respuesta });
       });
     }
   }, [data.title, row.cod_paquete]);
 
   const [open, setOpen] = React.useState(false);
+  console.log(row);
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
@@ -93,11 +89,12 @@ export default function AdminRow(props) {
           </IconButton>
         </TableCell>
         {tableCells.map((data, index) => (
-          <TableCell key={index} align="center">
+          <TableCell align="center" key={index}>
             {data}
           </TableCell>
         ))}
       </TableRow>
+
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -108,10 +105,10 @@ export default function AdminRow(props) {
                     return <ServiceDescription row={row} />;
 
                   case "Paquetes":
-                    return <PackageDescription row={row} data={subdata} />;
+                    return <PackageDescription row={row} data={fetchData} />;
 
                   case "Entidades":
-                    return <EntitiesDescription row={row} data={subdata} />;
+                    return <EntitiesDescription row={row} data={fetchData} />;
 
                   case "Convenios":
                     return <AgreementsDescription row={row} data={subdata} />;
@@ -120,7 +117,7 @@ export default function AdminRow(props) {
                     return <EmployeesDescription row={row} />;
 
                   case "Doctores":
-                    return <DoctorsDescription row={row} data={subdata} />;
+                    return <DoctorsDescription row={row} data={fetchData} />;
 
                   default:
                     return "";
@@ -136,10 +133,14 @@ export default function AdminRow(props) {
                 className={classes.tableRow}
                 spacing={4}
               >
-                {data.actions.map((action) => (
+                {data.actions.map((action, index) => (
                   <Button
                     component={Link}
-                    to={{ pathname: action.action, data: row }}
+                    key={index}
+                    to={{
+                      pathname: action.action,
+                      data: row,
+                    }}
                     variant="contained"
                     color="primary"
                     size={"small"}

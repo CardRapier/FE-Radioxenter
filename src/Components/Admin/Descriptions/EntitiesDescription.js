@@ -15,15 +15,14 @@ export default function EntitiesDescription(props) {
   const classes = useStyles();
   const { row, data } = props;
   return (
-    <Grid container direction="column" justify="center" alignItems="strech">
+    <Grid container direction="column" justify="center" alignItems="stretch">
       <Grid item container className={classes.row}>
         <Grid item xs={1} />
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Forma de pago</InputLabel>
+          <InputLabel>Forma de pago</InputLabel>
           <Input
             fullWidth
             disabled
-            id="component-disabled"
             value={
               data !== undefined && data.periods !== undefined
                 ? data.periods.find(
@@ -37,13 +36,10 @@ export default function EntitiesDescription(props) {
         </Grid>
 
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">
-            Tipo de facturacion
-          </InputLabel>
+          <InputLabel>Tipo de facturacion</InputLabel>
           <Input
             fullWidth
             disabled
-            id="component-disabled"
             value={
               data !== undefined && data.type_receipts !== undefined
                 ? data.type_receipts.find(
@@ -59,26 +55,47 @@ export default function EntitiesDescription(props) {
       <Grid item container className={classes.row}>
         <Grid item xs={1} />
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">
-            Nombre Representante
-          </InputLabel>
+          <InputLabel>Nombre Representante</InputLabel>
+          <Input fullWidth disabled value={row.nombre_representante} />
+        </Grid>
+
+        <Grid item xs={5}>
+          <InputLabel>Cedula Representante</InputLabel>
+          <Input fullWidth disabled value={row.cedula_representante} />
+        </Grid>
+        <Grid item xs={1} />
+      </Grid>
+
+      <Grid item container className={classes.row}>
+        <Grid item xs={1} />
+        <Grid item xs={5}>
+          <InputLabel>Telefono Representante</InputLabel>
+          <Input fullWidth disabled value={row.telefono_representante} />
+        </Grid>
+
+        <Grid item xs={5}>
+          <InputLabel>Correo Representante</InputLabel>
+          <Input fullWidth disabled value={row.correo_representante} />
+        </Grid>
+        <Grid item xs={1} />
+      </Grid>
+      <Grid item container className={classes.row}>
+        <Grid item xs={1} />
+        <Grid item xs={5}>
+          <InputLabel>Nombre Contacto</InputLabel>
           <Input
             fullWidth
             disabled
-            id="component-disabled"
-            value={row.nombre_representante}
+            value={row.nombre_contacto !== undefined ? row.nombre_contacto : ""}
           />
         </Grid>
 
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">
-            Cedula Representante
-          </InputLabel>
+          <InputLabel>Cedula Contacto</InputLabel>
           <Input
             fullWidth
             disabled
-            id="component-disabled"
-            value={row.cedula_representante}
+            value={row.cedula_contacto !== null ? row.cedula_contacto : ""}
           />
         </Grid>
         <Grid item xs={1} />
@@ -87,74 +104,21 @@ export default function EntitiesDescription(props) {
       <Grid item container className={classes.row}>
         <Grid item xs={1} />
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">
-            Telefono Representante
-          </InputLabel>
+          <InputLabel>Telefono Contacto</InputLabel>
           <Input
             fullWidth
             disabled
-            id="component-disabled"
-            value={row.telefono_representante}
-          />
-        </Grid>
-
-        <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">
-            Correo Representante
-          </InputLabel>
-          <Input
-            fullWidth
-            disabled
-            id="component-disabled"
-            value={row.correo_representante}
-          />
-        </Grid>
-        <Grid item xs={1} />
-      </Grid>
-      <Grid item container className={classes.row}>
-        <Grid item xs={1} />
-        <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Nombre Contacto</InputLabel>
-          <Input
-            fullWidth
-            disabled
-            id="component-disabled"
-            value={row.nombre_contacto}
-          />
-        </Grid>
-
-        <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Cedula Contacto</InputLabel>
-          <Input
-            fullWidth
-            disabled
-            id="component-disabled"
-            value={row.cedula_contacto}
-          />
-        </Grid>
-        <Grid item xs={1} />
-      </Grid>
-
-      <Grid item container className={classes.row}>
-        <Grid item xs={1} />
-        <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">
-            Telefono Contacto
-          </InputLabel>
-          <Input
-            fullWidth
-            disabled
-            id="component-disabled"
-            value={row.telefono_contacto}
+            value={
+              row.telefono_contacto !== undefined ? row.telefono_contacto : ""
+            }
           />
         </Grid>
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Correo Contacto</InputLabel>
+          <InputLabel>Correo Contacto</InputLabel>
           <Input
             fullWidth
             disabled
-            id="component-disabled"
-            value={row.correo_contacto}
+            value={row.correo_contacto !== undefined ? row.correo_contacto : ""}
           />
         </Grid>
         <Grid item xs={1} />

@@ -20,7 +20,7 @@ export default function FormButtons(props) {
         item
         container
         justify="flex-end"
-        spacing={3}
+        spacing={1}
         className={classes.buttons}
       >
         <Grid item>

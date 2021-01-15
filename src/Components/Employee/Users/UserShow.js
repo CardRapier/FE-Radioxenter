@@ -47,6 +47,7 @@ export default function UserShow() {
               to="/Empleado/CrearUsuario"
               variant="contained"
               color="primary"
+              size="small"
             >
               Crear
             </Button>
@@ -56,10 +57,20 @@ export default function UserShow() {
         <Grid container item spacing={4}>
           <Grid item xs={2}></Grid>
           <Grid item xs={5}>
-            <TextField id="documento" label="Documento" variant="outlined" />
+            <TextField
+              id="documento"
+              label="Documento"
+              variant="outlined"
+              size="small"
+            />
           </Grid>
           <Grid item xs={5}>
-            <TextField id="nombre" label="Nombre" variant="outlined" />
+            <TextField
+              id="nombre"
+              label="Nombre"
+              variant="outlined"
+              size="small"
+            />
           </Grid>
         </Grid>
         <Grid container item spacing={4} justify="center" alignItems="center">

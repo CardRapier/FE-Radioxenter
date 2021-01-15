@@ -12,4 +12,7 @@ export const useStyles = makeStyles((theme) => ({
   services: {
     paddingTop: theme.spacing(3),
   },
+  expandedPanel: {
+    backgroundColor: "#fcfcfc",
+  },
 }));

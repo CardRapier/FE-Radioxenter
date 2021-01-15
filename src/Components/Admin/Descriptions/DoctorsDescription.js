@@ -16,17 +16,14 @@ export default function DoctorsDescription(props) {
   const classes = useStyles();
 
   return (
-    <Grid container direction="column" justify="center" alignItems="strech">
+    <Grid container direction="column" justify="center" alignItems="stretch">
       <Grid item container className={classes.row}>
         <Grid item xs={1} />
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">
-            Preferencia Entrega
-          </InputLabel>
+          <InputLabel>Preferencia Entrega</InputLabel>
           <Input
             fullWidth
             disabled
-            id="component-disabled"
             value={
               data !== undefined && data.type_shipments !== undefined
                 ? data.type_shipments.find(
@@ -39,32 +36,21 @@ export default function DoctorsDescription(props) {
           />
         </Grid>
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Dirección</InputLabel>
-          <Input
-            fullWidth
-            disabled
-            id="component-disabled"
-            value={row.direccion_doctor}
-          />
+          <InputLabel>Dirección</InputLabel>
+          <Input fullWidth disabled value={row.direccion_doctor} />
         </Grid>
       </Grid>
       <Grid item container className={classes.row}>
         <Grid item xs={1} />
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Documento</InputLabel>
-          <Input
-            fullWidth
-            disabled
-            id="component-disabled"
-            value={row.documento_doctor}
-          />
+          <InputLabel>Documento</InputLabel>
+          <Input fullWidth disabled value={row.documento_doctor} />
         </Grid>
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Tipo Documento</InputLabel>
+          <InputLabel>Tipo Documento</InputLabel>
           <Input
             fullWidth
             disabled
-            id="component-disabled"
             value={
               data !== undefined && data.type_documents !== undefined
                 ? data.type_documents.find(

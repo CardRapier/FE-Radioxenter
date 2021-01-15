@@ -42,12 +42,29 @@ export default function AgreementForm(props) {
     }
   }, [props.location]);
 
+  console.log(data);
+
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Formik
         enableReinitialize
         validationSchema={agreement_schema}
-        initialValues={data === undefined ? agreement_initial_values : data}
+        initialValues={
+          data === undefined
+            ? agreement_initial_values
+            : {
+                cod_entidad: data.cod_entidad,
+                fecha_inicial_convenio:
+                  data.Convenios[0].fecha_inicial_convenio,
+                fecha_final_convenio: data.Convenios[0].fecha_final_convenio,
+                cod_servicios: data.Convenios.map((element) => [
+                  element.cod_servicio,
+                ]),
+                precios_servicios: data.Convenios.map((element) => [
+                  element.valor_servicio,
+                ]),
+              }
+        }
         onSubmit={(values, { setSubmitting, resetForm }) => {
           if (data === undefined) {
             setSubmitting(true);
@@ -80,8 +97,13 @@ export default function AgreementForm(props) {
             );
           } else {
             setSubmitting(true);
-            api_agreements
-              .put("/", values)
+            api_entities
+              .put(`/${data.cod_entidad}/convenios`, {
+                fecha_inicial_convenio: values.fecha_inicial_convenio,
+                fecha_final_convenio: values.fecha_final_convenio,
+                servicios_convenio: values.cod_servicios,
+                valores_servicios: values.precios_servicios,
+              })
               .then(function (response) {
                 setSubmitting(false);
                 enqueueSnackbar("Los cambios han sido exitosos!", {
@@ -163,7 +185,7 @@ export default function AgreementForm(props) {
                 <Grid item xs={12}>
                   <InputLabel id="servicios_label">Servicios</InputLabel>
                   <Field
-                    name={`cod_servicios`}
+                    name={"cod_servicios"}
                     component={Select}
                     multiple
                     fullWidth
@@ -184,8 +206,8 @@ export default function AgreementForm(props) {
                     )}
                   >
                     {services !== undefined
-                      ? services.map((service) => (
-                          <MenuItem value={service.cod_servicio}>
+                      ? services.map((service, index) => (
+                          <MenuItem key={index} value={service.cod_servicio}>
                             {service.nombre_servicio}
                           </MenuItem>
                         ))
@@ -197,24 +219,22 @@ export default function AgreementForm(props) {
                 <Grid item xs={12}>
                   {values.cod_servicios.map((code, index) => {
                     return (
-                      <div key={index}>
-                        <Field
-                          required
-                          label={`Precio ${services
-                            .filter((service) => service.cod_servicio === code)
-                            .map((x) => x.nombre_servicio)}`}
-                          name={`precios_servicios.${index}`}
-                          component={TextFormField}
-                          type={"number"}
-                        />
-                      </div>
+                      <Field
+                        required
+                        label={`Precio ${services
+                          .filter((service) => service.cod_servicio === code)
+                          .map((x) => x.nombre_servicio)}`}
+                        name={`precios_servicios.${index}`}
+                        component={TextFormField}
+                        type={"number"}
+                      />
                     );
                   })}
                 </Grid>
               </Grid>
-
+              <pre>{JSON.stringify(values, null, 2)}</pre>
               <FormButtons
-                to={"/Administrador/Paquetes"}
+                to={"/Administrador/Convenios"}
                 data={data}
                 isSubmitting={isSubmitting}
                 resetForm={() => resetForm}

@@ -1,3 +1,5 @@
+import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 import React from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,48 +11,56 @@ import Typography from "@material-ui/core/Typography";
 export default function AgreementsDescription(props) {
   const { row, data } = props;
   console.log(row);
-  console.log(data);
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom component="div">
+      <Typography variant="h6" gutterBottom>
         Descripción de los convenios
       </Typography>
 
-      <Table size="small" aria-label="purchases">
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell>Nombre</TableCell>
             <TableCell>Precio</TableCell>
             <TableCell>Fecha inicial</TableCell>
             <TableCell>Fecha Final</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {row.servicios.map((service, i) => (
-            <TableRow
-              key={
-                data.services.find(
-                  (element) => element.cod_servicio === service
-                ).cod_servicio
-              }
-            >
-              <TableCell component="th" scope="row">
+          {row.Convenios.map((element, i) => (
+            <TableRow key={i}>
+              <TableCell scope="row">
                 {
                   data.services.find(
-                    (element) => element.cod_servicio === service
+                    (service) => service.cod_servicio === element.cod_servicio
                   ).nombre_servicio
                 }
               </TableCell>
-              <TableCell>
-                {
-                  data.services.find(
-                    (element) => element.cod_servicio === service
-                  ).precio_servicio
-                }
-              </TableCell>
+              <TableCell>{element.valor_servicio}</TableCell>
 
-              <TableCell>{row.fechas.fecha_inicial_convenio[i]}</TableCell>
-              <TableCell>{row.fechas.fecha_final_convenio[i]}</TableCell>
+              <TableCell>{element.fecha_inicial_convenio}</TableCell>
+              <TableCell>{element.fecha_final_convenio}</TableCell>
+              <TableCell>
+                <Button
+                  component={Link}
+                  to={{
+                    pathname: "/Administrador/EditarConvenio",
+                    data: {
+                      cod_entidad: row.cod_entidad,
+                      fecha_inicial_convenio: element.fecha_inicial_convenio,
+                      fecha_final_convenio: element.fecha_final_convenio,
+                      servicios_convenio: [element.cod_servicio],
+                      valores_servicios: [element.valor_servicio],
+                    },
+                  }}
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                >
+                  Editar
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

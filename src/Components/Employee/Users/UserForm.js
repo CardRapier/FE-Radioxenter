@@ -7,14 +7,22 @@ import {
   api_users,
 } from "../../../api_app";
 
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import BackDropLoading from "../../BackDropLoading";
+import { Button } from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import FormButtons from "../../FormButtons";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
 import { KeyboardDatePicker } from "formik-material-ui-pickers";
-import { MenuItem } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import MenuItem from "@material-ui/core/MenuItem";
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import React from "react";
+import { Switch } from "formik-material-ui";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
 import { useSnackbar } from "notistack";
@@ -135,26 +143,6 @@ export default function UserForm(props) {
                 </Grid>
               </Grid>
 
-              <Grid item container spacing={3}>
-                <Grid item xs={6}>
-                  <Field
-                    required
-                    label="Telefono"
-                    name="telefono_usuario"
-                    component={TextFormField}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <Field
-                    required
-                    label="Dirección"
-                    name="direccion_usuario"
-                    component={TextFormField}
-                  />
-                </Grid>
-              </Grid>
-
               <Grid
                 item
                 container
@@ -193,45 +181,6 @@ export default function UserForm(props) {
                 </Grid>
               </Grid>
 
-              <Grid item container spacing={3}>
-                <Grid item xs={6}>
-                  <Field
-                    required
-                    label="Ocupación"
-                    name="ocupacion_usuario"
-                    component={TextFormField}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <Field
-                    required
-                    label="Genero"
-                    name="genero_usuario"
-                    component={TextFormField}
-                  />
-                </Grid>
-              </Grid>
-              <Grid item container spacing={3}>
-                <Grid item xs={6}>
-                  <Field
-                    component={TextFormField}
-                    required
-                    label="Celular"
-                    name="celular_usuario"
-                  ></Field>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <Field
-                    required
-                    label="Correo"
-                    name="correo_usuario"
-                    component={TextFormField}
-                  />
-                </Grid>
-              </Grid>
-
               <Grid item container spacing={3} alignItems="center">
                 <Grid item xs={6}>
                   <Field
@@ -265,40 +214,130 @@ export default function UserForm(props) {
                 </Grid>
               </Grid>
 
-              <Grid item container spacing={3}>
+              <Grid item container spacing={3} alignItems="center">
                 <Grid item xs={6}>
                   <Field
+                    label="Correo"
+                    name="correo_usuario"
                     component={TextFormField}
-                    required
-                    label="Ciudad"
-                    name="cod_ciudad"
-                    fullWidth
-                    select
-                  >
-                    {cities.map((city) => (
-                      <MenuItem key={city.cod_ciudad} value={city.cod_ciudad}>
-                        {city.nom_ciudad}
-                      </MenuItem>
-                    ))}
-                  </Field>
+                  />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <Field
-                    component={TextFormField}
-                    required
-                    label="Sexo"
-                    name="cod_sexo"
-                    fullWidth
-                    select
-                  >
-                    {sex.map((element) => (
-                      <MenuItem key={element.cod_sexo} value={element.cod_sexo}>
-                        {element.nombre_sexo}
-                      </MenuItem>
-                    ))}
-                  </Field>
+                  <FormControlLabel
+                    control={
+                      <Field
+                        component={Switch}
+                        type="checkbox"
+                        color="primary"
+                      />
+                    }
+                    label="Discapacidad"
+                  />
                 </Grid>
+              </Grid>
+
+              <Accordion classes={{ root: classes.expandedPanel }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel-content"
+                  id="panel1a-header"
+                >
+                  <Typography variant="h6">
+                    Información complementaria
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    <Grid item container spacing={3}>
+                      <Grid item xs={6}>
+                        <Field
+                          label="Telefono"
+                          name="telefono_usuario"
+                          component={TextFormField}
+                        />
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <Field
+                          component={TextFormField}
+                          label="Celular"
+                          name="celular_usuario"
+                        />
+                      </Grid>
+                    </Grid>
+
+                    <Grid item container spacing={3}>
+                      <Grid item xs={6}>
+                        <Field
+                          label="Ocupación"
+                          name="ocupacion_usuario"
+                          component={TextFormField}
+                        />
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <Field
+                          label="Genero"
+                          name="genero_usuario"
+                          component={TextFormField}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid item container spacing={3}>
+                      <Grid item xs={12}>
+                        <Field
+                          label="Dirección"
+                          name="direccion_usuario"
+                          component={TextFormField}
+                        />
+                      </Grid>
+                    </Grid>
+
+                    <Grid item container spacing={3}>
+                      <Grid item xs={6}>
+                        <Field
+                          component={TextFormField}
+                          label="Ciudad"
+                          name="cod_ciudad"
+                          fullWidth
+                          select
+                        >
+                          {cities.map((city) => (
+                            <MenuItem
+                              key={city.cod_ciudad}
+                              value={city.cod_ciudad}
+                            >
+                              {city.nom_ciudad}
+                            </MenuItem>
+                          ))}
+                        </Field>
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <Field
+                          component={TextFormField}
+                          label="Sexo"
+                          name="cod_sexo"
+                          fullWidth
+                          select
+                        >
+                          {sex.map((element) => (
+                            <MenuItem
+                              key={element.cod_sexo}
+                              value={element.cod_sexo}
+                            >
+                              {element.nombre_sexo}
+                            </MenuItem>
+                          ))}
+                        </Field>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+
+              <Grid item container spacing={3}>
                 <Grid
                   item
                   container
@@ -312,6 +351,17 @@ export default function UserForm(props) {
                     isSubmitting={isSubmitting}
                     resetForm={() => resetForm}
                   />
+
+                  <Button
+                    component={Link}
+                    to="/Empleado/Parentesco"
+                    className={classes.button}
+                    variant="contained"
+                    size="small"
+                    color="primary"
+                  >
+                    Parentesco
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>

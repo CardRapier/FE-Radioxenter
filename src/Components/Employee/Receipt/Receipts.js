@@ -37,7 +37,12 @@ export default function Receipts() {
         <Grid container item spacing={4}>
           <Grid item xs={2}></Grid>
           <Grid item xs={5}>
-            <TextField id="documento" label="Documento" variant="outlined" />
+            <TextField
+              id="documento"
+              label="Documento"
+              variant="outlined"
+              size="small"
+            />
           </Grid>
         </Grid>
         <Grid container item spacing={4} justify="center" alignItems="center">

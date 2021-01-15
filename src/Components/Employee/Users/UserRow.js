@@ -76,6 +76,7 @@ export default function UserRow(props) {
                   className={classes.button}
                   component={Link}
                   to={{ pathname: "/Empleado/EditarUsuario", data: row }}
+                  size="small"
                 >
                   Editar
                 </Button>
@@ -84,6 +85,7 @@ export default function UserRow(props) {
                   to={{ pathname: "/Empleado/CrearFactura", data: row }}
                   variant="contained"
                   color="primary"
+                  size="small"
                 >
                   Facturar
                 </Button>

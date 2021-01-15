@@ -2,6 +2,7 @@ import { Redirect, Route } from "react-router-dom";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AppBar from "@material-ui/core/AppBar";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 import Button from "@material-ui/core/Button";
 import ConsentForm from "./Consent/ConsentForm";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,6 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Proccess from "./Process/Proccess";
+import ProcessPopOver from "./ProcessPopOver";
 import React from "react";
 import ReceiptCreate from "./Receipt/ReceiptCreate";
 import ReceiptKinship from "./Receipt/ReceiptKinship";
@@ -72,6 +74,18 @@ export default function Employee() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [redirect, setRedirect] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openPopover = Boolean(anchorEl);
+  const id = openPopover ? "simple-popover" : undefined;
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -103,6 +117,13 @@ export default function Employee() {
                 noWrap
                 className={classes.title}
               ></Typography>
+              <Button
+                color="inherit"
+                aria-describedby={id}
+                onClick={handleClick}
+              >
+                <AssignmentIcon />
+              </Button>
               <Button color="inherit">
                 <AccountCircleIcon />
               </Button>
@@ -151,9 +172,18 @@ export default function Employee() {
               component={ConsentForm}
             />
           </Grid>
+
           <Grid item xs={false} sm={1} md={3}></Grid>
         </Grid>
       </Grid>
+
+      <ProcessPopOver
+        id={id}
+        open={openPopover}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+      />
+
       {redirect === true && localStorage.getItem("authenticated") ? (
         <Redirect to={"/"} />
       ) : (

@@ -15,47 +15,27 @@ export default function EmployeesDescription(props) {
   const { row } = props;
   const classes = useStyles();
   return (
-    <Grid container direction="column" justify="center" alignItems="strech">
+    <Grid container direction="column" justify="center" alignItems="stretch">
       <Grid item container className={classes.row}>
         <Grid item xs={1} />
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Dirección</InputLabel>
-          <Input
-            fullWidth
-            disabled
-            id="component-disabled"
-            value={row.direccion_empleado}
-          />
+          <InputLabel>Dirección</InputLabel>
+          <Input fullWidth disabled value={row.direccion_empleado} />
         </Grid>
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Fecha Nacimiento</InputLabel>
-          <Input
-            fullWidth
-            disabled
-            id="component-disabled"
-            value={row.fnacimiento_empleado}
-          />
+          <InputLabel>Fecha Nacimiento</InputLabel>
+          <Input fullWidth disabled value={row.fnacimiento_empleado} />
         </Grid>
       </Grid>
       <Grid item container className={classes.row}>
         <Grid item xs={1} />
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Telefono</InputLabel>
-          <Input
-            fullWidth
-            disabled
-            id="component-disabled"
-            value={row.telefono_empleado}
-          />
+          <InputLabel>Telefono</InputLabel>
+          <Input fullWidth disabled value={row.telefono_empleado} />
         </Grid>
         <Grid item xs={5}>
-          <InputLabel htmlFor="component-disabled">Correo</InputLabel>
-          <Input
-            fullWidth
-            disabled
-            id="component-disabled"
-            value={row.correo_empleado}
-          />
+          <InputLabel>Correo</InputLabel>
+          <Input fullWidth disabled value={row.correo_empleado} />
         </Grid>
       </Grid>
     </Grid>

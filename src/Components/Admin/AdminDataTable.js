@@ -1,5 +1,4 @@
 import {
-  api_agreements,
   api_doctors,
   api_employees,
   api_entities,
@@ -51,36 +50,14 @@ export default function AdminDataTable(props) {
         setRows(res.data.respuesta);
       });
     } else if (data.title === "Convenios") {
-      api_agreements.get("/Entidad").then((res) => {
+      api_entities.get("/convenios").then((res) => {
         setRows(res.data.respuesta);
-        api_entities.get("/").then((res) => {
-          let entities = res.data.respuesta;
-          setRows((row) =>
-            row.map((element) => ({
-              ...element,
-              razon_social_entidad: entities.find(
-                (entity) => entity.cod_entidad === element[0].cod_entidad
-              ).razon_social_entidad,
-              servicios: Object.values(element).map(
-                (object) => object.cod_servicio
-              ),
-              fechas: {
-                fecha_inicial_convenio: Object.values(element).map(
-                  (object) => object.fecha_inicial_convenio
-                ),
-                fecha_final_convenio: Object.values(element).map(
-                  (object) => object.fecha_final_convenio
-                ),
-              },
-            }))
-          );
 
-          api_services.get("/").then((res) => {
-            setSubData((subdata) => ({
-              ...subdata,
-              services: res.data.respuesta,
-            }));
-          });
+        api_services.get("/").then((res) => {
+          setSubData((subdata) => ({
+            ...subdata,
+            services: res.data.respuesta,
+          }));
         });
       });
     } else if (data.title === "Empleados") {
@@ -116,7 +93,7 @@ export default function AdminDataTable(props) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  console.log(rows);
+
   return (rows !== undefined && subdata !== undefined) ||
     data.title !== "Convenios" ? (
     <TableContainer component={Paper}>
@@ -124,8 +101,10 @@ export default function AdminDataTable(props) {
         <TableHead>
           <TableRow>
             <TableCell className={classes.smallTableCell} />
-            {data.header.map((head) => (
-              <TableCell align="center">{head}</TableCell>
+            {data.header.map((head, index) => (
+              <TableCell align="center" key={index}>
+                {head}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -169,21 +148,21 @@ export default function AdminDataTable(props) {
               case "Convenios":
                 return (
                   <AdminRow
-                    key={row.cod_convenio}
+                    key={row.cod_entidad}
                     tableCells={[
                       row.razon_social_entidad,
                       subdata !== undefined && subdata.services !== undefined
-                        ? row.servicios
-                            .map(
-                              (element, index) =>
-                                subdata.services.find(
-                                  (service) => service.cod_servicio === element
-                                ).nombre_servicio
-                            )
-                            .join(" - ")
+                        ? row.Convenios.map(
+                            (element, index) =>
+                              subdata.services.find(
+                                (service) =>
+                                  service.cod_servicio === element.cod_servicio
+                              ).nombre_servicio
+                          ).join(" - ")
                         : "",
                     ]}
                     row={row}
+                    subdata={subdata}
                     data={data}
                   />
                 );

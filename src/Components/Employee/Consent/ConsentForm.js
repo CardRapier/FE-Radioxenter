@@ -1,7 +1,9 @@
+import { Text, Text1, Text2, Text3 } from "./ConsentText.js";
+
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import { Link } from "react-router-dom";
 import React from "react";
-import { Text } from "./ConsentText.js";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -27,6 +29,9 @@ export default function ConsentForm() {
   const classes = useStyles();
 
   const text = Text;
+  const text1 = Text1;
+  const text2 = Text2;
+  const text3 = Text3;
 
   return (
     <React.Fragment>
@@ -44,23 +49,32 @@ export default function ConsentForm() {
             </Typography>
           </Grid>
         </Grid>
-        <Grid container direction="row-reverse" item spacing={4}>
+        {/*//TODO: Añadir diferentes formas de mostrar el consentimiento*/}
+        <Grid container item spacing={4}>
+          <Typography variant="h6">
+            Yo, Fabian Ricardo Alfonso Tirado
+          </Typography>
           <Typography variant="body1">{text}</Typography>
-
-          <Grid item>
-            <div id="imageBox" className={classes.signature}></div>
+          <Typography variant="body1">{text1}</Typography>
+          <Typography variant="body1">{text2}</Typography>
+          <Typography variant="body1">{text3}</Typography>
+          {/*//TODO: Añadir datos del usuario que firmara*/}
+          <Grid container item justify="flex-end">
+            <Grid item>
+              <div id="imageBox" className={classes.signature}></div>
+            </Grid>
           </Grid>
         </Grid>
         <Grid
           container
           className={classes.buttons}
-          direction="row-reverse"
+          justify="flex-end"
           item
-          spacing={4}
+          spacing={1}
         >
           <Grid item>
-            <Button variant="contained" color="primary">
-              Continuar
+            <Button variant="contained" color="primary" size="small">
+              Volver
             </Button>
           </Grid>
           <Grid item>
@@ -70,13 +84,22 @@ export default function ConsentForm() {
               color="primary"
               id="btnStartStopWizard"
               value="Start Wizard"
+              size="small"
             >
               Firmar
             </Button>
           </Grid>
+
           <Grid item>
-            <Button variant="contained" color="primary">
-              Volver
+            <Button
+              component={Link}
+              to="/Empleado/CrearFactura"
+              className={classes.button}
+              variant="contained"
+              size="small"
+              color="primary"
+            >
+              Continuar
             </Button>
           </Grid>
         </Grid>
