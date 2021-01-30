@@ -76,7 +76,6 @@ export default function AdminRow(props) {
   }, [data.title, row.cod_paquete]);
 
   const [open, setOpen] = React.useState(false);
-
   return (
     <React.Fragment>
       <TableRow className={classes.root}>

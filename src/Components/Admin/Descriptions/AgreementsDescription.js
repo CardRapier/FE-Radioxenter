@@ -8,7 +8,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 
+<<<<<<< HEAD
 //TODO: Edit the both ways
+=======
+>>>>>>> c77b33dca2e3f54a2c0640aeb9c7156c620113c8
 export default function AgreementsDescription(props) {
   const { row, data } = props;
   console.log(row);
