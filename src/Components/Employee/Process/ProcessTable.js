@@ -10,6 +10,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow";
+import socket from "../Socket";
 
 function createData(code, name, document, date, pref_shipment) {
   return {
@@ -29,7 +30,9 @@ const rows = [
 ];
 
 export default function ProcessTable() {
+  let aux = {};
   const [page, setPage] = React.useState(0);
+  const [data, setData] = React.useState(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -43,6 +46,27 @@ export default function ProcessTable() {
     setPage(0);
   };
 
+  React.useEffect(() => {
+    socket.on("data", (msg) => {
+      setData(msg);
+    });
+  }, []);
+
+  const send_process = (cod_proceso) => {
+    socket.emit("finalizar_proceso", {
+      documento_usuario: data.data.documento_usuario,
+      cod_proceso: cod_proceso,
+    });
+  };
+
+  const send_shipment = (cod_proceso) => {
+    socket.emit("entrega_resultado", {
+      documento_usuario: data.data.documento_usuario,
+      cod_proceso: cod_proceso,
+    });
+  };
+
+  console.log(data);
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
