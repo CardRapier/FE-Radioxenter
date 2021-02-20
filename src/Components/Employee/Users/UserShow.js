@@ -21,16 +21,19 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
+  marginBottom: {
+    marginBottom: 2,
+  },
 }));
-
+//TODO: CUANDO SE VA A FACTURAR, REALIZAR EL MISMO FLUJO
 export default function UserShow() {
   const classes = useStyles();
   return (
     <React.Fragment>
       <Grid container direction={"column"}>
-        <Grid container item className={classes.titlebutton} spacing={4}>
+        <Grid container item className={classes.titlebutton}>
           <Grid item xs={3}></Grid>
-          <Grid item xs={4}>
+          <Grid item xs={5}>
             <Typography
               component="h1"
               variant="h5"
@@ -38,10 +41,10 @@ export default function UserShow() {
               color="textPrimary"
               gutterBottom
             >
-              Usuarios
+              {`Usuarios`}
             </Typography>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <Button
               component={Link}
               to="/Empleado/CrearUsuario"
@@ -54,8 +57,15 @@ export default function UserShow() {
           </Grid>
         </Grid>
 
-        <Grid container item spacing={4}>
-          <Grid item xs={2}></Grid>
+        <Grid
+          container
+          item
+          spacing={4}
+          className={classes.marginBottom}
+          justify="flex-start"
+          alignItems="center"
+        >
+          <Grid item xs={3}></Grid>
           <Grid item xs={5}>
             <TextField
               id="documento"
@@ -64,18 +74,20 @@ export default function UserShow() {
               size="small"
             />
           </Grid>
-          <Grid item xs={5}>
-            <TextField
-              id="nombre"
-              label="Nombre"
-              variant="outlined"
-              size="small"
-            />
-          </Grid>
         </Grid>
-        <Grid container item spacing={4} justify="center" alignItems="center">
-          <Grid item className={classes.margintop4}>
-            <UserDatatable />
+
+        <Grid
+          container
+          item
+          spacing={4}
+          justify="center"
+          alignItems="center"
+          className={classes.margintop4}
+        >
+          <Grid item className={classes.margintop}>
+            <Grid item xs>
+              <UserDatatable />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

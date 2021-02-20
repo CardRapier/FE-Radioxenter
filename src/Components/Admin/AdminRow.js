@@ -104,20 +104,32 @@ export default function AdminRow(props) {
                   case "Servicios":
                     return <ServiceDescription row={row} />;
 
-                  case "Paquetes":
-                    return <PackageDescription row={row} data={fetchData} />;
-
-                  case "Entidades":
-                    return <EntitiesDescription row={row} data={fetchData} />;
-
                   case "Convenios":
                     return <AgreementsDescription row={row} data={subdata} />;
 
                   case "Empleados":
                     return <EmployeesDescription row={row} />;
 
+                  case "Paquetes":
+                    return fetchData !== undefined ? (
+                      <PackageDescription row={row} data={fetchData} />
+                    ) : (
+                      ""
+                    );
+
+                  case "Entidades":
+                    return fetchData !== undefined ? (
+                      <EntitiesDescription row={row} data={fetchData} />
+                    ) : (
+                      ""
+                    );
+
                   case "Doctores":
-                    return <DoctorsDescription row={row} data={fetchData} />;
+                    return fetchData !== undefined ? (
+                      <DoctorsDescription row={row} data={fetchData} />
+                    ) : (
+                      ""
+                    );
 
                   default:
                     return "";

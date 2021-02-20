@@ -7,6 +7,7 @@ import React from "react";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
 import { api_services } from "../../../api_app";
+import { give_error_message } from "../../../utils.js";
 import { service_initial_values } from "./initial_values_admin";
 import { service_schema } from "./validation_schemas_admin";
 import { useSnackbar } from "notistack";
@@ -38,16 +39,12 @@ export default function ServiceForm(props) {
                 variant: "success",
               });
               resetForm({});
-              console.log(response);
             })
             .catch(function (error) {
               setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo.",
-                {
-                  variant: "error",
-                }
-              );
+              enqueueSnackbar(give_error_message(error.response), {
+                variant: "error",
+              });
             });
         } else {
           setSubmitting(true);
@@ -61,13 +58,9 @@ export default function ServiceForm(props) {
             })
             .catch(function (error) {
               setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo." +
-                  error.response,
-                {
-                  variant: "error",
-                }
-              );
+              enqueueSnackbar(give_error_message(error.response), {
+                variant: "error",
+              });
             });
         }
       }}

@@ -21,6 +21,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow";
 import { makeStyles } from "@material-ui/core/styles";
+import { remove_abbreviation } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -45,7 +46,6 @@ function filter_services(services) {
   return filtered_services;
 }
 
-//TODO: SERVICES/PACKAGES FROM AGREEMENT, REMOVE THE ABBREVIATION
 export default function AdminDataTable(props) {
   const classes = useStyles();
   const { data, filter } = props;
@@ -53,9 +53,16 @@ export default function AdminDataTable(props) {
   const [subdata, setSubData] = React.useState(undefined);
   React.useEffect(() => {
     if (data.title === "Servicios") {
-      api_services.get("/").then((res) => {
-        setRows(filter_services(res.data.respuesta));
-      });
+      api_services
+        .get("/", {
+          params: {
+            excludeConvenios: true,
+            excludePaquetes: true,
+          },
+        })
+        .then((res) => {
+          setRows(remove_abbreviation(res.data.respuesta, "SE-"));
+        });
     } else if (data.title === "Paquetes") {
       api_packages.get("/").then((res) => {
         setRows(res.data.respuesta);

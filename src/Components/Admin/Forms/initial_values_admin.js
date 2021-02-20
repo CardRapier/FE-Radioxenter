@@ -11,7 +11,7 @@ export const entity_initial_values = {
   telefono_representante: "",
   correo_representante: "",
   nombre_contacto: "",
-  cedula_contacto: null,
+  cedula_contacto: "",
   telefono_contacto: "",
   correo_contacto: "",
   cod_forma_de_pago_entidad: 1,

@@ -64,6 +64,7 @@ export default function UserForm(props) {
     }
   }, [props.location]);
   //TODO: Filter users by document and name
+  //TODO: SEND es_nuevo
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Formik

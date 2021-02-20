@@ -11,6 +11,7 @@ import { api_entities } from "../../../api_app";
 import { api_type_receipt } from "../../../api_app";
 import { entity_initial_values } from "./initial_values_admin";
 import { entity_schema } from "./validation_schemas_admin";
+import { give_error_message } from "../../../utils.js";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
 
@@ -29,17 +30,14 @@ export default function EntityForm(props) {
       setData(props.location.data);
     }
   }, [props.location]);
-  console.log(data);
   return (
     <Formik
       enableReinitialize
       validationSchema={entity_schema}
       initialValues={data === undefined ? entity_initial_values : data}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        if (values.cedula_contacto === "") {
-          delete values.cedula_contacto;
-        }
-
+        values.cedula_representante = `${values.cedula_representante}`;
+        values.cedula_contacto = `${values.cedula_contacto}`;
         if (data === undefined) {
           setSubmitting(true);
           api_entities
@@ -50,16 +48,12 @@ export default function EntityForm(props) {
                 variant: "success",
               });
               resetForm({});
-              console.log(response);
             })
             .catch(function (error) {
               setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo.",
-                {
-                  variant: "error",
-                }
-              );
+              enqueueSnackbar(give_error_message(error.response), {
+                variant: "error",
+              });
             });
         } else {
           setSubmitting(true);
@@ -73,13 +67,9 @@ export default function EntityForm(props) {
             })
             .catch(function (error) {
               setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo." +
-                  error.response,
-                {
-                  variant: "error",
-                }
-              );
+              enqueueSnackbar(give_error_message(error.response), {
+                variant: "error",
+              });
             });
         }
       }}
@@ -155,20 +145,27 @@ export default function EntityForm(props) {
               </Grid>
 
               <Grid item xs={6}>
-                <Field
-                  component={TextFormField}
-                  required
-                  label="Tipo de Facturación"
-                  name="cod_tipo_facturacion"
-                  fullWidth
-                  select
-                >
-                  {type_receipts.map((type) => (
-                    <MenuItem value={type.cod_tipo_facturacion}>
-                      {type.nombre_tipo_facturacion}
-                    </MenuItem>
-                  ))}
-                </Field>
+                {type_receipts.length !== 0 ? (
+                  <Field
+                    component={TextFormField}
+                    required
+                    label="Tipo de Facturación"
+                    name="cod_tipo_facturacion"
+                    fullWidth
+                    select
+                  >
+                    {type_receipts.map((type, index) => (
+                      <MenuItem
+                        key={`menu-receipt-${index}`}
+                        value={type.cod_tipo_facturacion}
+                      >
+                        {type.nombre_tipo_facturacion}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                ) : (
+                  ""
+                )}
               </Grid>
             </Grid>
 

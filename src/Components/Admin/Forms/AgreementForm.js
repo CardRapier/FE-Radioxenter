@@ -43,7 +43,7 @@ export default function AgreementForm(props) {
   }, [props.location]);
 
   console.log(data);
-
+  //TODO: REMOVE SERVICES/PACKAGES ABREVIATION
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Formik

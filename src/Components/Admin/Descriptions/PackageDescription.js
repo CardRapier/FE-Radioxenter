@@ -26,7 +26,7 @@ export default function PackageDescription(props) {
           {data.packages.map((element) => (
             <TableRow key={element.cod_servicio}>
               <TableCell component="th" scope="row">
-                {element.Servicio.nombre_servicio}
+                {element.Servicio.nombre_servicio.replace("SE-", "")}
               </TableCell>
               <TableCell>{element.Servicio.precio_servicio}</TableCell>
               <TableCell align="right">

@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   buttonUnselected: {
-    backgroundColor: "#e91e63",
+    backgroundColor: "#f39921",
   },
 
   buttonSelected: {
@@ -24,31 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProccessData(props) {
   const classes = useStyles();
-  const { services } = props;
-  const [servicesState, setServicesState] = React.useState(
-    services.map(() => false)
-  );
-
-  const [deliveriesState, setDeliveriesState] = React.useState(
-    services.map(() => false)
-  );
-
-  const changeStateService = (index) => {
-    let servicess = [...servicesState];
-    let service = { ...servicess[index] };
-    service = true;
-    servicess[index] = service;
-    setServicesState(servicess);
-  };
-
-  const changeStateDeliveries = (index) => {
-    let deliveriesAux = [...deliveriesState];
-    let delivery = { ...deliveriesAux[index] };
-    delivery = true;
-    deliveriesAux[index] = delivery;
-    setDeliveriesState(deliveriesAux);
-  };
-
+  const { services, document, changeServices, changeShipments } = props;
   return (
     <div className={classes.root}>
       <Grid container>
@@ -59,14 +35,19 @@ export default function ProccessData(props) {
             {services.map((service, index) => (
               <ListItem
                 button
-                disabled={servicesState[index]}
+                disabled={service.completado}
                 classes={{
                   button: classes.buttonUnselected,
                   disabled: classes.buttonSelected,
                 }}
-                onClick={() => changeStateService(index)}
+                onClick={() =>
+                  changeServices({
+                    documento_usuario: document,
+                    cod_servicio: service.cod_servicio,
+                  })
+                }
               >
-                <ListItemText primary={service} />
+                <ListItemText primary={service.nombre_servicio} />
               </ListItem>
             ))}
           </List>
@@ -79,14 +60,19 @@ export default function ProccessData(props) {
             {services.map((service, index) => (
               <ListItem
                 button
-                disabled={deliveriesState[index]}
+                disabled={service.entregado}
                 classes={{
                   button: classes.buttonUnselected,
                   disabled: classes.buttonSelected,
                 }}
-                onClick={() => changeStateDeliveries(index)}
+                onClick={() =>
+                  changeShipments({
+                    documento_usuario: document,
+                    cod_servicio: service.cod_servicio,
+                  })
+                }
               >
-                <ListItemText primary={service} />
+                <ListItemText primary={service.nombre_servicio} />
               </ListItem>
             ))}
           </List>

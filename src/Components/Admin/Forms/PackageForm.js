@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from "formik";
 import { api_packages, api_services } from "../../../api_app";
+import { give_error_message, remove_abbreviation } from "../../../utils.js";
 
 import BackDropLoading from "../../BackDropLoading";
 import Chip from "@material-ui/core/Chip";
@@ -17,7 +18,7 @@ import { package_schema } from "./validation_schemas_admin";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
 
-//TODO: JUST SHOW SERVICES ON THE FORM, FILTER THEM
+//TODO: JUST SHOW SERVICES ON THE FORM, FILTER THEM AND REMOVE ABBREVATION
 export default function ServiceForm(props) {
   const classes = useStyles();
   const [data, setData] = React.useState(undefined);
@@ -27,7 +28,11 @@ export default function ServiceForm(props) {
   React.useEffect(() => {
     if (props.location.hasOwnProperty("data")) {
       setData(props.location.data);
+    }
+  }, [props.location]);
 
+  React.useEffect(() => {
+    if (props.location.hasOwnProperty("data")) {
       api_packages
         .get(`/${props.location.data.cod_paquete}/servicios`)
         .then((res) => {
@@ -40,9 +45,16 @@ export default function ServiceForm(props) {
   }, [props.location]);
 
   React.useEffect(() => {
-    api_services.get("/").then((res) => {
-      setServices(res.data.respuesta);
-    });
+    api_services
+      .get("/", {
+        params: {
+          excludeConvenios: true,
+          excludePaquetes: true,
+        },
+      })
+      .then((res) => {
+        setServices(remove_abbreviation(res.data.respuesta, "SE-"));
+      });
   }, []);
   return (
     <Formik
@@ -51,16 +63,17 @@ export default function ServiceForm(props) {
       initialValues={
         data === undefined
           ? package_initial_values
-          : {
+          : data.packages !== undefined
+          ? {
               nombre_paquete: data.nombre_paquete,
               precio_paquete: data.precio_paquete,
               servicios: data.packages,
             }
+          : package_initial_values
       }
       onSubmit={(values, { setSubmitting, resetForm }) => {
         if (data === undefined) {
           setSubmitting(true);
-          console.log(values);
           api_packages
             .post("/", {
               nombre_paquete: values.nombre_paquete,
@@ -73,7 +86,7 @@ export default function ServiceForm(props) {
                   cod_servicio: servicio,
                 })
               );
-              console.log(response);
+
               setSubmitting(false);
               enqueueSnackbar("Se ha creado exitosamente!", {
                 variant: "success",
@@ -82,21 +95,23 @@ export default function ServiceForm(props) {
             })
             .catch(function (error) {
               setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo.",
-                {
-                  variant: "error",
-                }
-              );
+              enqueueSnackbar(give_error_message(error.response), {
+                variant: "error",
+              });
             });
         } else {
           setSubmitting(true);
           api_packages
             .put("/", {
+              cod_paquete: data.cod_paquete,
               nombre_paquete: values.nombre_paquete,
               precio_paquete: values.precio_paquete,
             })
             .then(function (response) {
+              let id_package = data.cod_paquete;
+              api_packages.put(`/${id_package}/servicios/`, {
+                servicios_paquete: values.servicios,
+              });
               setSubmitting(false);
               enqueueSnackbar("Los cambios han sido exitosos!", {
                 variant: "success",
@@ -104,13 +119,9 @@ export default function ServiceForm(props) {
             })
             .catch(function (error) {
               setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo." +
-                  error.response,
-                {
-                  variant: "error",
-                }
-              );
+              enqueueSnackbar(give_error_message(error.response), {
+                variant: "error",
+              });
             });
         }
       }}
@@ -150,37 +161,46 @@ export default function ServiceForm(props) {
             <Grid item container justify="center" className={classes.services}>
               <Grid item xs={12}>
                 <InputLabel id="servicios_label">Servicios</InputLabel>
-                <Field
-                  name={`servicios`}
-                  type="select"
-                  component={Select}
-                  label_id="servicios_label"
-                  multiple
-                  required
-                  fullWidth
-                  renderValue={(selected) => (
-                    <div className={classes.chips}>
-                      {selected.map((value) => (
-                        <Chip
-                          key={value}
-                          label={services
-                            .filter((service) => service.cod_servicio === value)
-                            .map((x) => x.nombre_servicio)}
-                          className={classes.chip}
-                        />
-                      ))}
-                    </div>
-                  )}
-                >
-                  {services !== undefined
-                    ? services.map((service) => (
-                        <MenuItem value={service.cod_servicio}>
+                {services.length !== 0 ? (
+                  <div>
+                    <Field
+                      name={`servicios`}
+                      type="select"
+                      component={Select}
+                      label_id="servicios_label"
+                      multiple
+                      required
+                      fullWidth
+                      renderValue={(selected) => (
+                        <div className={classes.chips}>
+                          {selected.map((value, index) => (
+                            <Chip
+                              key={`${value}-${index}`}
+                              label={services
+                                .filter(
+                                  (service) => service.cod_servicio === value
+                                )
+                                .map((x) => x.nombre_servicio)}
+                              className={classes.chip}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    >
+                      {services.map((service, index) => (
+                        <MenuItem
+                          key={`menu-${index}`}
+                          value={service.cod_servicio}
+                        >
                           {service.nombre_servicio}
                         </MenuItem>
-                      ))
-                    : ""}
-                </Field>
-                <FormHelperText>{errors.servicios}</FormHelperText>
+                      ))}
+                    </Field>
+                    <FormHelperText>{errors.servicios}</FormHelperText>
+                  </div>
+                ) : (
+                  ""
+                )}
               </Grid>
             </Grid>
 
