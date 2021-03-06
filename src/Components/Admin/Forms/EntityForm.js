@@ -1,15 +1,21 @@
 import { Field, Form, Formik } from "formik";
-import { MenuItem, TextField } from "@material-ui/core";
 import {
+  api_doctors,
   api_entities,
   api_type_payment,
   api_type_receipt,
 } from "../../../api_app";
 
 import BackDropLoading from "../../BackDropLoading";
+import Chip from "@material-ui/core/Chip";
 import FormButtons from "../../FormButtons";
+import FormHelperText from "@material-ui/core/FormHelperText";
 import Grid from "@material-ui/core/Grid";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
+import { Select } from "formik-material-ui";
+import TextField from "@material-ui/core/TextField";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
 import { entity_initial_values } from "./initial_values_admin";
@@ -23,6 +29,8 @@ export default function EntityForm(props) {
   var data = undefined;
   const [type_payments, setTypePayments] = React.useState([]);
   const [type_receipts, setTypeReceipts] = React.useState([]);
+  const [entities, setEntities] = React.useState([]);
+  const [doctors, setDoctors] = React.useState([]);
   const { enqueueSnackbar } = useSnackbar();
   React.useEffect(() => {
     api_type_receipt.get("/").then((res) => {
@@ -32,18 +40,28 @@ export default function EntityForm(props) {
     api_type_payment.get("/").then((res) => {
       setTypePayments(res.data.respuesta);
     });
+
+    api_entities.get("/").then((res) => {
+      setEntities(res.data.respuesta);
+    });
+
+    api_doctors.get("/").then((res) => {
+      setDoctors(res.data.respuesta);
+    });
   }, []);
   if (props.location.hasOwnProperty("data")) {
     data = props.location.data;
   }
+  console.log(doctors);
   return (
     <Formik
       enableReinitialize
       validationSchema={entity_schema}
       initialValues={
         data === undefined
-          ? entity_initial_values
-          : {
+          ? { ...entity_initial_values, doctores_entidad: [] }
+          : data.Entidad_doctors !== undefined
+          ? {
               razon_social_entidad: data.razon_social_entidad,
               nombre_comercial_entidad: data.nombre_comercial_entidad,
               nit_entidad: data.nit_entidad,
@@ -60,16 +78,32 @@ export default function EntityForm(props) {
               cod_forma_de_pago_entidad: data.cod_forma_de_pago_entidad,
               cod_tipo_facturacion: data.cod_tipo_facturacion,
               cod_entidad: data.cod_entidad,
+              doctores_entidad: data.Entidad_doctors.map((e) => e.cod_doctor),
             }
+          : entity_initial_values
       }
       onSubmit={(values, { setSubmitting, resetForm }) => {
         values.cedula_representante = `${values.cedula_representante}`;
         values.cedula_contacto = `${values.cedula_contacto}`;
+        let send_values = { ...values };
+        let doctores_entidad = [...values.doctores_entidad];
+        delete send_values.doctores_entidad;
+
         if (data === undefined) {
           setSubmitting(true);
           api_entities
-            .post("/", values)
+            .post("/", send_values)
             .then(function (response) {
+              let entities = [];
+              api_entities.get("/").then((res) => {
+                entities = res.data.respuesta;
+              });
+              let entity = entities.filter(
+                (e) => e.nit_entidad === values.nit_entidad
+              );
+              api_entities.put(`${entity.cod_entidad}/doctores`, {
+                doctores_entidad: doctores_entidad,
+              });
               setSubmitting(false);
               enqueueSnackbar("Se ha creado exitosamente!", {
                 variant: "success",
@@ -85,12 +119,18 @@ export default function EntityForm(props) {
         } else {
           setSubmitting(true);
           api_entities
-            .put("/", values)
+            .put("/", send_values)
             .then(function (response) {
-              setSubmitting(false);
-              enqueueSnackbar("Los cambios han sido exitosos!", {
-                variant: "success",
-              });
+              api_entities
+                .put(`${data.cod_entidad}/doctores`, {
+                  doctores_entidad: doctores_entidad,
+                })
+                .then(function (response) {
+                  setSubmitting(false);
+                  enqueueSnackbar("Los cambios han sido exitosos!", {
+                    variant: "success",
+                  });
+                });
             })
             .catch(function (error) {
               setSubmitting(false);
@@ -101,7 +141,7 @@ export default function EntityForm(props) {
         }
       }}
     >
-      {({ resetForm, isSubmitting, values }) => (
+      {({ resetForm, isSubmitting, values, errors }) => (
         <Form>
           <Grid container direction="column">
             <Grid item container className={classes.title}>
@@ -317,6 +357,52 @@ export default function EntityForm(props) {
               </Grid>
             </Grid>
 
+            <Grid item container justify="center" className={classes.services}>
+              <Grid item xs={12}>
+                <InputLabel id="doctors_label">Doctores</InputLabel>
+                {doctors.length !== 0 ? (
+                  <div>
+                    <Field
+                      name={`doctores_entidad`}
+                      type="select"
+                      component={Select}
+                      label_id="doctors_label"
+                      multiple
+                      required
+                      fullWidth
+                      renderValue={(selected) => (
+                        <div className={classes.chips}>
+                          {selected.map((value, index) => (
+                            <Chip
+                              key={`${value}-${index}`}
+                              label={doctors
+                                .filter((doctor) => doctor.cod_doctor === value)
+                                .map(
+                                  (x) =>
+                                    `${x.nombres_doctor} ${x.apellidos_doctor}`
+                                )}
+                              className={classes.chip}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    >
+                      {doctors.map((doctor, index) => (
+                        <MenuItem
+                          key={`menu-${index}`}
+                          value={doctor.cod_doctor}
+                        >
+                          {`${doctor.nombres_doctor} ${doctor.apellidos_doctor}`}
+                        </MenuItem>
+                      ))}
+                    </Field>
+                    <FormHelperText>{errors.doctores_entidad}</FormHelperText>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </Grid>
+            </Grid>
             <Grid
               item
               container

@@ -35,8 +35,7 @@ export default function ProcessTable() {
     setPage(0);
   };
   //TODO: Fix it
-  const handleChangeServiceStatus = async (data) => {
-    console.log(data);
+  const handleChangeServiceStatus = (data) => {
     socket.emit("finalizar_proceso", {
       documento_usuario: data.documento_usuario,
       cod_servicio: data.cod_servicio,
@@ -44,7 +43,6 @@ export default function ProcessTable() {
   };
 
   const handleChangeShipmentStatus = (data) => {
-    console.log(data);
     socket.emit("entrega_resultado", {
       documento_usuario: data.documento_usuario,
       cod_servicio: data.cod_servicio,

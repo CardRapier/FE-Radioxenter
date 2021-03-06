@@ -1,4 +1,5 @@
 import { Field, Form, Formik } from "formik";
+import { Link, Redirect } from "react-router-dom";
 import { api_process, api_type_document } from "../../../api_app";
 
 import BackDropLoading from "../../BackDropLoading";
@@ -6,9 +7,9 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
-import { Redirect } from "react-router-dom";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
+import { give_error_message } from "../../../utils";
 import { makeStyles } from "@material-ui/core/styles";
 import { tutor_initial_values } from "../Forms/initial_values_employee";
 import { tutor_schema } from "../Forms/validation_schemas_employee";
@@ -46,6 +47,7 @@ export default function ReceiptKinship(props) {
         validationSchema={tutor_schema}
         initialValues={tutor_initial_values}
         onSubmit={(values, { setSubmitting, resetForm }) => {
+          values.documento_tutor = `${values.documento_tutor}`;
           setSubmitting(true);
           api_process
             .post("agregarTutor", {
@@ -61,13 +63,9 @@ export default function ReceiptKinship(props) {
             })
             .catch(function (error) {
               setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo." +
-                  error.response,
-                {
-                  variant: "error",
-                }
-              );
+              enqueueSnackbar(give_error_message(error.response), {
+                variant: "error",
+              });
             });
         }}
       >
@@ -155,12 +153,14 @@ export default function ReceiptKinship(props) {
                 className={classes.marginT}
               >
                 <Button
+                  component={Link}
+                  to={"/Empleado/"}
                   className={classes.button}
                   variant="contained"
                   size="small"
                   color="primary"
                 >
-                  Cancelar
+                  Volver
                 </Button>
 
                 <Button
@@ -168,6 +168,7 @@ export default function ReceiptKinship(props) {
                   variant="contained"
                   size="small"
                   color="primary"
+                  onClick={() => resetForm({})}
                 >
                   Limpiar
                 </Button>

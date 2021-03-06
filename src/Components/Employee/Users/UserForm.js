@@ -91,10 +91,11 @@ export default function UserForm(props) {
           values.documento_usuario = `${values.documento_usuario}`;
           let send_values = { ...values };
           delete send_values.cod_departamento;
+
           if (data === undefined) {
             setSubmitting(true);
             api_process
-              .post("crearUsuario", send_values)
+              .post("crearUsuario", { ...send_values, cod_usuario: null })
               .then(function (response) {
                 setSubmitting(false);
                 enqueueSnackbar("Se ha agregado el usuario exitososamente!", {
@@ -109,10 +110,12 @@ export default function UserForm(props) {
                 });
               });
           } else {
+            delete send_values.createdAt;
+            delete send_values.updatedAt;
             if (receipt === true) {
               setSubmitting(true);
               api_process
-                .put("crearUsuario", send_values)
+                .post("crearUsuario", send_values)
                 .then(function (response) {
                   setSubmitting(false);
                   enqueueSnackbar("Los cambios han sido exitosos!", {
@@ -486,7 +489,6 @@ export default function UserForm(props) {
                 </Grid>
               </Grid>
             </Grid>
-
             <BackDropLoading isSubmitting={isSubmitting} />
             {renderRedirect(values)}
           </Form>

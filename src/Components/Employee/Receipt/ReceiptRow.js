@@ -16,7 +16,7 @@ const useRowStyles = makeStyles((theme) => ({
 export default function ReceiptRow(props) {
   const { row } = props;
   const classes = useRowStyles();
-  console.log(row);
+
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
@@ -32,7 +32,10 @@ export default function ReceiptRow(props) {
         <TableCell align="center">
           <Button
             color="primary"
-            href={row.ruta_factura}
+            href={`${
+              process.env.REACT_APP_API_ROUTE
+            }/files/pdf/facturas/${row.ruta_factura.split("/").pop()}`}
+            target="_blank"
             className={classes.button}
           >
             Ver Factura

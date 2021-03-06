@@ -54,7 +54,7 @@ export default function AdminDataTable(props) {
         setRows(res.data.respuesta);
       });
     } else if (data.title === "Entidades") {
-      api_entities.get("/").then((res) => {
+      api_entities.get("/convenios").then((res) => {
         setRows(res.data.respuesta);
       });
     } else if (data.title === "Convenios") {

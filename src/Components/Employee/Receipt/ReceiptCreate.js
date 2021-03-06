@@ -20,6 +20,7 @@ import MuiTextField from "@material-ui/core/TextField";
 import React from "react";
 import ReceiptServiceTable from "./ReceiptServiceTable";
 import Typography from "@material-ui/core/Typography";
+import { give_error_message } from "../../../utils";
 import { makeStyles } from "@material-ui/core/styles";
 import publicIp from "public-ip";
 import { receipt_initial_values } from "../Forms/initial_values_employee";
@@ -53,7 +54,7 @@ export default function ReceiptCreate(props) {
   const classes = useStyles();
   const [redirect, setRedirect] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const [ip4, setIp4] = React.useState(undefined);
+  const [ipv4, setIpv4] = React.useState(undefined);
   const [servicesSelected, setServicesSelected] = React.useState([]);
   const [services, setServices] = React.useState([]);
   const [packages, setPackages] = React.useState([]);
@@ -68,16 +69,16 @@ export default function ReceiptCreate(props) {
   }
 
   function remove_service(id) {
-    var array = [...servicesSelected];
+    let array = [...servicesSelected];
     setServicesSelected(array.filter((service) => service.cod_servicio !== id));
   }
 
   function filter_services(services, abbreviation) {
-    var filtered_services = services.filter((service) =>
+    let filtered_services = services.filter((service) =>
       service.nombre_servicio.includes(abbreviation)
     );
 
-    for (var i in filtered_services) {
+    for (let i in filtered_services) {
       filtered_services[i].nombre_servicio = filtered_services[
         i
       ].nombre_servicio.replace(abbreviation, "");
@@ -87,8 +88,8 @@ export default function ReceiptCreate(props) {
   }
 
   function evaluate_total_value() {
-    var sum = 0;
-    for (var i in servicesSelected) {
+    let sum = 0;
+    for (let i in servicesSelected) {
       sum = sum + servicesSelected[i].precio_servicio;
     }
 
@@ -96,9 +97,12 @@ export default function ReceiptCreate(props) {
   }
 
   const evaluate_entity_doctor = (entity, doctor) => {
-    var doctor_entity = doctor.Entidad_doctors.find(
-      (element) => element.cod_entidad === entity.cod_entidad
-    );
+    let doctor_entity =
+      entity !== null && doctor !== null
+        ? doctor.Entidad_doctors.find(
+            (element) => element.cod_entidad === entity.cod_entidad
+          )
+        : null;
     return doctor_entity;
   };
 
@@ -107,7 +111,7 @@ export default function ReceiptCreate(props) {
   };
 
   const filter_entities = (doctor) => {
-    var filtered_entities = doctor.Entidad_doctors.map((entity_doctor) =>
+    let filtered_entities = doctor.Entidad_doctors.map((entity_doctor) =>
       entitiesAgreements.find(
         (entity) => entity.cod_entidad === entity_doctor.cod_entidad
       )
@@ -143,16 +147,15 @@ export default function ReceiptCreate(props) {
 
   const validate_selected_services = () => {
     let response = false;
-    if (servicesSelected.length === 0) {
+    if (servicesSelected.length !== 0) {
       response = true;
     }
-
     return response;
   };
 
   React.useEffect(
     () => {
-      publicIp.v4().then((e) => setIp4(e));
+      publicIp.v4().then((e) => setIpv4(e));
 
       api_services.get("/").then((res) => {
         setServices(filter_services(res.data.respuesta, "SE-"));
@@ -178,18 +181,19 @@ export default function ReceiptCreate(props) {
         initialValues={{ ...receipt_initial_values }}
         onSubmit={(values, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          if (validate_selected_services === true) {
+          if (validate_selected_services() === true) {
             let petitionData = { ...values };
             let final_data = {
               ...petitionData,
               documento_usuario: data.documento_usuario,
               valor_transaccion: evaluate_total_value(),
-              cod_entidad_doctor: evaluate_entity_doctor(
-                values.entity,
-                values.doctor
-              ).cod_entidad_doctor,
+              cod_entidad_doctor:
+                values.entity !== null && values.doctor !== null
+                  ? evaluate_entity_doctor(values.entity, values.doctor)
+                      .cod_entidad_doctor
+                  : null,
               motivo: motive,
-              ip4: ip4,
+              ipv4: ipv4,
               servicios: servicesSelected,
             };
 
@@ -211,13 +215,9 @@ export default function ReceiptCreate(props) {
               })
               .catch(function (error) {
                 setSubmitting(false);
-                enqueueSnackbar(
-                  "Ha habido un error, revise los datos e intente de nuevo." +
-                    error.response,
-                  {
-                    variant: "error",
-                  }
-                );
+                enqueueSnackbar(give_error_message(error.response), {
+                  variant: "error",
+                });
               });
           } else {
             setSubmitting(false);
@@ -453,7 +453,6 @@ export default function ReceiptCreate(props) {
                   Crear
                 </Button>
               </Grid>
-              <pre>{JSON.stringify(values, null, 2)}</pre>
             </Grid>
             <BackDropLoading isSubmitting={isSubmitting} />
             {redirect === true ? (
