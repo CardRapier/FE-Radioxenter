@@ -1,3 +1,13 @@
+import {
+  api_cities,
+  api_departments,
+  api_sex,
+  api_type_document,
+  api_type_shipment,
+  api_users,
+} from "../../../api_app";
+
+import BackDropLoading from "../../BackDropLoading";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
@@ -14,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   titlebutton: {
     padding: theme.spacing(4, 0, 2),
   },
-  margintop4: {
+  margintop: {
     marginTop: theme.spacing(2),
   },
   container: {
@@ -25,15 +35,67 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 2,
   },
 }));
-//TODO: CUANDO SE VA A FACTURAR, REALIZAR EL MISMO FLUJO
+//TODO: Filter users by document and name
 export default function UserShow() {
   const classes = useStyles();
+  const [loaded, setLoaded] = React.useState(false);
+  const [data, setData] = React.useState({});
+  const [users, setUsers] = React.useState([]);
+  React.useEffect(() => {
+    api_users.get("/").then((res) => {
+      setUsers(res.data.respuesta);
+    });
+    api_type_document.get("/").then((res) => {
+      setData((prevState) => ({
+        data: {
+          ...prevState.data,
+          type_document: res.data.respuesta,
+        },
+      }));
+    });
+    api_cities.get("/").then((res) => {
+      setData((prevState) => ({
+        data: {
+          ...prevState.data,
+          cities: res.data.respuesta,
+        },
+      }));
+    });
+    api_sex.get("/").then((res) => {
+      setData((prevState) => ({
+        data: {
+          ...prevState.data,
+          sex: res.data.respuesta,
+        },
+      }));
+    });
+
+    api_type_shipment.get("/").then((res) => {
+      setData((prevState) => ({
+        data: {
+          ...prevState.data,
+          type_shipment: res.data.respuesta,
+        },
+      }));
+    });
+
+    api_departments.get("/").then((res) => {
+      setData((prevState) => ({
+        data: {
+          ...prevState.data,
+          departments: res.data.respuesta,
+        },
+      }));
+      setLoaded(true);
+    });
+  }, []);
+
   return (
     <React.Fragment>
       <Grid container direction={"column"}>
         <Grid container item className={classes.titlebutton}>
           <Grid item xs={3}></Grid>
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <Typography
               component="h1"
               variant="h5"
@@ -47,7 +109,11 @@ export default function UserShow() {
           <Grid item xs={4}>
             <Button
               component={Link}
-              to="/Empleado/CrearUsuario"
+              to={{
+                pathname: "/Empleado/CrearUsuario",
+                fetched_data: data,
+                receipt: true,
+              }}
               variant="contained"
               color="primary"
               size="small"
@@ -76,21 +142,15 @@ export default function UserShow() {
           </Grid>
         </Grid>
 
-        <Grid
-          container
-          item
-          spacing={4}
-          justify="center"
-          alignItems="center"
-          className={classes.margintop4}
-        >
+        <Grid container item spacing={4} justify="center" alignItems="center">
           <Grid item className={classes.margintop}>
             <Grid item xs>
-              <UserDatatable />
+              <UserDatatable users={users} data={data} />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
+      <BackDropLoading isSubmitting={!loaded} />
     </React.Fragment>
   );
 }

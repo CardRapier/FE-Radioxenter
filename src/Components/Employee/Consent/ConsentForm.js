@@ -1,9 +1,9 @@
+import { Link, Redirect } from "react-router-dom";
 import React, { useState } from "react";
 import { Text, Text1, Text2, Text3 } from "./ConsentText.js";
 
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import { Redirect } from "react-router-dom";
 import SignatureCanvas from "react-signature-canvas";
 import Typography from "@material-ui/core/Typography";
 import { api_process } from "../../../api_app.js";
@@ -92,14 +92,9 @@ export default function ConsentForm(props) {
           <Typography variant="h6">
             Yo,
             {tutor !== undefined
-              ? ` ${tutor.nombres_tutor} ${tutor.apellidos_tutor} `
-              : ` ${data.nombres_usuario} ${data.apellidos_usuario} `}
-            identificado con el documento
-            {tutor !== undefined
-              ? ` ${tutor.documento_tutor} `
-              : ` ${data.documento_usuario} `}
-            {tutor !== undefined
-              ? `tutor de ${data.nombres_usuario} ${data.apellidos_usuario}, identificado por el documento ${data.documento_usuario}`
+              ? ` ${tutor.nombres_tutor} ${tutor.apellidos_tutor} identificado con el documento ${tutor.documento_tutor} tutor de ${data.nombres_usuario} ${data.apellidos_usuario}, identificado por el documento ${data.documento_usuario}`
+              : data !== undefined
+              ? ` ${data.nombres_usuario} ${data.apellidos_usuario} identificado con el documento ${data.documento_usuario}`
               : ""}
           </Typography>
           <Typography variant="body1">{text}</Typography>
@@ -132,7 +127,13 @@ export default function ConsentForm(props) {
           spacing={1}
         >
           <Grid item>
-            <Button variant="contained" color="primary" size="small">
+            <Button
+              component={Link}
+              to={"/Empleado/"}
+              variant="contained"
+              color="primary"
+              size="small"
+            >
               Volver
             </Button>
           </Grid>

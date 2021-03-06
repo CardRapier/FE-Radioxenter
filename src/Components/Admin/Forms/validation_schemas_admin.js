@@ -1,6 +1,5 @@
 import * as yup from "yup";
 
-//TODO: Validate number lenght
 export const entity_schema = yup.object({
   razon_social_entidad: yup.string().required("Campo requerido"),
   nombre_comercial_entidad: yup.string().required("Campo requerido"),
@@ -29,7 +28,7 @@ export const entity_schema = yup.object({
   cod_forma_de_pago_entidad: yup.number().required("Campo requerido"),
   cod_tipo_facturacion: yup.number().required("Campo requerido"),
 });
-//TODO: Validate number lenght
+
 export const service_schema = yup.object({
   nombre_servicio: yup.string().required("Campo requerido"),
   descripcion_servicio: yup.string().required("Campo requerido"),
@@ -47,7 +46,7 @@ export const service_schema = yup.object({
     .typeError("Debe ser un numero")
     .integer("Debe ser un numero entero"),
 });
-//TODO: Validate number lenght
+
 export const package_schema = yup.object({
   nombre_paquete: yup.string().required("Campo requerido"),
   precio_paquete: yup
@@ -59,9 +58,83 @@ export const package_schema = yup.object({
   servicios: yup.array().of(yup.number()).required("Campo requerido"),
 });
 
-//TODO:Add Validations
-export const agreement_schema = yup.object({});
-//TODO:Add Validations
-export const doctor_schema = yup.object({});
-//TODO:Add Validations
-export const employee_schema = yup.object({});
+export const agreements_schema = yup.object({
+  fecha_inicial_convenio: yup.date(),
+  fecha_final_convenio: yup
+    .date()
+    .when(
+      "fecha_inicial_convenio",
+      (fecha_inicial_convenio, yup) =>
+        fecha_inicial_convenio &&
+        yup.min(
+          fecha_inicial_convenio,
+          "La fecha final debe ser despues de la inicial"
+        )
+    ),
+  cod_servicios: yup.array().of(yup.number()).required("Campo requerido"),
+  precios_servicios: yup
+    .array()
+    .of(
+      yup
+        .number()
+        .required("Campo requerido")
+        .min(1000, "Debe ser igual o mayor a 1000")
+        .integer("Debe ser un numero entero")
+    )
+    .required("Campo requerido"),
+});
+
+export const agreement_schema = yup.object({
+  valor_servicio: yup
+    .number()
+    .required("Campo requerido")
+    .min(1000, "Debe ser igual o mayor a 1000")
+    .typeError("Debe ser un numero")
+    .integer("Debe ser un numero entero"),
+  fecha_inicial_convenio: yup.date(),
+  fecha_final_convenio: yup
+    .date()
+    .when(
+      "fecha_inicial_convenio",
+      (fecha_inicial_convenio, yup) =>
+        fecha_inicial_convenio &&
+        yup.min(
+          fecha_inicial_convenio,
+          "La fecha final debe ser despues de la inicial"
+        )
+    ),
+});
+
+export const doctor_schema = yup.object({
+  nombres_doctor: yup.string().required("Campo requerido"),
+  apellidos_doctor: yup.string().required("Campo requerido"),
+  direccion_doctor: yup.string().required("Campo requerido"),
+  telefono_doctor: yup.string().required("Campo requerido"),
+  documento_doctor: yup
+    .number()
+    .integer("Debe ser un numero entero")
+    .required("Campo requerido")
+    .positive("Debe ser positivo"),
+  correo_doctor: yup
+    .string()
+    .email("Debe ser un correo")
+    .required("El correo es requerido"),
+});
+
+export const employee_schema = yup.object({
+  nombres_empleado: yup.string().required("Campo requerido"),
+  apellidos_empleado: yup.string().required("Campo requerido"),
+  documento_empleado: yup
+    .number()
+    .integer("Debe ser un numero entero")
+    .required("Campo requerido")
+    .positive("Debe ser positivo"),
+  direccion_empleado: yup.string().required("Campo requerido"),
+  correo_empleado: yup
+    .string()
+    .email("Debe ser un correo")
+    .required("El correo es requerido"),
+  fnacimiento_empleado: yup.date(),
+  telefono_empleado: yup.string().required("Campo requerido"),
+  usuario_empleado: yup.string().required("Campo requerido"),
+});

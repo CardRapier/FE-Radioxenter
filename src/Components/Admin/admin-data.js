@@ -33,7 +33,7 @@ const data = {
       filter: { id: "razon_social_entidad", label: "Entidad" },
       header: ["Entidad", "Convenios"],
       actions: [
-        { name: "Editar", action: "/Administrador/EditarConvenio" },
+        { name: "Editar", action: "/Administrador/EditarConvenios" },
         { name: "Facturar", action: "/Administrador/Facturar" },
       ],
     },

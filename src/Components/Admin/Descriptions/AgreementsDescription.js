@@ -7,11 +7,13 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
+import { remove_abbreviations } from "../../../utils";
 
-//TODO: Edit the both ways
 export default function AgreementsDescription(props) {
-  const { row, data } = props;
-  console.log(row);
+  const { row } = props;
+
+  let data = props.data;
+  data.services = remove_abbreviations(data.services, ["SE-", "PA-"]);
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -49,10 +51,16 @@ export default function AgreementsDescription(props) {
                     pathname: "/Administrador/EditarConvenio",
                     data: {
                       cod_entidad: row.cod_entidad,
+                      cod_convenio: element.cod_convenio,
+                      nom_servicio: data.services.find(
+                        (service) =>
+                          service.cod_servicio === element.cod_servicio
+                      ).nombre_servicio,
+                      nom_entidad: row.razon_social_entidad,
                       fecha_inicial_convenio: element.fecha_inicial_convenio,
                       fecha_final_convenio: element.fecha_final_convenio,
-                      servicios_convenio: [element.cod_servicio],
-                      valores_servicios: [element.valor_servicio],
+                      cod_servicio: element.cod_servicio,
+                      valor_servicio: element.valor_servicio,
                     },
                   }}
                   variant="contained"

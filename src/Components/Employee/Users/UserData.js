@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserData(props) {
   const classes = useStyles();
-  const { row, fetched_data } = props;
+  const { row, fetched_data, city_department } = props;
   return (
     <React.Fragment>
       <Grid container direction="column">
@@ -110,6 +110,14 @@ export default function UserData(props) {
                     element.cod_tipo_pref_entrega === row.cod_tipo_pref_entrega
                 ).nombre_tipo_pref_entrega
               }
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <InputLabel htmlFor="component-department">Departamento</InputLabel>
+            <Input
+              disabled
+              id="component-departments"
+              value={city_department.Departamento.nom_departamento}
             />
           </Grid>
         </Grid>

@@ -1,12 +1,5 @@
 import { Field, Form, Formik } from "formik";
-import {
-  api_departments,
-  api_process,
-  api_sex,
-  api_type_document,
-  api_type_shipment,
-  api_users,
-} from "../../../api_app";
+import { api_process, api_users } from "../../../api_app";
 
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -25,6 +18,7 @@ import { Redirect } from "react-router-dom";
 import { Switch } from "formik-material-ui";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
+import { give_error_message } from "../../../utils";
 import { useSnackbar } from "notistack";
 import { useStyles } from "../Forms/styles";
 import { user_initial_values } from "../Forms/initial_values_employee";
@@ -32,50 +26,73 @@ import { user_schema } from "../Forms/validation_schemas_employee";
 
 export default function UserForm(props) {
   const classes = useStyles();
-  const [data, setData] = React.useState(undefined);
+  let fetched_data = undefined;
+  let data = undefined;
+  let receipt = false;
   const [redirect, setRedirect] = React.useState({
     redirect: false,
     tutor: false,
   });
-  const [type_shipment, setTypeShipment] = React.useState([]);
-  const [type_document, setTypeDocument] = React.useState([]);
-  const [sex, setSex] = React.useState([]);
-  const [departments, setDepartments] = React.useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  React.useEffect(() => {
-    api_type_shipment.get("/").then((res) => {
-      setTypeShipment(res.data.respuesta);
-    });
 
-    api_type_document.get("/").then((res) => {
-      setTypeDocument(res.data.respuesta);
-    });
+  if (props.location.hasOwnProperty("data")) {
+    data = props.location.data;
+  }
+  if (props.location.hasOwnProperty("receipt")) {
+    receipt = props.location.receipt;
+  }
+  if (props.location.hasOwnProperty("fetched_data")) {
+    fetched_data = props.location.fetched_data;
+  }
 
-    api_sex.get("/").then((res) => {
-      setSex(res.data.respuesta);
-    });
-    api_departments.get("/").then((res) => {
-      setDepartments(res.data.respuesta);
-    });
-  }, []);
-  React.useEffect(() => {
-    if (props.location.hasOwnProperty("data")) {
-      setData(props.location.data);
+  let { departments, sex, type_document, type_shipment } = fetched_data.data;
+
+  if (data !== undefined) {
+    console.log(data);
+    console.log(fetched_data.data);
+    console.log(departments);
+  }
+
+  const renderRedirect = (values) => {
+    if (redirect.redirect === true) {
+      if (redirect.tutor === true) {
+        return (
+          <Redirect
+            to={{
+              pathname: "/Empleado/Tutor",
+              data: values,
+            }}
+          />
+        );
+      } else {
+        return (
+          <Redirect
+            to={{
+              pathname: "/Empleado/CrearFactura",
+              data: values,
+            }}
+          />
+        );
+      }
     }
-  }, [props.location]);
-  //TODO: Filter users by document and name
-  //TODO: SEND es_nuevo
+  };
+
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Formik
         enableReinitialize
         validationSchema={user_schema}
-        initialValues={data === undefined ? user_initial_values : data}
+        initialValues={
+          data === undefined
+            ? user_initial_values
+            : { ...data, esNuevo: false, tutor: false }
+        }
         onSubmit={(values, { setSubmitting, resetForm }) => {
+          values.documento_usuario = `${values.documento_usuario}`;
+          let send_values = { ...values };
+          delete send_values.cod_departamento;
           if (data === undefined) {
             setSubmitting(true);
-            let send_values = { ...values };
-            delete send_values.cod_departamento;
             api_process
               .post("crearUsuario", send_values)
               .then(function (response) {
@@ -87,38 +104,51 @@ export default function UserForm(props) {
               })
               .catch(function (error) {
                 setSubmitting(false);
-                enqueueSnackbar(
-                  "Ha habido un error, revise los datos e intente de nuevo." +
-                    error.response,
-                  {
-                    variant: "error",
-                  }
-                );
+                enqueueSnackbar(give_error_message(error.response), {
+                  variant: "error",
+                });
               });
           } else {
-            setSubmitting(true);
-            api_users
-              .put("/", values)
-              .then(function (response) {
-                setSubmitting(false);
-                enqueueSnackbar("Los cambios han sido exitosos!", {
-                  variant: "success",
-                });
-              })
-              .catch(function (error) {
-                setSubmitting(false);
-                enqueueSnackbar(
-                  "Ha habido un error, revise los datos e intente de nuevo." +
-                    error.response,
-                  {
+            if (receipt === true) {
+              setSubmitting(true);
+              api_process
+                .put("crearUsuario", send_values)
+                .then(function (response) {
+                  setSubmitting(false);
+                  enqueueSnackbar("Los cambios han sido exitosos!", {
+                    variant: "success",
+                  });
+                  setRedirect({ redirect: true, tutor: values.tutor });
+                })
+                .catch(function (error) {
+                  setSubmitting(false);
+                  enqueueSnackbar(give_error_message(error.response), {
                     variant: "error",
-                  }
-                );
-              });
+                  });
+                });
+            } else {
+              delete send_values.esNuevo;
+              delete send_values.tutor;
+              setSubmitting(true);
+              api_users
+                .put("/", send_values)
+                .then(function (response) {
+                  setSubmitting(false);
+                  enqueueSnackbar("Los cambios han sido exitosos!", {
+                    variant: "success",
+                  });
+                })
+                .catch(function (error) {
+                  setSubmitting(false);
+                  enqueueSnackbar(give_error_message(error.response), {
+                    variant: "error",
+                  });
+                });
+            }
           }
         }}
       >
-        {({ resetForm, isSubmitting, values }) => (
+        {({ resetForm, isSubmitting, values, setFieldValue }) => (
           <Form>
             <Grid container direction="column">
               <Grid item container className={classes.title}>
@@ -160,7 +190,7 @@ export default function UserForm(props) {
                 alignItems="center"
               >
                 <Grid item xs={6}>
-                  {type_document.length !== 0 ? (
+                  {type_document !== undefined ? (
                     <Field
                       component={TextFormField}
                       required
@@ -212,7 +242,7 @@ export default function UserForm(props) {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  {type_shipment.length !== 0 ? (
+                  {type_shipment !== undefined ? (
                     <Field
                       component={TextFormField}
                       required
@@ -244,7 +274,7 @@ export default function UserForm(props) {
 
               <Grid item container spacing={3} alignItems="center">
                 <Grid item xs={6}>
-                  {type_shipment.length !== 0 ? (
+                  {type_shipment !== undefined ? (
                     type_shipment.find(
                       (type) =>
                         values.cod_tipo_pref_entrega ===
@@ -273,17 +303,21 @@ export default function UserForm(props) {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <FormControlLabel
-                    control={
-                      <Field
-                        component={Switch}
-                        type="checkbox"
-                        color="primary"
-                        name="tutor"
-                      />
-                    }
-                    label="Tutor"
-                  />
+                  {receipt === true ? (
+                    <FormControlLabel
+                      control={
+                        <Field
+                          component={Switch}
+                          type="checkbox"
+                          color="primary"
+                          name="tutor"
+                        />
+                      }
+                      label="Tutor"
+                    />
+                  ) : (
+                    ""
+                  )}
                 </Grid>
               </Grid>
 
@@ -346,12 +380,25 @@ export default function UserForm(props) {
 
                     <Grid item container spacing={3}>
                       <Grid item xs={6}>
-                        {departments.length !== 0 ? (
+                        {departments !== undefined ? (
                           <Field
                             component={TextFormField}
                             label="Departamento"
                             name="cod_departamento"
                             fullWidth
+                            onChange={(e) => {
+                              let cod_departamento = e.target.value;
+                              setFieldValue(
+                                "cod_departamento",
+                                cod_departamento
+                              );
+                              setFieldValue(
+                                "cod_ciudad",
+                                departments.find(
+                                  (e) => e.cod_departamento === cod_departamento
+                                ).Ciudads[0].cod_ciudad
+                              );
+                            }}
                             select
                           >
                             {departments.map((department) => (
@@ -366,7 +413,8 @@ export default function UserForm(props) {
                         ) : (
                           ""
                         )}
-                        {departments.length !== 0 ? (
+
+                        {departments !== undefined ? (
                           <Field
                             component={TextFormField}
                             label="Ciudad"
@@ -395,7 +443,7 @@ export default function UserForm(props) {
                       </Grid>
 
                       <Grid item xs={6}>
-                        {sex.length !== 0 ? (
+                        {sex !== undefined ? (
                           <Field
                             component={TextFormField}
                             label="Sexo"
@@ -438,26 +486,9 @@ export default function UserForm(props) {
                 </Grid>
               </Grid>
             </Grid>
+
             <BackDropLoading isSubmitting={isSubmitting} />
-            {redirect.redirect === true ? (
-              redirect.tutor === true ? (
-                <Redirect
-                  to={{
-                    pathname: "/Empleado/Tutor",
-                    data: values,
-                  }}
-                />
-              ) : (
-                <Redirect
-                  to={{
-                    pathname: "/Empleado/CrearFactura",
-                    data: values,
-                  }}
-                />
-              )
-            ) : (
-              ""
-            )}
+            {renderRedirect(values)}
           </Form>
         )}
       </Formik>

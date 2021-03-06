@@ -34,6 +34,10 @@ export const api_type_receipt = axios.create({
   baseURL: process.env.REACT_APP_API_ROUTE + "/api/tipoFacturaciones/",
   headers: headers,
 });
+export const api_type_payment = axios.create({
+  baseURL: process.env.REACT_APP_API_ROUTE + "/api/formaDePagoEntidad/",
+  headers: headers,
+});
 export const api_type_document = axios.create({
   baseURL: process.env.REACT_APP_API_ROUTE + "/api/tipoDocumentos/",
   headers: headers,
@@ -46,11 +50,6 @@ export const api_type_shipment = axios.create({
 
 export const api_type_employee = axios.create({
   baseURL: process.env.REACT_APP_API_ROUTE + "/api/tipoEmpleados/",
-  headers: headers,
-});
-
-export const api_users = axios.create({
-  baseURL: process.env.REACT_APP_API_ROUTE + "/api/usuarios/",
   headers: headers,
 });
 
@@ -96,5 +95,15 @@ export const api_departments = axios.create({
 
 export const api_doctors_entities = axios.create({
   baseURL: process.env.REACT_APP_API_ROUTE + "/api/entidadDoctor/",
+  headers: headers,
+});
+
+export const api_users = axios.create({
+  baseURL: process.env.REACT_APP_API_ROUTE + "/api/usuarios/",
+  headers: headers,
+});
+
+export const api_receipts = axios.create({
+  baseURL: process.env.REACT_APP_API_ROUTE + "/api/facturas/",
   headers: headers,
 });

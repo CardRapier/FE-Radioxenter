@@ -32,6 +32,14 @@ export const package_initial_values = {
 };
 
 export const agreement_initial_values = {
+  nom_entidad: "",
+  nom_servicio: "",
+  valor_servicio: 0,
+  fecha_inicial_convenio: moment(),
+  fecha_final_convenio: moment(),
+};
+
+export const agreements_initial_values = {
   cod_entidad: "",
   fecha_inicial_convenio: moment(),
   fecha_final_convenio: moment(),

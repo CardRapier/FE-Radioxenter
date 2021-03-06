@@ -4,6 +4,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AdminDrawer from "./AdminDrawer";
 import AdminShow from "./AdminShow";
 import AgreementForm from "./Forms/AgreementForm";
+import AgreementsForm from "./Forms/AgreementsForm";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -132,7 +133,7 @@ export default function Admin() {
             [classes.contentShift]: open,
           })}
         >
-          <Grid item xs={1} sm={1} md={3}></Grid>
+          <Grid item xs={false} sm={1} md={3}></Grid>
           <Grid item xs={11} sm={10} md={6}>
             <Route
               exact
@@ -197,7 +198,13 @@ export default function Admin() {
             <Route
               exact
               path="/Administrador/CrearConvenio"
-              component={AgreementForm}
+              component={AgreementsForm}
+            />
+
+            <Route
+              exact
+              path="/Administrador/EditarConvenios"
+              component={AgreementsForm}
             />
 
             <Route

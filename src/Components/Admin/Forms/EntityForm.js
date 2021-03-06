@@ -1,14 +1,17 @@
 import { Field, Form, Formik } from "formik";
+import { MenuItem, TextField } from "@material-ui/core";
+import {
+  api_entities,
+  api_type_payment,
+  api_type_receipt,
+} from "../../../api_app";
 
 import BackDropLoading from "../../BackDropLoading";
 import FormButtons from "../../FormButtons";
 import Grid from "@material-ui/core/Grid";
-import { MenuItem } from "@material-ui/core";
 import React from "react";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
-import { api_entities } from "../../../api_app";
-import { api_type_receipt } from "../../../api_app";
 import { entity_initial_values } from "./initial_values_admin";
 import { entity_schema } from "./validation_schemas_admin";
 import { give_error_message } from "../../../utils.js";
@@ -17,24 +20,48 @@ import { useStyles } from "./styles";
 
 export default function EntityForm(props) {
   const classes = useStyles();
-  const [data, setData] = React.useState(undefined);
+  var data = undefined;
+  const [type_payments, setTypePayments] = React.useState([]);
   const [type_receipts, setTypeReceipts] = React.useState([]);
   const { enqueueSnackbar } = useSnackbar();
   React.useEffect(() => {
     api_type_receipt.get("/").then((res) => {
       setTypeReceipts(res.data.respuesta);
     });
+
+    api_type_payment.get("/").then((res) => {
+      setTypePayments(res.data.respuesta);
+    });
   }, []);
-  React.useEffect(() => {
-    if (props.location.hasOwnProperty("data")) {
-      setData(props.location.data);
-    }
-  }, [props.location]);
+  if (props.location.hasOwnProperty("data")) {
+    data = props.location.data;
+  }
   return (
     <Formik
       enableReinitialize
       validationSchema={entity_schema}
-      initialValues={data === undefined ? entity_initial_values : data}
+      initialValues={
+        data === undefined
+          ? entity_initial_values
+          : {
+              razon_social_entidad: data.razon_social_entidad,
+              nombre_comercial_entidad: data.nombre_comercial_entidad,
+              nit_entidad: data.nit_entidad,
+              direccion_entidad: data.direccion_entidad,
+              telefono_entidad: data.telefono_entidad,
+              nombre_representante: data.nombre_representante,
+              cedula_representante: data.cedula_representante,
+              telefono_representante: data.telefono_representante,
+              correo_representante: data.correo_representante,
+              nombre_contacto: data.nombre_contacto,
+              cedula_contacto: data.cedula_contacto,
+              telefono_contacto: data.telefono_contacto,
+              correo_contacto: data.correo_contacto,
+              cod_forma_de_pago_entidad: data.cod_forma_de_pago_entidad,
+              cod_tipo_facturacion: data.cod_tipo_facturacion,
+              cod_entidad: data.cod_entidad,
+            }
+      }
       onSubmit={(values, { setSubmitting, resetForm }) => {
         values.cedula_representante = `${values.cedula_representante}`;
         values.cedula_contacto = `${values.cedula_contacto}`;
@@ -164,23 +191,53 @@ export default function EntityForm(props) {
                     ))}
                   </Field>
                 ) : (
-                  ""
+                  <div>
+                    <TextField
+                      label="Tipo de Facturación"
+                      fullWidth
+                      required
+                      value={"    "}
+                      select
+                    >
+                      <MenuItem value={"    "}> </MenuItem>
+                    </TextField>
+                  </div>
                 )}
               </Grid>
             </Grid>
 
             <Grid item>
-              <Field
-                component={TextFormField}
-                required
-                label="Forma de pago entidad"
-                name="cod_forma_de_pago_entidad"
-                fullWidth
-                select
-              >
-                <MenuItem value={0}>Mensual</MenuItem>
-                <MenuItem value={1}>Quincenal</MenuItem>
-              </Field>
+              {type_payments.length !== 0 ? (
+                <Field
+                  component={TextFormField}
+                  required
+                  label="Forma de pago entidad"
+                  name="cod_forma_de_pago_entidad"
+                  fullWidth
+                  select
+                >
+                  {type_payments.map((type, index) => (
+                    <MenuItem
+                      key={`menu-payments-${index}`}
+                      value={type.cod_forma_de_pago_entidad}
+                    >
+                      {type.nombre_forma_de_pago_entidad}
+                    </MenuItem>
+                  ))}
+                </Field>
+              ) : (
+                <div>
+                  <TextField
+                    label="Forma de pago entidad"
+                    fullWidth
+                    required
+                    value={"    "}
+                    select
+                  >
+                    <MenuItem value={"    "}> </MenuItem>
+                  </TextField>
+                </div>
+              )}
             </Grid>
 
             <Grid item container spacing={3}>

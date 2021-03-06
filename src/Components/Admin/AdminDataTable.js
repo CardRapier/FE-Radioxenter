@@ -25,26 +25,12 @@ import { remove_abbreviation } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    minWidth: 750,
+    minWidth: 900,
   },
   smallTableCell: {
     width: 50,
   },
 }));
-
-function filter_services(services) {
-  let filtered_services = services.filter((service) =>
-    service.nombre_servicio.includes("SE-")
-  );
-
-  for (let i in filtered_services) {
-    filtered_services[i].nombre_servicio = filtered_services[
-      i
-    ].nombre_servicio.replace("SE-", "");
-  }
-
-  return filtered_services;
-}
 
 export default function AdminDataTable(props) {
   const classes = useStyles();
@@ -119,7 +105,7 @@ export default function AdminDataTable(props) {
   return (rows !== undefined && subdata !== undefined) ||
     data.title !== "Convenios" ? (
     <TableContainer component={Paper}>
-      <Table aria-label="collapsible table" className={classes.table}>
+      <Table className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell className={classes.smallTableCell} />

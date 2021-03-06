@@ -1,4 +1,5 @@
 import { Field, Form, Formik } from "formik";
+import { MenuItem, TextField } from "@material-ui/core";
 import {
   api_employees,
   api_register,
@@ -10,7 +11,6 @@ import BackDropLoading from "../../BackDropLoading";
 import FormButtons from "../../FormButtons";
 import Grid from "@material-ui/core/Grid";
 import { KeyboardDatePicker } from "formik-material-ui-pickers";
-import { MenuItem } from "@material-ui/core";
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import React from "react";
@@ -18,6 +18,7 @@ import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
 import { employee_initial_values } from "./initial_values_admin";
 import { employee_schema } from "./validation_schemas_admin";
+import { give_error_message } from "../../../utils";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
 
@@ -44,8 +45,25 @@ export default function EmployeeForm(props) {
     <Formik
       enableReinitialize
       validationSchema={employee_schema}
-      initialValues={data === undefined ? employee_initial_values : data}
+      initialValues={
+        data === undefined
+          ? employee_initial_values
+          : {
+              nombres_empleado: data.nombres_empleado,
+              apellidos_empleado: data.apellidos_empleado,
+              cod_tipo_documento: data.cod_tipo_documento,
+              documento_empleado: data.documento_empleado,
+              direccion_empleado: data.direccion_empleado,
+              correo_empleado: data.correo_empleado,
+              fnacimiento_empleado: data.fnacimiento_empleado,
+              telefono_empleado: data.telefono_empleado,
+              usuario_empleado: data.usuario_empleado,
+              cod_tipo_empleado: data.cod_tipo_documento,
+              contrasenia_empleado: "",
+            }
+      }
       onSubmit={(values, { setSubmitting, resetForm }) => {
+        values.documento_empleado = `${values.documento_empleado}`;
         if (data === undefined) {
           setSubmitting(true);
           api_register
@@ -60,16 +78,13 @@ export default function EmployeeForm(props) {
             })
             .catch(function (error) {
               setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo.",
-                {
-                  variant: "error",
-                }
-              );
+              enqueueSnackbar(give_error_message(error.response), {
+                variant: "error",
+              });
             });
         } else {
-          delete values.createdAt;
-          delete values.updatedAt;
+          values.cod_empleado = data.cod_empleado;
+
           setSubmitting(true);
           api_employees
             .put("/", values)
@@ -81,13 +96,9 @@ export default function EmployeeForm(props) {
             })
             .catch(function (error) {
               setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo." +
-                  error.response,
-                {
-                  variant: "error",
-                }
-              );
+              enqueueSnackbar(give_error_message(error.response), {
+                variant: "error",
+              });
             });
         }
       }}
@@ -154,20 +165,37 @@ export default function EmployeeForm(props) {
               alignItems="center"
             >
               <Grid item xs={6}>
-                <Field
-                  component={TextFormField}
-                  required
-                  label="Tipo de documento"
-                  name="cod_tipo_documento"
-                  fullWidth
-                  select
-                >
-                  {type_document.map((type) => (
-                    <MenuItem value={type.cod_tipo_documento}>
-                      {type.nombre_tipo_documento}
-                    </MenuItem>
-                  ))}
-                </Field>
+                {type_document.length !== 0 ? (
+                  <Field
+                    component={TextFormField}
+                    required
+                    label="Tipo de documento"
+                    name="cod_tipo_documento"
+                    fullWidth
+                    select
+                  >
+                    {type_document.map((type, index) => (
+                      <MenuItem
+                        key={`type-emp-${index}`}
+                        value={type.cod_tipo_documento}
+                      >
+                        {type.nombre_tipo_documento}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                ) : (
+                  <div>
+                    <TextField
+                      label="Tipo de documento"
+                      fullWidth
+                      required
+                      value={"    "}
+                      select
+                    >
+                      <MenuItem value={"    "}> </MenuItem>
+                    </TextField>
+                  </div>
+                )}
               </Grid>
 
               <Grid item xs={6}>
@@ -193,7 +221,6 @@ export default function EmployeeForm(props) {
 
               <Grid item xs={6}>
                 <Field
-                  required
                   label="Contraseña del empleado"
                   type="password"
                   name="contrasenia_empleado"
@@ -201,22 +228,45 @@ export default function EmployeeForm(props) {
                 />
               </Grid>
             </Grid>
-            <Grid item container spacing={3}>
+            <Grid
+              item
+              container
+              spacing={3}
+              justify="center"
+              alignItems="center"
+            >
               <Grid item xs={6}>
-                <Field
-                  component={TextFormField}
-                  required
-                  label="Tipo de empleado"
-                  name="cod_tipo_empleado"
-                  fullWidth
-                  select
-                >
-                  {type_employee.map((type) => (
-                    <MenuItem value={type.cod_tipo_empleado}>
-                      {type.nombre_tipo_empleado}
-                    </MenuItem>
-                  ))}
-                </Field>
+                {type_employee.length !== 0 ? (
+                  <Field
+                    component={TextFormField}
+                    required
+                    label="Tipo de empleado"
+                    name="cod_tipo_empleado"
+                    fullWidth
+                    select
+                  >
+                    {type_employee.map((type, index) => (
+                      <MenuItem
+                        key={`type-emp-${index}`}
+                        value={type.cod_tipo_empleado}
+                      >
+                        {type.nombre_tipo_empleado}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                ) : (
+                  <div>
+                    <TextField
+                      label="Tipo de empleado"
+                      fullWidth
+                      required
+                      value={"    "}
+                      select
+                    >
+                      <MenuItem value={"    "}> </MenuItem>
+                    </TextField>
+                  </div>
+                )}
               </Grid>
 
               <Grid item xs={6}>
@@ -259,7 +309,6 @@ export default function EmployeeForm(props) {
               />
             </Grid>
           </Grid>
-
           <BackDropLoading isSubmitting={isSubmitting} />
         </Form>
       )}

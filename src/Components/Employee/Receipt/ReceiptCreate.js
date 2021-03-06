@@ -1,11 +1,5 @@
-import {
-  Button,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-} from "@material-ui/core";
 import { Field, Form, Formik } from "formik";
+import { Link, Redirect } from "react-router-dom";
 import {
   api_doctors,
   api_entities,
@@ -16,17 +10,18 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import AutocompleteForm from "../../Form/AutocompleteForm";
 import BackDropLoading from "../../BackDropLoading";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/Button";
 import { KeyboardDatePicker } from "formik-material-ui-pickers";
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MuiTextField from "@material-ui/core/TextField";
 import React from "react";
 import ReceiptServiceTable from "./ReceiptServiceTable";
-import { Redirect } from "react-router-dom";
-import { Select } from "formik-material-ui";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import publicIp from "public-ip";
 import { receipt_initial_values } from "../Forms/initial_values_employee";
 import { useSnackbar } from "notistack";
 
@@ -36,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
   pading: {
     marginTop: 14,
+  },
+  paddingBot: {
+    paddingBottom: theme.spacing(1),
   },
   button: {
     marginRight: 4,
@@ -51,10 +49,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ReceiptCreate(props) {
   const { data, tutor } = props.location;
+
   const classes = useStyles();
   const [redirect, setRedirect] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
-
+  const [ip4, setIp4] = React.useState(undefined);
   const [servicesSelected, setServicesSelected] = React.useState([]);
   const [services, setServices] = React.useState([]);
   const [packages, setPackages] = React.useState([]);
@@ -100,7 +99,6 @@ export default function ReceiptCreate(props) {
     var doctor_entity = doctor.Entidad_doctors.find(
       (element) => element.cod_entidad === entity.cod_entidad
     );
-    console.log(doctor_entity);
     return doctor_entity;
   };
 
@@ -119,32 +117,48 @@ export default function ReceiptCreate(props) {
   };
 
   const filter_agreements = (entity) => {
-    var entity_agreement = [];
-    var agreements_codes = entity.Convenios.map(
-      (element) => element.cod_servicio
-    );
+    let entity_agreement = [];
 
-    for (var i in agreements_codes) {
-      var code = agreements_codes[i];
-      entity_agreement.push(
-        agreements.find((element) => element.cod_servicio === code)
+    if (entity != null) {
+      let agreements_codes = entity.Convenios.map(
+        (element) => element.cod_servicio
       );
+
+      for (var i in agreements_codes) {
+        let code = agreements_codes[i];
+        let aux_service = agreements.find(
+          (element) => element.cod_servicio === code
+        );
+        let service = Object.assign({}, aux_service);
+        entity_agreement.push(service);
+        entity_agreement[i].precio_servicio = entity.Convenios.find(
+          // eslint-disable-next-line
+          (e) => e.cod_servicio === entity_agreement[i].cod_servicio
+        ).valor_servicio;
+      }
     }
+
     return entity_agreement;
   };
 
-  //TODO:Validate
-  const validate_doctor_entity = () => {};
-  const validate_services_agreements = () => {};
-  //TODO: Review if this can be better
+  const validate_selected_services = () => {
+    let response = false;
+    if (servicesSelected.length === 0) {
+      response = true;
+    }
+
+    return response;
+  };
+
   React.useEffect(
     () => {
+      publicIp.v4().then((e) => setIp4(e));
+
       api_services.get("/").then((res) => {
         setServices(filter_services(res.data.respuesta, "SE-"));
         setPackages(filter_services(res.data.respuesta, "PA-"));
-        setAgreements(filter_services(res.data.respuesta, "CO-"));
+        setAgreements(res.data.respuesta);
       });
-
       api_doctors.get("/").then((res) => {
         setDoctors(res.data.respuesta);
       });
@@ -156,54 +170,64 @@ export default function ReceiptCreate(props) {
     [props.location],
     []
   );
+  //TODO: revisar la ip 4
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      {/* //TODO: SEND documento_usuario, valor_transaccion, cod_entidad_doctor AND motive*/}
       <Formik
         enableReinitialize
         initialValues={{ ...receipt_initial_values }}
         onSubmit={(values, { setSubmitting, resetForm }) => {
           setSubmitting(true);
+          if (validate_selected_services === true) {
+            let petitionData = { ...values };
+            let final_data = {
+              ...petitionData,
+              documento_usuario: data.documento_usuario,
+              valor_transaccion: evaluate_total_value(),
+              cod_entidad_doctor: evaluate_entity_doctor(
+                values.entity,
+                values.doctor
+              ).cod_entidad_doctor,
+              motivo: motive,
+              ip4: ip4,
+              servicios: servicesSelected,
+            };
 
-          var petitionData = { ...values };
-          var final_data = {
-            ...petitionData,
-            documento_usuario: data.documento_usuario,
-            valor_transaccion: evaluate_total_value(),
-            cod_entidad_doctor: evaluate_entity_doctor(
-              values.entity,
-              values.doctor
-            ).cod_entidad_doctor,
-            motivo: motive,
-            servicios: servicesSelected,
-          };
+            delete final_data.doctor;
+            delete final_data.entity;
+            delete final_data.service;
 
-          delete final_data.doctor;
-          delete final_data.entity;
-          delete final_data.service;
-
-          api_process
-            .post("agregarTransaccion", final_data)
-            .then(function (response) {
-              setSubmitting(false);
-              enqueueSnackbar("Se ha agregado la transaccion exitososamente!", {
-                variant: "success",
+            api_process
+              .post("agregarTransaccion", final_data)
+              .then(function (response) {
+                setSubmitting(false);
+                enqueueSnackbar(
+                  "Se ha agregado la transaccion exitososamente!",
+                  {
+                    variant: "success",
+                  }
+                );
+                setRedirect(true);
+              })
+              .catch(function (error) {
+                setSubmitting(false);
+                enqueueSnackbar(
+                  "Ha habido un error, revise los datos e intente de nuevo." +
+                    error.response,
+                  {
+                    variant: "error",
+                  }
+                );
               });
-              setRedirect(true);
-            })
-            .catch(function (error) {
-              setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo." +
-                  error.response,
-                {
-                  variant: "error",
-                }
-              );
+          } else {
+            setSubmitting(false);
+            enqueueSnackbar("Se deben seleccionar servicios ", {
+              variant: "error",
             });
+          }
         }}
       >
-        {({ resetForm, isSubmitting, values, touched, errors }) => (
+        {({ resetForm, isSubmitting, values }) => (
           <Form>
             <Grid container direction={"column"}>
               <Grid>
@@ -222,9 +246,14 @@ export default function ReceiptCreate(props) {
                 </Grid>
                 <Grid container item>
                   <Grid container direction="column">
-                    <Grid item container spacing={3}>
-                      <Grid item xs={12} sm={6} className={classes.pading}>
-                        {/* TODO: Add conditional when the tutor exists */}
+                    <Grid
+                      item
+                      container
+                      spacing={3}
+                      justify="flex-start"
+                      alignItems="flex-start"
+                    >
+                      <Grid item xs={12} sm={6}>
                         <MuiTextField
                           id="user"
                           disabled
@@ -233,7 +262,7 @@ export default function ReceiptCreate(props) {
                               ? `${data.nombres_usuario} ${data.apellidos_usuario}`
                               : tutor !== undefined
                               ? `${tutor.nombres_tutor} ${tutor.apellidos_tutor}`
-                              : ""
+                              : "Lmao"
                           }
                           fullWidth
                           label="Usuario"
@@ -256,11 +285,26 @@ export default function ReceiptCreate(props) {
                           name="doctor"
                           label={"Nombre Doctor/Doctora"}
                           required
+                          disableClearable
                           component={AutocompleteForm}
                           options={doctors}
                           getOptionLabel={(option) =>
                             `${option.nombres_doctor} ${option.apellidos_doctor}`
                           }
+                          onChange={(value, setFieldValue) => {
+                            let entity = entitiesAgreements.find(
+                              (e) =>
+                                e.cod_entidad ===
+                                value.Entidad_doctors[0].cod_entidad
+                            );
+                            setFieldValue("entity", entity);
+                            if (values.tipo_compra === "Convenio") {
+                              setFieldValue(
+                                "service",
+                                filter_agreements(entity)[0]
+                              );
+                            }
+                          }}
                         />
                       </Grid>
 
@@ -270,6 +314,7 @@ export default function ReceiptCreate(props) {
                           label={"Entidad"}
                           required
                           component={AutocompleteForm}
+                          disableClearable
                           options={
                             values.doctor != null
                               ? filter_entities(values.doctor)
@@ -282,7 +327,12 @@ export default function ReceiptCreate(props) {
                       </Grid>
                     </Grid>
 
-                    <Grid item container spacing={3}>
+                    <Grid
+                      item
+                      container
+                      spacing={3}
+                      className={classes.paddingBot}
+                    >
                       <Grid item xs={12}>
                         <MuiTextField
                           value={motive}
@@ -297,23 +347,32 @@ export default function ReceiptCreate(props) {
 
                     <Grid item container spacing={3}>
                       <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                          <InputLabel htmlFor="type_service">
-                            Tipo Compra
-                          </InputLabel>
-                          <Field
-                            component={Select}
-                            name="tipo_compra"
-                            inputProps={{
-                              id: "type_service",
-                            }}
-                            fullWidth
-                          >
-                            <MenuItem value={"Servicio"}>Servicio</MenuItem>
-                            <MenuItem value={"Paquete"}>Paquete</MenuItem>
-                            <MenuItem value={"Convenio"}>Convenio</MenuItem>
-                          </Field>
-                        </FormControl>
+                        <Field
+                          name="tipo_compra"
+                          label={"Tipo de Compra"}
+                          required
+                          disableClearable
+                          component={AutocompleteForm}
+                          options={
+                            values.entity !== null &&
+                            values.entity.Convenios !== undefined &&
+                            values.entity.Convenios.length !== 0
+                              ? ["Servicio", "Paquete", "Convenio"]
+                              : ["Servicio", "Paquete"]
+                          }
+                          onChange={(value, setFieldValue) => {
+                            if (value === "Servicio") {
+                              setFieldValue("service", services[0]);
+                            } else if (value === "Paquete") {
+                              setFieldValue("service", packages[0]);
+                            } else {
+                              setFieldValue(
+                                "service",
+                                filter_agreements(values.entity)[0]
+                              );
+                            }
+                          }}
+                        />
                       </Grid>
 
                       <Grid item xs={10} sm={5}>
@@ -365,12 +424,14 @@ export default function ReceiptCreate(props) {
                 className={classes.buttons}
               >
                 <Button
+                  component={Link}
+                  to={"/Empleado/"}
                   className={classes.button}
                   variant="contained"
                   color="primary"
                   size="small"
                 >
-                  Cancelar
+                  Volver
                 </Button>
 
                 <Button
@@ -378,6 +439,7 @@ export default function ReceiptCreate(props) {
                   className={classes.button}
                   variant="contained"
                   color="primary"
+                  onClick={() => resetForm({})}
                 >
                   Limpiar
                 </Button>
@@ -391,6 +453,7 @@ export default function ReceiptCreate(props) {
                   Crear
                 </Button>
               </Grid>
+              <pre>{JSON.stringify(values, null, 2)}</pre>
             </Grid>
             <BackDropLoading isSubmitting={isSubmitting} />
             {redirect === true ? (

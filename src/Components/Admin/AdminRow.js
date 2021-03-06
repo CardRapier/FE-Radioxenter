@@ -25,6 +25,7 @@ import ServiceDescription from "./Descriptions/ServiceDescription";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import { makeStyles } from "@material-ui/core/styles";
+import { remove_abbreviations_ofString } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,12 +42,12 @@ const useStyles = makeStyles((theme) => ({
     margin: 4,
   },
 }));
-//TODO: PACKAGES SHOW NORMAL NAME OF SERVICES
-//TODO: SERVICES/PACKAGES FROM AGREEMENT, REMOVE THE ABBREVIATION
+
 export default function AdminRow(props) {
   const { tableCells, row, data, subdata } = props;
   const classes = useStyles();
   const [fetchData, setFetchData] = React.useState();
+  const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
     if (data.title === "Entidades") {
       api_period_payments.get("/").then((res) => {
@@ -75,7 +76,12 @@ export default function AdminRow(props) {
     }
   }, [data.title, row.cod_paquete]);
 
-  const [open, setOpen] = React.useState(false);
+  if (data.title === "Convenios" && tableCells !== undefined) {
+    tableCells[1] = remove_abbreviations_ofString(`${tableCells[1]}`, [
+      "SE-",
+      "PA-",
+    ]);
+  }
   return (
     <React.Fragment>
       <TableRow className={classes.root}>

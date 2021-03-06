@@ -1,6 +1,5 @@
 import moment from "moment";
 
-//TODO: DOCUMENT STRING
 export const user_initial_values = {
   nombres_usuario: "",
   apellidos_usuario: "",
@@ -18,6 +17,7 @@ export const user_initial_values = {
   cod_departamento: 1,
   cod_ciudad: 1,
   cod_tipo_pref_entrega: 1,
+  esNuevo: true,
 };
 
 export const tutor_initial_values = {

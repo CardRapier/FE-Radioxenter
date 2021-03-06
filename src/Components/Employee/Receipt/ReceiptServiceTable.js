@@ -23,13 +23,16 @@ export default function ReceiptServiceTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {servicesSelected === undefined ? (
-              <TableRow style={{ height: 100 }}>
-                <TableCell key={"single-row"} colSpan={8} />
+            {servicesSelected.length === 0 ? (
+              <TableRow>
+                <TableCell key={"single-row"}>
+                  No hay servicios seleccionados
+                </TableCell>
+                <TableCell />
               </TableRow>
             ) : (
               servicesSelected.map((service, index) => (
-                <TableRow>
+                <TableRow key={`${index}-row`}>
                   <TableCell key={`${index}-name`}>
                     {service.nombre_servicio}
                   </TableCell>

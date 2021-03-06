@@ -1,4 +1,5 @@
 import { Field, Form, Formik } from "formik";
+import { MenuItem, TextField } from "@material-ui/core";
 import {
   api_doctors,
   api_type_document,
@@ -8,12 +9,12 @@ import {
 import BackDropLoading from "../../BackDropLoading";
 import FormButtons from "../../FormButtons";
 import Grid from "@material-ui/core/Grid";
-import { MenuItem } from "@material-ui/core";
 import React from "react";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
 import { doctor_initial_values } from "./initial_values_admin";
 import { doctor_schema } from "./validation_schemas_admin";
+import { give_error_message } from "../../../utils";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
 
@@ -37,12 +38,28 @@ export default function DoctorForm(props) {
       setData(props.location.data);
     }
   }, [props.location]);
+
   return (
     <Formik
       enableReinitialize
       validationSchema={doctor_schema}
-      initialValues={data === undefined ? doctor_initial_values : data}
+      initialValues={
+        data === undefined
+          ? doctor_initial_values
+          : {
+              nombres_doctor: data.nombres_doctor,
+              apellidos_doctor: data.apellidos_doctor,
+              direccion_doctor: data.direccion_doctor,
+              telefono_doctor: data.telefono_doctor,
+              documento_doctor: data.documento_doctor,
+              cod_tipo_documento: data.cod_tipo_documento,
+              cod_tipo_pref_entrega: data.cod_tipo_pref_entrega,
+              correo_doctor: data.correo_doctor,
+              cod_doctor: data.cod_doctor,
+            }
+      }
       onSubmit={(values, { setSubmitting, resetForm }) => {
+        values.documento_doctor = `${values.documento_doctor}`;
         if (data === undefined) {
           setSubmitting(true);
           api_doctors
@@ -53,16 +70,12 @@ export default function DoctorForm(props) {
                 variant: "success",
               });
               resetForm({});
-              console.log(response);
             })
             .catch(function (error) {
               setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo.",
-                {
-                  variant: "error",
-                }
-              );
+              enqueueSnackbar(give_error_message(error.response), {
+                variant: "error",
+              });
             });
         } else {
           setSubmitting(true);
@@ -76,13 +89,9 @@ export default function DoctorForm(props) {
             })
             .catch(function (error) {
               setSubmitting(false);
-              enqueueSnackbar(
-                "Ha habido un error, revise los datos e intente de nuevo." +
-                  error.response,
-                {
-                  variant: "error",
-                }
-              );
+              enqueueSnackbar(give_error_message(error.response), {
+                variant: "error",
+              });
             });
         }
       }}
@@ -149,20 +158,37 @@ export default function DoctorForm(props) {
               alignItems="center"
             >
               <Grid item xs={6}>
-                <Field
-                  component={TextFormField}
-                  required
-                  label="Tipo de documento"
-                  name="cod_tipo_documento"
-                  fullWidth
-                  select
-                >
-                  {type_document.map((type) => (
-                    <MenuItem value={type.cod_tipo_documento}>
-                      {type.nombre_tipo_documento}
-                    </MenuItem>
-                  ))}
-                </Field>
+                {type_document.length !== 0 ? (
+                  <Field
+                    component={TextFormField}
+                    required
+                    label="Tipo de documento"
+                    name="cod_tipo_documento"
+                    fullWidth
+                    select
+                  >
+                    {type_document.map((type, index) => (
+                      <MenuItem
+                        key={`type-doc-${index}`}
+                        value={type.cod_tipo_documento}
+                      >
+                        {type.nombre_tipo_documento}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                ) : (
+                  <div>
+                    <TextField
+                      label="Tipo de documento"
+                      fullWidth
+                      required
+                      value={"    "}
+                      select
+                    >
+                      <MenuItem value={"    "}> </MenuItem>
+                    </TextField>
+                  </div>
+                )}
               </Grid>
 
               <Grid item xs={6}>
@@ -178,20 +204,37 @@ export default function DoctorForm(props) {
 
             <Grid item container spacing={3}>
               <Grid item xs={6}>
-                <Field
-                  component={TextFormField}
-                  required
-                  label="Preferencia de entrega"
-                  name="cod_tipo_pref_entrega"
-                  fullWidth
-                  select
-                >
-                  {type_shipment.map((type) => (
-                    <MenuItem value={type.cod_tipo_pref_entrega}>
-                      {type.nombre_tipo_pref_entrega}
-                    </MenuItem>
-                  ))}
-                </Field>
+                {type_shipment.length !== 0 ? (
+                  <Field
+                    component={TextFormField}
+                    required
+                    label="Preferencia de entrega"
+                    name="cod_tipo_pref_entrega"
+                    fullWidth
+                    select
+                  >
+                    {type_shipment.map((type, index) => (
+                      <MenuItem
+                        key={`type-pref-${index}`}
+                        value={type.cod_tipo_pref_entrega}
+                      >
+                        {type.nombre_tipo_pref_entrega}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                ) : (
+                  <div>
+                    <TextField
+                      label="Preferencia de entrega"
+                      fullWidth
+                      required
+                      value={"    "}
+                      select
+                    >
+                      <MenuItem value={"    "}> </MenuItem>
+                    </TextField>
+                  </div>
+                )}
               </Grid>
 
               <Grid item xs={6}>

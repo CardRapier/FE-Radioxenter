@@ -18,13 +18,11 @@ import { package_schema } from "./validation_schemas_admin";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
 
-//TODO: JUST SHOW SERVICES ON THE FORM, FILTER THEM AND REMOVE ABBREVATION
 export default function ServiceForm(props) {
   const classes = useStyles();
   const [data, setData] = React.useState(undefined);
   const [services, setServices] = React.useState([]);
   const { enqueueSnackbar } = useSnackbar();
-
   React.useEffect(() => {
     if (props.location.hasOwnProperty("data")) {
       setData(props.location.data);
@@ -56,6 +54,7 @@ export default function ServiceForm(props) {
         setServices(remove_abbreviation(res.data.respuesta, "SE-"));
       });
   }, []);
+
   return (
     <Formik
       enableReinitialize
@@ -68,6 +67,7 @@ export default function ServiceForm(props) {
               nombre_paquete: data.nombre_paquete,
               precio_paquete: data.precio_paquete,
               servicios: data.packages,
+              valor_antiguo: data.nombre_paquete,
             }
           : package_initial_values
       }
@@ -106,6 +106,7 @@ export default function ServiceForm(props) {
               cod_paquete: data.cod_paquete,
               nombre_paquete: values.nombre_paquete,
               precio_paquete: values.precio_paquete,
+              valor_antiguo: values.valor_antiguo,
             })
             .then(function (response) {
               let id_package = data.cod_paquete;

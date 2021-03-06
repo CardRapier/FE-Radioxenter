@@ -78,7 +78,7 @@ export default function AdminShow(props) {
 
         <Grid container item spacing={4} justify="center" alignItems="center">
           <Grid item className={classes.margintop}>
-            <Grid item xs={12}>
+            <Grid item>
               <AdminDataTable
                 data={data}
                 filter={{ query: query.query, id: data.filter.id }}

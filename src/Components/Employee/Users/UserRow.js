@@ -30,7 +30,19 @@ const useRowStyles = makeStyles((theme) => ({
 }));
 
 export default function UserRow(props) {
-  const { row, fetched_data } = props;
+  let { row, fetched_data } = props;
+  let city_department = undefined;
+  if (
+    fetched_data.data !== undefined &&
+    fetched_data.data.hasOwnProperty("departments") &&
+    fetched_data.data.hasOwnProperty("cities")
+  ) {
+    city_department = fetched_data.data.cities.find(
+      (element) => element.cod_ciudad === row.cod_ciudad
+    );
+
+    row.cod_departamento = city_department.cod_departamento;
+  }
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
   return (
@@ -45,21 +57,25 @@ export default function UserRow(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell align="center" component="th" scope="row">
           {row.documento_usuario}
         </TableCell>
-        <TableCell align="right">
+        <TableCell align="center">
           {row.nombres_usuario + " " + row.apellidos_usuario}
         </TableCell>
-        <TableCell align="right">{row.correo_usuario}</TableCell>
-        <TableCell align="right">{row.telefono_usuario}</TableCell>
-        <TableCell align="right">{row.genero_usuario}</TableCell>
+        <TableCell align="center">{row.correo_usuario}</TableCell>
+        <TableCell align="center">{row.telefono_usuario}</TableCell>
+        <TableCell align="center">{row.genero_usuario}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
-              <UserData row={row} fetched_data={fetched_data} />
+              <UserData
+                row={row}
+                fetched_data={fetched_data}
+                city_department={city_department}
+              />
             </Box>
             <Divider />
             <Box margin={1}>
@@ -75,14 +91,24 @@ export default function UserRow(props) {
                   color="primary"
                   className={classes.button}
                   component={Link}
-                  to={{ pathname: "/Empleado/EditarUsuario", data: row }}
+                  to={{
+                    pathname: "/Empleado/EditarUsuario",
+                    data: row,
+                    fetched_data: fetched_data,
+                    receipt: false,
+                  }}
                   size="small"
                 >
                   Editar
                 </Button>
                 <Button
                   component={Link}
-                  to={{ pathname: "/Empleado/CrearFactura", data: row }}
+                  to={{
+                    pathname: "/Empleado/EditarUsuario",
+                    data: row,
+                    fetched_data: fetched_data,
+                    receipt: true,
+                  }}
                   variant="contained"
                   color="primary"
                   size="small"
