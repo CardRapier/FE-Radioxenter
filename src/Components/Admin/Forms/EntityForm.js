@@ -29,7 +29,7 @@ export default function EntityForm(props) {
   var data = undefined;
   const [type_payments, setTypePayments] = React.useState([]);
   const [type_receipts, setTypeReceipts] = React.useState([]);
-  const [entities, setEntities] = React.useState([]);
+
   const [doctors, setDoctors] = React.useState([]);
   const { enqueueSnackbar } = useSnackbar();
   React.useEffect(() => {
@@ -39,10 +39,6 @@ export default function EntityForm(props) {
 
     api_type_payment.get("/").then((res) => {
       setTypePayments(res.data.respuesta);
-    });
-
-    api_entities.get("/").then((res) => {
-      setEntities(res.data.respuesta);
     });
 
     api_doctors.get("/").then((res) => {

@@ -18,7 +18,6 @@ export default function Proccess() {
   return (
     <React.Fragment>
       <Grid container direction={"column"}>
-        {process.env.REACT_APP_API_ROUTE}
         <Grid container item className={classes.title}>
           <Grid item xs={3}></Grid>
           <Grid item xs={5}>
