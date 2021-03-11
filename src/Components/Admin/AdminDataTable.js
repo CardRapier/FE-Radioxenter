@@ -9,6 +9,7 @@ import {
 } from "../../api_app";
 
 import AdminRow from "./AdminRow";
+import BackDropLoading from "../BackDropLoading";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
 import Table from "@material-ui/core/Table";
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AdminDataTable(props) {
   const classes = useStyles();
+  const [loaded, setLoaded] = React.useState(false);
   const { data, filter } = props;
   const [rows, setRows] = React.useState([]);
   const [subdata, setSubData] = React.useState(undefined);
@@ -48,24 +50,27 @@ export default function AdminDataTable(props) {
         })
         .then((res) => {
           setRows(remove_abbreviation(res.data.respuesta, "SE-"));
+          setLoaded(true);
         });
     } else if (data.title === "Paquetes") {
       api_packages.get("/").then((res) => {
         setRows(res.data.respuesta);
+        setLoaded(true);
       });
     } else if (data.title === "Entidades") {
       api_entities.get("/convenios").then((res) => {
         setRows(res.data.respuesta);
+        setLoaded(true);
       });
     } else if (data.title === "Convenios") {
       api_entities.get("/convenios").then((res) => {
         setRows(res.data.respuesta);
-
         api_services.get("/").then((res) => {
           setSubData((subdata) => ({
             ...subdata,
             services: res.data.respuesta,
           }));
+          setLoaded(true);
         });
       });
     } else if (data.title === "Empleados") {
@@ -78,12 +83,14 @@ export default function AdminDataTable(props) {
           }));
           api_employees.get("/").then((res) => {
             setRows(res.data.respuesta);
+            setLoaded(true);
           });
         });
       });
     } else if (data.title === "Doctores") {
       api_doctors.get("/").then((res) => {
         setRows(res.data.respuesta);
+        setLoaded(true);
       });
     }
   }, [data.title]);
@@ -102,8 +109,7 @@ export default function AdminDataTable(props) {
     setPage(0);
   };
 
-  return (rows !== undefined && subdata !== undefined) ||
-    data.title !== "Convenios" ? (
+  return (
     <TableContainer component={Paper}>
       <Table className={classes.table}>
         <TableHead>
@@ -259,8 +265,7 @@ export default function AdminDataTable(props) {
           </TableRow>
         </TableFooter>
       </Table>
+      <BackDropLoading isSubmitting={!loaded} />
     </TableContainer>
-  ) : (
-    ""
   );
 }
