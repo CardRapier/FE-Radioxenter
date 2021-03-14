@@ -29,10 +29,15 @@ export default function Receipts() {
   const [receipts, setReceipts] = useState([]);
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    api_receipts.get("/").then((res) => {
-      setReceipts(res.data.respuesta);
-      setLoaded(true);
-    });
+    api_receipts
+      .get("/")
+      .then((res) => {
+        setReceipts(res.data.respuesta);
+        setLoaded(true);
+      })
+      .catch((error) => {
+        setLoaded(true);
+      });
     return () => {};
   }, []);
   return (

@@ -43,9 +43,14 @@ export default function UserShow() {
   const [data, setData] = React.useState({});
   const [users, setUsers] = React.useState([]);
   React.useEffect(() => {
-    api_users.get("/").then((res) => {
-      setUsers(res.data.respuesta);
-    });
+    api_users
+      .get("/")
+      .then((res) => {
+        setUsers(res.data.respuesta);
+      })
+      .catch((error) => {
+        setLoaded(true);
+      });
     api_type_document.get("/").then((res) => {
       setData((prevState) => ({
         data: {
