@@ -52,47 +52,75 @@ export default function AdminDataTable(props) {
         .then((res) => {
           setRows(remove_abbreviation(res.data.respuesta, "SE-"));
           setLoaded(true);
-        });
-    } else if (data.title === "Paquetes") {
-      api_packages.get("/").then((res) => {
-        setRows(res.data.respuesta);
-        setLoaded(true);
-      });
-    } else if (data.title === "Entidades") {
-      api_entities.get("/convenios").then((res) => {
-        setRows(res.data.respuesta);
-        setLoaded(true);
-      });
-    } else if (data.title === "Convenios") {
-      api_entities.get("/convenios").then((res) => {
-        setRows(res.data.respuesta);
-        api_services.get("/").then((res) => {
-          setSubData((subdata) => ({
-            ...subdata,
-            services: res.data.respuesta,
-          }));
+        })
+        .catch((error) => {
           setLoaded(true);
         });
-      });
-    } else if (data.title === "Empleados") {
-      api_type_employee.get("/").then((res) => {
-        setSubData({ type_employees: res.data.respuesta });
-        api_type_document.get("/").then((res) => {
-          setSubData((subdata) => ({
-            ...subdata,
-            type_documents: res.data.respuesta,
-          }));
-          api_employees.get("/").then((res) => {
-            setRows(res.data.respuesta);
+    } else if (data.title === "Paquetes") {
+      api_packages
+        .get("/")
+        .then((res) => {
+          setRows(res.data.respuesta);
+          setLoaded(true);
+        })
+        .catch((error) => {
+          setLoaded(true);
+        });
+    } else if (data.title === "Entidades") {
+      api_entities
+        .get("/convenios")
+        .then((res) => {
+          setRows(res.data.respuesta);
+          setLoaded(true);
+        })
+        .catch((error) => {
+          setLoaded(true);
+        });
+    } else if (data.title === "Convenios") {
+      api_entities
+        .get("/convenios")
+        .then((res) => {
+          setRows(res.data.respuesta);
+          api_services.get("/").then((res) => {
+            setSubData((subdata) => ({
+              ...subdata,
+              services: res.data.respuesta,
+            }));
             setLoaded(true);
           });
+        })
+        .catch((error) => {
+          setLoaded(true);
         });
-      });
+    } else if (data.title === "Empleados") {
+      api_type_employee
+        .get("/")
+        .then((res) => {
+          setSubData({ type_employees: res.data.respuesta });
+          api_type_document.get("/").then((res) => {
+            setSubData((subdata) => ({
+              ...subdata,
+              type_documents: res.data.respuesta,
+            }));
+            api_employees.get("/").then((res) => {
+              setRows(res.data.respuesta);
+              setLoaded(true);
+            });
+          });
+        })
+        .catch((error) => {
+          setLoaded(true);
+        });
     } else if (data.title === "Doctores") {
-      api_doctors.get("/").then((res) => {
-        setRows(res.data.respuesta);
-        setLoaded(true);
-      });
+      api_doctors
+        .get("/")
+        .then((res) => {
+          setRows(res.data.respuesta);
+          setLoaded(true);
+        })
+        .catch((error) => {
+          setLoaded(true);
+        });
     }
   }, [data.title]);
 
