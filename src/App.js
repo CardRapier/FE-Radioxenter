@@ -1,3 +1,5 @@
+import "./App.css";
+
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import Admin from "./Components/Admin/Admin";
@@ -6,6 +8,7 @@ import Login from "./Components/Login";
 import { ProtectedRoute } from "./Components/ProtectedRoute";
 import React from "react";
 import { SnackbarProvider } from "notistack";
+import Waves from "./Waves";
 
 function App() {
   return (
@@ -17,6 +20,7 @@ function App() {
           <ProtectedRoute path="/Administrador" component={Admin} />
         </Switch>
       </BrowserRouter>
+      <Waves />
     </SnackbarProvider>
   );
 }

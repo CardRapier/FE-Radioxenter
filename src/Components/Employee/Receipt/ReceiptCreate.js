@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ReceiptCreate(props) {
   const { data, tutor } = props.location;
-
   const classes = useStyles();
   const [redirect, setRedirect] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -65,7 +64,13 @@ export default function ReceiptCreate(props) {
   const [entitiesAgreements, setEntitiesAgreements] = React.useState([]);
 
   function add_service(service) {
-    setServicesSelected(() => [...servicesSelected, service]);
+    if (service !== null) {
+      setServicesSelected(() => [...servicesSelected, service]);
+    } else {
+      enqueueSnackbar("Seleccione un servicio para poder agregarlo", {
+        variant: "error",
+      });
+    }
   }
 
   function remove_service(id) {
@@ -173,7 +178,6 @@ export default function ReceiptCreate(props) {
     [props.location],
     []
   );
-  //TODO: revisar la ip 4
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Formik
@@ -262,7 +266,7 @@ export default function ReceiptCreate(props) {
                               ? `${data.nombres_usuario} ${data.apellidos_usuario}`
                               : tutor !== undefined
                               ? `${tutor.nombres_tutor} ${tutor.apellidos_tutor}`
-                              : "Lmao"
+                              : ""
                           }
                           fullWidth
                           label="Usuario"

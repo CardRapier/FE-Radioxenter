@@ -1,3 +1,4 @@
+import { Grid } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
 import Table from "@material-ui/core/Table";
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 export default function UserDatatable(props) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
-  let { users, data } = props;
+  let { users, data, filter } = props;
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
@@ -51,14 +52,31 @@ export default function UserDatatable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(rowsPerPage > 0
-            ? users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : users
-          ).map((row) => (
-            <UserRow key={row.cod_usuario} row={row} fetched_data={data} />
-          ))}
+          {users.length === 0 ? (
+            <TableRow>
+              <TableCell key={"single-row"} colSpan={6}>
+                <Grid container justify="center" alignItems="center">
+                  No hay usuarios seleccionados
+                </Grid>
+              </TableCell>
+            </TableRow>
+          ) : (
+            (rowsPerPage > 0
+              ? users
+                  .filter((row) =>
+                    row["documento_usuario"]
+                      .toString()
+                      .toLowerCase()
+                      .includes(filter.query.toLowerCase())
+                  )
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : users
+            ).map((row) => (
+              <UserRow key={row.cod_usuario} row={row} fetched_data={data} />
+            ))
+          )}
 
-          {emptyRows > 0 && (
+          {emptyRows > 0 && emptyRows !== 5 && (
             <TableRow style={{ height: 53 * emptyRows }}>
               <TableCell colSpan={6} />
             </TableRow>

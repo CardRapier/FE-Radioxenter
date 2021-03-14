@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 //TODO: Filtrar xd
 export default function Receipts() {
   const classes = useStyles();
+  const [query, setQuery] = React.useState({ query: "" });
   const [receipts, setReceipts] = useState([]);
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
@@ -34,7 +35,6 @@ export default function Receipts() {
     });
     return () => {};
   }, []);
-  console.log(receipts);
   return (
     <React.Fragment>
       <Grid container direction={"column"}>
@@ -68,13 +68,21 @@ export default function Receipts() {
               label="Documento"
               variant="outlined"
               size="small"
+              type="search"
+              value={query.query}
+              onChange={(event, index, value) =>
+                setQuery({ query: event.target.value })
+              }
             />
           </Grid>
         </Grid>
         <Grid container item spacing={4} justify="center" alignItems="center">
           <Grid item className={classes.margintop}>
             <Grid item xs>
-              <ReceiptTable receipts={receipts} />
+              <ReceiptTable
+                receipts={receipts}
+                filter={{ query: query.query }}
+              />
             </Grid>
           </Grid>
         </Grid>

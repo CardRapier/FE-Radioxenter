@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
+import { TextField } from "@material-ui/core";
 import TextFormField from "../../Form/TextFormField";
 import Typography from "@material-ui/core/Typography";
 import { give_error_message } from "../../../utils";
@@ -103,25 +104,43 @@ export default function ReceiptKinship(props) {
                   />
                 </Grid>
               </Grid>
-              <Grid item container spacing={3}>
+              <Grid
+                item
+                container
+                spacing={3}
+                justify="center"
+                alignItems="center"
+              >
                 <Grid item xs={12} sm={6}>
-                  <Field
-                    component={TextFormField}
-                    required
-                    label="Tipo de documento"
-                    name="cod_tipo_documento"
-                    fullWidth
-                    select
-                  >
-                    {type_document.map((type) => (
-                      <MenuItem
-                        key={type.cod_tipo_documento}
-                        value={type.cod_tipo_documento}
-                      >
-                        {type.nombre_tipo_documento}
-                      </MenuItem>
-                    ))}
-                  </Field>
+                  {type_document.length !== 0 ? (
+                    <Field
+                      component={TextFormField}
+                      required
+                      label="Tipo de documento"
+                      name="cod_tipo_documento"
+                      fullWidth
+                      select
+                    >
+                      {type_document.map((type) => (
+                        <MenuItem
+                          key={type.cod_tipo_documento}
+                          value={type.cod_tipo_documento}
+                        >
+                          {type.nombre_tipo_documento}
+                        </MenuItem>
+                      ))}
+                    </Field>
+                  ) : (
+                    <TextField
+                      label="Tipo de documento"
+                      fullWidth
+                      required
+                      value={"    "}
+                      select
+                    >
+                      <MenuItem value={"    "}> </MenuItem>
+                    </TextField>
+                  )}
                 </Grid>
 
                 <Grid item xs={12} sm={6}>

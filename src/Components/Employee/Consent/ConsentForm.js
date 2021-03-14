@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import SignatureCanvas from "react-signature-canvas";
 import Typography from "@material-ui/core/Typography";
 import { api_process } from "../../../api_app.js";
+import { give_error_message } from "../../../utils.js";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
 
@@ -49,26 +50,29 @@ export default function ConsentForm(props) {
     var signature_ref = refSignature.getTrimmedCanvas();
     var signature_image = signature_ref.toDataURL("image/png");
 
-    api_process
-      .post("crearConsentimiento", {
-        signature: signature_image,
-        documento_usuario: data.documento_usuario,
-      })
-      .then((res) => {
-        enqueueSnackbar("Se ha agregado la transaccion exitososamente!", {
-          variant: "success",
-        });
-        setRedirect(true);
-      })
-      .catch(function (error) {
-        enqueueSnackbar(
-          "Ha habido un error, revise los datos e intente de nuevo." +
-            error.response,
-          {
+    if (refSignature.isEmpty() === false) {
+      api_process
+        .post("crearConsentimiento", {
+          signature: signature_image,
+          documento_usuario: data.documento_usuario,
+        })
+        .then((res) => {
+          enqueueSnackbar("Se ha agregado la transaccion exitososamente!", {
+            variant: "success",
+          });
+          setRedirect(true);
+        })
+        .catch(function (error) {
+          enqueueSnackbar(give_error_message(error.response), {
             variant: "error",
-          }
-        );
-      });
+          });
+        });
+    } else {
+      enqueueSnackbar(
+        "El formato de firma está vacío, por favor coloque su firma",
+        { variant: "error" }
+      );
+    }
   };
 
   return (

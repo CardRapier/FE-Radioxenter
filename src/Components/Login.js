@@ -67,8 +67,8 @@ export default function Login() {
             className={classes.grid}
           >
             <img
-              src="http://radioxenter.com/images/header_logo.png"
-              alt="new"
+              src={window.location.origin + "/header_logo.png"}
+              alt="logo"
               className={classes.image}
             />
 

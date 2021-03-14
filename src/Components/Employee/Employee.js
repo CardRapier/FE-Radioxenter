@@ -3,6 +3,7 @@ import { Redirect, Route } from "react-router-dom";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AppBar from "@material-ui/core/AppBar";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import BackDropLoading from "../BackDropLoading";
 import Button from "@material-ui/core/Button";
 import ConsentForm from "./Consent/ConsentForm";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -24,6 +25,7 @@ import UserShow from "./Users/UserShow";
 import auth from "../Auth/auth";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
+import socketIOClient from "socket.io-client";
 
 const drawerWidth = 150;
 
@@ -70,11 +72,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const ENDPOINT = process.env.REACT_APP_SOCKET_ROUTE;
+const socket = socketIOClient(ENDPOINT);
+
 export default function Employee() {
   const classes = useStyles();
+  const [rows, setRows] = React.useState([]);
+  const [loaded, setLoaded] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [redirect, setRedirect] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const openPopover = Boolean(anchorEl);
+  const id = openPopover ? "simple-popover" : undefined;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -84,12 +93,32 @@ export default function Employee() {
     setAnchorEl(null);
   };
 
-  const openPopover = Boolean(anchorEl);
-  const id = openPopover ? "simple-popover" : undefined;
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
+  const handleChangeServiceStatus = (data) => {
+    socket.emit("finalizar_proceso", {
+      documento_usuario: data.documento_usuario,
+      cod_servicio: data.cod_servicio,
+    });
+  };
+
+  const handleChangeShipmentStatus = (data) => {
+    socket.emit("entrega_resultado", {
+      documento_usuario: data.documento_usuario,
+      cod_servicio: data.cod_servicio,
+    });
+  };
+
+  React.useEffect(() => {
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("data", (msg) => {
+      setRows(msg);
+      setLoaded(true);
+    });
+    return () => socket.disconnect();
+  }, []);
 
   return (
     <React.Fragment>
@@ -155,7 +184,17 @@ export default function Employee() {
             <Route exact path="/Empleado/CrearUsuario" component={UserForm} />
             <Route exact path="/Empleado/EditarUsuario" component={UserForm} />
             <Route exact path="/Empleado/Tutor" component={ReceiptKinship} />
-            <Route exact path="/Empleado/Procesos" component={Proccess} />
+            <Route
+              exact
+              path="/Empleado/Procesos"
+              render={() => (
+                <Proccess
+                  rows={rows}
+                  handleChangeServiceStatus={handleChangeServiceStatus}
+                  handleChangeShipmentStatus={handleChangeShipmentStatus}
+                />
+              )}
+            />
             <Route
               exact
               path="/Empleado/CrearFactura"
@@ -172,12 +211,19 @@ export default function Employee() {
           <Grid item xs={false} sm={1} md={3}></Grid>
         </Grid>
       </Grid>
-
+      <img
+        src={window.location.origin + "/header_logo.png"}
+        alt="logo"
+        class="ribbon"
+      />
       <ProcessPopOver
         id={id}
         open={openPopover}
         anchorEl={anchorEl}
         onClose={handleClose}
+        rows={rows}
+        handleChangeServiceStatus={handleChangeServiceStatus}
+        handleChangeShipmentStatus={handleChangeShipmentStatus}
       />
 
       {redirect === true && localStorage.getItem("authenticated") ? (
@@ -185,6 +231,7 @@ export default function Employee() {
       ) : (
         ""
       )}
+      <BackDropLoading isSubmitting={!loaded} />
     </React.Fragment>
   );
 }

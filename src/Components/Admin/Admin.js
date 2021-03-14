@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
 }));
-//TODO:ADD DOCTOR ENTITY RELATION
+
 export default function Admin() {
   const classes = useStyles();
   const [redirect, setRedirect] = React.useState(false);
@@ -250,6 +250,11 @@ export default function Admin() {
             />
           </Grid>
           <Grid item xs={false} sm={1} md={3}></Grid>
+          <img
+            src={window.location.origin + "/header_logo.png"}
+            alt="logo"
+            class="ribbon"
+          />
         </Grid>
       </Grid>
       {redirect === true && localStorage.getItem("authenticated") ? (

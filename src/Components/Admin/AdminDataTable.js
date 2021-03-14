@@ -10,6 +10,7 @@ import {
 
 import AdminRow from "./AdminRow";
 import BackDropLoading from "../BackDropLoading";
+import { Grid } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
 import Table from "@material-ui/core/Table";
@@ -123,126 +124,137 @@ export default function AdminDataTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(rowsPerPage > 0
-            ? rows
-                .filter((row) =>
-                  row[filter.id]
-                    .toString()
-                    .toLowerCase()
-                    .includes(filter.query.toLowerCase())
-                )
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
-          ).map((row) => {
-            switch (data.title) {
-              case "Entidades":
-                return (
-                  <AdminRow
-                    key={row.cod_entidad}
-                    tableCells={[
-                      row.razon_social_entidad,
-                      row.nombre_comercial_entidad,
-                      row.nit_entidad,
-                      row.direccion_entidad,
-                      row.telefono_entidad,
-                    ]}
-                    row={row}
-                    data={data}
-                  />
-                );
-              case "Paquetes":
-                return (
-                  <AdminRow
-                    key={row.cod_paquete}
-                    tableCells={[row.nombre_paquete, row.precio_paquete]}
-                    row={row}
-                    data={data}
-                  />
-                );
-              case "Convenios":
-                return (
-                  <AdminRow
-                    key={row.cod_entidad}
-                    tableCells={[
-                      row.razon_social_entidad,
-                      subdata !== undefined && subdata.services !== undefined
-                        ? row.Convenios.map(
-                            (element, index) =>
-                              subdata.services.find(
-                                (service) =>
-                                  service.cod_servicio === element.cod_servicio
-                              ).nombre_servicio
-                          ).join(" - ")
-                        : "",
-                    ]}
-                    row={row}
-                    subdata={subdata}
-                    data={data}
-                  />
-                );
-              case "Empleados":
-                return (
-                  <AdminRow
-                    key={row.cod_empleado}
-                    tableCells={[
-                      row.nombres_empleado + " " + row.apellidos_empleado,
-                      row.documento_empleado,
-                      subdata !== "undefined" &&
-                      subdata.type_documents !== "undefined"
-                        ? subdata.type_documents.find(
-                            (element) =>
-                              element.cod_tipo_documento ===
-                              row.cod_tipo_documento
-                          ).nombre_tipo_documento
-                        : row.cod_tipo_documento,
-                      row.usuario_empleado,
-                      subdata !== "undefined" &&
-                      subdata.type_employees !== "undefined"
-                        ? subdata.type_employees.find(
-                            (element) =>
-                              element.cod_tipo_empleado ===
-                              row.cod_tipo_empleado
-                          ).nombre_tipo_empleado
-                        : row.cod_tipo_empleado,
-                    ]}
-                    row={row}
-                    data={data}
-                  />
-                );
+          {rows.length === 0 ? (
+            <TableRow>
+              <TableCell key={"single-row"} colSpan={10}>
+                <Grid container justify="center" alignItems="center">
+                  No hay servicios seleccionados
+                </Grid>
+              </TableCell>
+            </TableRow>
+          ) : (
+            (rowsPerPage > 0
+              ? rows
+                  .filter((row) =>
+                    row[filter.id]
+                      .toString()
+                      .toLowerCase()
+                      .includes(filter.query.toLowerCase())
+                  )
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : rows
+            ).map((row) => {
+              switch (data.title) {
+                case "Entidades":
+                  return (
+                    <AdminRow
+                      key={row.cod_entidad}
+                      tableCells={[
+                        row.razon_social_entidad,
+                        row.nombre_comercial_entidad,
+                        row.nit_entidad,
+                        row.direccion_entidad,
+                        row.telefono_entidad,
+                      ]}
+                      row={row}
+                      data={data}
+                    />
+                  );
+                case "Paquetes":
+                  return (
+                    <AdminRow
+                      key={row.cod_paquete}
+                      tableCells={[row.nombre_paquete, row.precio_paquete]}
+                      row={row}
+                      data={data}
+                    />
+                  );
+                case "Convenios":
+                  return (
+                    <AdminRow
+                      key={row.cod_entidad}
+                      tableCells={[
+                        row.razon_social_entidad,
+                        subdata !== undefined && subdata.services !== undefined
+                          ? row.Convenios.map(
+                              (element, index) =>
+                                subdata.services.find(
+                                  (service) =>
+                                    service.cod_servicio ===
+                                    element.cod_servicio
+                                ).nombre_servicio
+                            ).join(" - ")
+                          : "",
+                      ]}
+                      row={row}
+                      subdata={subdata}
+                      data={data}
+                    />
+                  );
+                case "Empleados":
+                  return (
+                    <AdminRow
+                      key={row.cod_empleado}
+                      tableCells={[
+                        row.nombres_empleado + " " + row.apellidos_empleado,
+                        row.documento_empleado,
+                        subdata !== "undefined" &&
+                        subdata.type_documents !== "undefined"
+                          ? subdata.type_documents.find(
+                              (element) =>
+                                element.cod_tipo_documento ===
+                                row.cod_tipo_documento
+                            ).nombre_tipo_documento
+                          : row.cod_tipo_documento,
+                        row.usuario_empleado,
+                        subdata !== "undefined" &&
+                        subdata.type_employees !== "undefined"
+                          ? subdata.type_employees.find(
+                              (element) =>
+                                element.cod_tipo_empleado ===
+                                row.cod_tipo_empleado
+                            ).nombre_tipo_empleado
+                          : row.cod_tipo_empleado,
+                      ]}
+                      row={row}
+                      data={data}
+                    />
+                  );
 
-              case "Doctores":
-                return (
-                  <AdminRow
-                    key={row.cod_doctor}
-                    tableCells={[
-                      row.nombres_doctor + " " + row.apellidos_doctor,
-                      row.telefono_doctor,
-                      row.correo_doctor,
-                    ]}
-                    row={row}
-                    data={data}
-                  />
-                );
+                case "Doctores":
+                  return (
+                    <AdminRow
+                      key={row.cod_doctor}
+                      tableCells={[
+                        row.nombres_doctor + " " + row.apellidos_doctor,
+                        row.telefono_doctor,
+                        row.correo_doctor,
+                      ]}
+                      row={row}
+                      data={data}
+                    />
+                  );
 
-              default:
-                return (
-                  <AdminRow
-                    key={row.cod_servicio}
-                    tableCells={[
-                      row.nombre_servicio,
-                      row.precio_servicio,
-                      row.iva_servicio + "%",
-                    ]}
-                    row={row}
-                    data={data}
-                  />
-                );
-            }
-          })}
+                default:
+                  return (
+                    <AdminRow
+                      key={row.cod_servicio}
+                      tableCells={[
+                        row.nombre_servicio,
+                        row.precio_servicio,
+                        row.iva_servicio + "%",
+                      ]}
+                      row={row}
+                      data={data}
+                    />
+                  );
+              }
+            })
+          )}
 
-          {emptyRows > 0 && (
+          {emptyRows > 0 && emptyRows !== 5 && (
             <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
+              <TableCell colSpan={4} />
             </TableRow>
           )}
         </TableBody>

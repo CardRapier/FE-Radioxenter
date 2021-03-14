@@ -1,5 +1,6 @@
 import { api_type_document, api_type_shipment } from "./../../../api_app";
 
+import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import ProcessRow from "./ProcessRow";
 import React from "react";
@@ -12,14 +13,26 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow";
-import socketIOClient from "socket.io-client";
+import { makeStyles } from "@material-ui/core";
 
-const ENDPOINT = process.env.REACT_APP_SOCKET_ROUTE;
-const socket = socketIOClient(ENDPOINT);
+const useStyles = makeStyles((theme) => ({
+  table: {
+    minWidth: 900,
+  },
+  smallTableCell: {
+    width: 50,
+  },
+}));
 
-export default function ProcessTable() {
+export default function ProcessTable(props) {
+  const {
+    rows,
+    handleChangeServiceStatus,
+    handleChangeShipmentStatus,
+    filter,
+  } = props;
+  const classes = useStyles();
   const [page, setPage] = React.useState(0);
-  const [rows, setRows] = React.useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -34,28 +47,6 @@ export default function ProcessTable() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  //TODO: Fix it
-  const handleChangeServiceStatus = (data) => {
-    socket.emit("finalizar_proceso", {
-      documento_usuario: data.documento_usuario,
-      cod_servicio: data.cod_servicio,
-    });
-  };
-
-  const handleChangeShipmentStatus = (data) => {
-    socket.emit("entrega_resultado", {
-      documento_usuario: data.documento_usuario,
-      cod_servicio: data.cod_servicio,
-    });
-  };
-
-  React.useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
-    socket.on("data", (msg) => {
-      setRows(msg);
-    });
-    return () => socket.disconnect();
-  }, []);
 
   React.useEffect(() => {
     api_type_document.get("/").then((response) => {
@@ -66,10 +57,9 @@ export default function ProcessTable() {
     });
   }, []);
 
-  console.log(rows);
   return (
     <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
+      <Table className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell />
@@ -80,38 +70,57 @@ export default function ProcessTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
-          ).map((row, index) => (
-            <ProcessRow
-              key={index}
-              row={row}
-              type_document={
-                type_document.length !== 0
-                  ? type_document.find(
-                      (element) =>
-                        element.cod_tipo_documento ===
-                        row.data.cod_tipo_documento
-                    ).nombre_tipo_documento
-                  : ""
-              }
-              type_pref_shipment={
-                type_shipment.length !== 0
-                  ? type_shipment.find(
-                      (element) =>
-                        element.cod_tipo_pref_entrega ===
-                        row.data.cod_tipo_pref_entrega
-                    ).nombre_tipo_pref_entrega
-                  : ""
-              }
-              changeServices={handleChangeServiceStatus}
-              changeShipments={handleChangeShipmentStatus}
-            />
-          ))}
+          {rows.length === 0 ? (
+            <TableRow>
+              <TableCell key={"single-row"} colSpan={5}>
+                <Grid container justify="center" alignItems="center">
+                  No hay datos para mostrar
+                </Grid>
+              </TableCell>
+            </TableRow>
+          ) : (
+            (rowsPerPage > 0
+              ? rows
+                  .filter((row) =>
+                    row["documento_usuario"]
+                      .toString()
+                      .toLowerCase()
+                      .includes(filter.query.toLowerCase())
+                  )
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : rows
+            ).map((row, index) => (
+              <ProcessRow
+                key={`${index}-row`}
+                row={row}
+                type_document={
+                  type_document.length !== 0
+                    ? type_document.find(
+                        (element) =>
+                          element.cod_tipo_documento ===
+                          row.data.cod_tipo_documento
+                      ).nombre_tipo_documento
+                    : ""
+                }
+                type_pref_shipment={
+                  type_shipment.length !== 0
+                    ? type_shipment.find(
+                        (element) =>
+                          element.cod_tipo_pref_entrega ===
+                          row.data.cod_tipo_pref_entrega
+                      ).nombre_tipo_pref_entrega
+                    : ""
+                }
+                changeServices={handleChangeServiceStatus}
+                changeShipments={handleChangeShipmentStatus}
+              />
+            ))
+          )}
 
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}></TableRow>
+          {emptyRows > 0 && emptyRows !== 5 && (
+            <TableRow style={{ height: 53 * emptyRows }}>
+              <TableCell colSpan={6} />
+            </TableRow>
           )}
         </TableBody>
         <TableFooter>

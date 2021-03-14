@@ -1,3 +1,4 @@
+import { Grid } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
 import ReceiptRow from "./ReceiptRow";
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ReceiptTable(props) {
-  const { receipts } = props;
+  const { receipts, filter } = props;
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -51,19 +52,31 @@ export default function ReceiptTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(rowsPerPage > 0
-            ? receipts.slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage
-              )
-            : receipts
-          ).map((row) => (
-            <ReceiptRow key={row.code} row={row} />
-          ))}
+          {receipts.length === 0 ? (
+            <TableRow>
+              <TableCell key={"single-row"} colSpan={6}>
+                <Grid container justify="center" alignItems="center">
+                  No hay datos para mostrar
+                </Grid>
+              </TableCell>
+            </TableRow>
+          ) : (
+            (rowsPerPage > 0
+              ? receipts
+                  .filter((row) =>
+                    row["documento_usuario"]
+                      .toString()
+                      .toLowerCase()
+                      .includes(filter.query.toLowerCase())
+                  )
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : receipts
+            ).map((row, index) => <ReceiptRow key={`${index}-row`} row={row} />)
+          )}
 
-          {emptyRows > 0 && (
+          {emptyRows > 0 && emptyRows !== 5 && (
             <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={8} />
+              <TableCell colSpan={6} />
             </TableRow>
           )}
         </TableBody>

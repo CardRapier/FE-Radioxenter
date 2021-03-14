@@ -28,13 +28,14 @@ export default function ProccessData(props) {
   return (
     <div className={classes.root}>
       <Grid container>
-        <Grid xs={6}>
+        <Grid item xs={6}>
           <Typography>Servicios</Typography>
           <Divider />
           <List component="div" aria-label="secondary mailbox folders">
             {services.map((service, index) => (
               <ListItem
                 button
+                key={`${index}-services`}
                 disabled={service.completado}
                 classes={{
                   button: classes.buttonUnselected,
@@ -53,12 +54,13 @@ export default function ProccessData(props) {
           </List>
         </Grid>
 
-        <Grid xs={6}>
+        <Grid item xs={6}>
           <Typography>Entregas</Typography>
           <Divider />
           <List component="div" aria-label="secondary mailbox folders">
             {services.map((service, index) => (
               <ListItem
+                key={`${index}-shipments`}
                 button
                 disabled={service.entregado}
                 classes={{

@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 //TODO: Filter users by document and name
 export default function UserShow() {
   const classes = useStyles();
+  const [query, setQuery] = React.useState({ query: "" });
   const [loaded, setLoaded] = React.useState(false);
   const [data, setData] = React.useState({});
   const [users, setUsers] = React.useState([]);
@@ -138,6 +139,11 @@ export default function UserShow() {
               label="Documento"
               variant="outlined"
               size="small"
+              type="search"
+              value={query.query}
+              onChange={(event, index, value) =>
+                setQuery({ query: event.target.value })
+              }
             />
           </Grid>
         </Grid>
@@ -145,7 +151,11 @@ export default function UserShow() {
         <Grid container item spacing={4} justify="center" alignItems="center">
           <Grid item className={classes.margintop}>
             <Grid item xs>
-              <UserDatatable users={users} data={data} />
+              <UserDatatable
+                users={users}
+                data={data}
+                filter={{ query: query.query }}
+              />
             </Grid>
           </Grid>
         </Grid>
