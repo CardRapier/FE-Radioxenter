@@ -32,6 +32,7 @@ export default function EntityForm(props) {
 
   const [doctors, setDoctors] = React.useState([]);
   const { enqueueSnackbar } = useSnackbar();
+
   React.useEffect(() => {
     api_type_receipt.get("/").then((res) => {
       setTypeReceipts(res.data.respuesta);
@@ -41,21 +42,31 @@ export default function EntityForm(props) {
       setTypePayments(res.data.respuesta);
     });
 
-    api_doctors.get("/").then((res) => {
-      setDoctors(res.data.respuesta);
-    });
-  }, []);
+    api_doctors
+      .get("/")
+      .then((res) => {
+        setDoctors(res.data.respuesta);
+      })
+      .catch((error) => {
+        enqueueSnackbar(
+          "No hay doctores en el sistema, para relacionarlos a esta entidad, por favor cree un nuevo doctor",
+          {
+            variant: "warning",
+          }
+        );
+      });
+  }, [enqueueSnackbar]);
   if (props.location.hasOwnProperty("data")) {
     data = props.location.data;
   }
-  console.log(doctors);
+
   return (
     <Formik
       enableReinitialize
       validationSchema={entity_schema}
       initialValues={
         data === undefined
-          ? { ...entity_initial_values, doctores_entidad: [] }
+          ? entity_initial_values
           : data.Entidad_doctors !== undefined
           ? {
               razon_social_entidad: data.razon_social_entidad,
@@ -355,9 +366,9 @@ export default function EntityForm(props) {
 
             <Grid item container justify="center" className={classes.services}>
               <Grid item xs={12}>
-                <InputLabel id="doctors_label">Doctores</InputLabel>
                 {doctors.length !== 0 ? (
                   <div>
+                    <InputLabel id="doctors_label">Doctores</InputLabel>
                     <Field
                       name={`doctores_entidad`}
                       type="select"

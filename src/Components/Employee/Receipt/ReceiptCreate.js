@@ -65,7 +65,15 @@ export default function ReceiptCreate(props) {
 
   function add_service(service) {
     if (service !== null) {
-      setServicesSelected(() => [...servicesSelected, service]);
+      let service_aux = servicesSelected.filter(
+        (element) => element.cod_servicio === service.cod_servicio
+      );
+
+      service_aux.length === 0
+        ? setServicesSelected(() => [...servicesSelected, service])
+        : enqueueSnackbar("No puede seleccionar un servicio mas de una vez", {
+            variant: "error",
+          });
     } else {
       enqueueSnackbar("Seleccione un servicio para poder agregarlo", {
         variant: "error",
@@ -162,11 +170,21 @@ export default function ReceiptCreate(props) {
     () => {
       publicIp.v4().then((e) => setIpv4(e));
 
-      api_services.get("/").then((res) => {
-        setServices(filter_services(res.data.respuesta, "SE-"));
-        setPackages(filter_services(res.data.respuesta, "PA-"));
-        setAgreements(res.data.respuesta);
-      });
+      api_services
+        .get("/")
+        .then((res) => {
+          setServices(filter_services(res.data.respuesta, "SE-"));
+          setPackages(filter_services(res.data.respuesta, "PA-"));
+          setAgreements(res.data.respuesta);
+        })
+        .catch((error) => {
+          enqueueSnackbar(
+            "No hay servicios en el sistema, por favor agregue un servicio antes de crear transacciones.",
+            {
+              variant: "warning",
+            }
+          );
+        });
       api_doctors.get("/").then((res) => {
         setDoctors(res.data.respuesta);
       });
@@ -175,7 +193,7 @@ export default function ReceiptCreate(props) {
         setEntitiesAgreements(res.data.respuesta);
       });
     },
-    [props.location],
+    [props.location, enqueueSnackbar],
     []
   );
   return (

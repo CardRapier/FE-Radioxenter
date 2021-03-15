@@ -47,12 +47,6 @@ export default function UserForm(props) {
 
   let { departments, sex, type_document, type_shipment } = fetched_data.data;
 
-  if (data !== undefined) {
-    console.log(data);
-    console.log(fetched_data.data);
-    console.log(departments);
-  }
-
   const renderRedirect = (values) => {
     if (redirect.redirect === true) {
       if (redirect.tutor === true) {

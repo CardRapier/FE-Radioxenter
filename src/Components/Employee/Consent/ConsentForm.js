@@ -2,6 +2,7 @@ import { Link, Redirect } from "react-router-dom";
 import React, { useState } from "react";
 import { Text, Text1, Text2, Text3 } from "./ConsentText.js";
 
+import BackDropLoading from "../../BackDropLoading.js";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import SignatureCanvas from "react-signature-canvas";
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ConsentForm(props) {
   const { data, tutor } = props.location;
   const classes = useStyles();
+  const [submitting, setSubmitting] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   let refSignature = {};
 
@@ -47,6 +49,7 @@ export default function ConsentForm(props) {
   };
 
   const submit = () => {
+    setSubmitting(true);
     var signature_ref = refSignature.getTrimmedCanvas();
     var signature_image = signature_ref.toDataURL("image/png");
 
@@ -61,13 +64,16 @@ export default function ConsentForm(props) {
             variant: "success",
           });
           setRedirect(true);
+          setSubmitting(false);
         })
         .catch(function (error) {
+          setSubmitting(false);
           enqueueSnackbar(give_error_message(error.response), {
             variant: "error",
           });
         });
     } else {
+      setSubmitting(false);
       enqueueSnackbar(
         "El formato de firma está vacío, por favor coloque su firma",
         { variant: "error" }
@@ -167,6 +173,7 @@ export default function ConsentForm(props) {
         </Grid>
         {redirect === true ? <Redirect to="/Empleado/" /> : ""}
       </Grid>
+      <BackDropLoading isSubmitting={submitting} />
     </React.Fragment>
   );
 }

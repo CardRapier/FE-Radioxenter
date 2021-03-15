@@ -214,7 +214,7 @@ export default function Employee() {
       <img
         src={window.location.origin + "/header_logo.png"}
         alt="logo"
-        class="ribbon"
+        className="ribbon"
       />
       <ProcessPopOver
         id={id}

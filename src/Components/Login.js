@@ -44,7 +44,6 @@ export default function Login() {
             auth.login(
               () => {
                 setRedirect(true);
-                console.log(response.data.respuesta);
               },
               { user: response.data.respuesta, token: response.data.token }
             );
@@ -91,7 +90,7 @@ export default function Login() {
                 type="password"
               />
             </Grid>
-            <Grid item xs={3} justify="flex-end">
+            <Grid item xs={3}>
               <Button
                 variant="contained"
                 color="primary"
@@ -105,7 +104,13 @@ export default function Login() {
           </Grid>
           <BackDropLoading isSubmitting={isSubmitting} />
           {redirect === true || localStorage.getItem("authenticated") ? (
-            <Redirect to={localStorage.getItem("redirect")} />
+            <Redirect
+              to={
+                localStorage.getItem("redirect") !== null
+                  ? localStorage.getItem("redirect")
+                  : "/"
+              }
+            />
           ) : (
             ""
           )}

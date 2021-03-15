@@ -43,7 +43,7 @@ export default function ReceiptTable(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell align="center">Numero</TableCell>
+            <TableCell align="center">Número</TableCell>
             <TableCell align="center">Documento</TableCell>
             <TableCell align="center">Fecha</TableCell>
             <TableCell align="center">Resumen</TableCell>

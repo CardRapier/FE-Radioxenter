@@ -253,7 +253,7 @@ export default function Admin() {
           <img
             src={window.location.origin + "/header_logo.png"}
             alt="logo"
-            class="ribbon"
+            className="ribbon"
           />
         </Grid>
       </Grid>

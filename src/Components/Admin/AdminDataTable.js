@@ -81,13 +81,18 @@ export default function AdminDataTable(props) {
         .get("/convenios")
         .then((res) => {
           setRows(res.data.respuesta);
-          api_services.get("/").then((res) => {
-            setSubData((subdata) => ({
-              ...subdata,
-              services: res.data.respuesta,
-            }));
-            setLoaded(true);
-          });
+          api_services
+            .get("/")
+            .then((res) => {
+              setSubData((subdata) => ({
+                ...subdata,
+                services: res.data.respuesta,
+              }));
+              setLoaded(true);
+            })
+            .catch((error) => {
+              setLoaded(true);
+            });
         })
         .catch((error) => {
           setLoaded(true);

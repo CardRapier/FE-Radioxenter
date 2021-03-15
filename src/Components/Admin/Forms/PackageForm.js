@@ -52,8 +52,16 @@ export default function ServiceForm(props) {
       })
       .then((res) => {
         setServices(remove_abbreviation(res.data.respuesta, "SE-"));
+      })
+      .catch((error) => {
+        enqueueSnackbar(
+          "No hay servicios en el sistema, por favor agregue un servicio antes de crear paquetes.",
+          {
+            variant: "warning",
+          }
+        );
       });
-  }, []);
+  }, [enqueueSnackbar]);
 
   return (
     <Formik
@@ -161,9 +169,9 @@ export default function ServiceForm(props) {
 
             <Grid item container justify="center" className={classes.services}>
               <Grid item xs={12}>
-                <InputLabel id="servicios_label">Servicios</InputLabel>
                 {services.length !== 0 ? (
                   <div>
+                    <InputLabel id="servicios_label">Servicios</InputLabel>
                     <Field
                       name={`servicios`}
                       type="select"
@@ -200,7 +208,16 @@ export default function ServiceForm(props) {
                     <FormHelperText>{errors.servicios}</FormHelperText>
                   </div>
                 ) : (
-                  ""
+                  <Field
+                    required
+                    label="Servicios"
+                    name="servicios"
+                    select
+                    disabled
+                    component={TextFormField}
+                  >
+                    <MenuItem value=""></MenuItem>
+                  </Field>
                 )}
               </Grid>
             </Grid>

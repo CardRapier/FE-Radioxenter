@@ -36,12 +36,30 @@ export default function AgreementsForm(props) {
       })
       .then((res) => {
         setServices(remove_abbreviations(res.data.respuesta, ["SE-", "PA-"]));
+      })
+      .catch((error) => {
+        enqueueSnackbar(
+          "No hay servicios en el sistema, para crear un convenio, agregue un nuevo servicio",
+          {
+            variant: "warning",
+          }
+        );
       });
 
-    api_entities.get("/").then((res) => {
-      setEntities(res.data.respuesta);
-    });
-  }, []);
+    api_entities
+      .get("/")
+      .then((res) => {
+        setEntities(res.data.respuesta);
+      })
+      .catch((error) => {
+        enqueueSnackbar(
+          "No hay entidades en el sistema, para crear un convenio, agregue una entidad",
+          {
+            variant: "warning",
+          }
+        );
+      });
+  }, [enqueueSnackbar]);
 
   React.useEffect(() => {
     if (props.location.hasOwnProperty("data")) {
@@ -155,11 +173,15 @@ export default function AgreementsForm(props) {
                   </Field>
                 ) : (
                   <Field
-                    disabled
+                    required
                     label="Entidad"
-                    name="nom_entidad"
+                    name="cod_entidad"
+                    select
+                    disabled
                     component={TextFormField}
-                  />
+                  >
+                    <MenuItem value=""></MenuItem>
+                  </Field>
                 )}
               </Grid>
 
@@ -193,41 +215,56 @@ export default function AgreementsForm(props) {
                 className={classes.services}
               >
                 <Grid item xs={12}>
-                  <InputLabel id="servicios_label">Servicios</InputLabel>
-                  <Field
-                    name={"cod_servicios"}
-                    component={Select}
-                    multiple
-                    required
-                    fullWidth
-                    renderValue={(selected) => (
-                      <div className={classes.chips}>
-                        {selected.map((value, index) => (
-                          <Chip
-                            key={`chips-${index}`}
-                            label={services
-                              .filter(
-                                (service) => service.cod_servicio === value
-                              )
-                              .map((x) => x.nombre_servicio)}
-                            className={classes.chip}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  >
-                    {services !== undefined
-                      ? services.map((service, index) => (
-                          <MenuItem
-                            key={`menu-${index}`}
-                            value={service.cod_servicio}
-                          >
-                            {service.nombre_servicio}
-                          </MenuItem>
-                        ))
-                      : ""}
-                  </Field>
-                  <FormHelperText>{errors.servicios}</FormHelperText>
+                  {services.length !== 0 ? (
+                    <div>
+                      <InputLabel id="servicios_label">Servicios</InputLabel>
+                      <Field
+                        name={"cod_servicios"}
+                        component={Select}
+                        multiple
+                        required
+                        fullWidth
+                        renderValue={(selected) => (
+                          <div className={classes.chips}>
+                            {selected.map((value, index) => (
+                              <Chip
+                                key={`chips-${index}`}
+                                label={services
+                                  .filter(
+                                    (service) => service.cod_servicio === value
+                                  )
+                                  .map((x) => x.nombre_servicio)}
+                                className={classes.chip}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      >
+                        {services !== undefined
+                          ? services.map((service, index) => (
+                              <MenuItem
+                                key={`menu-${index}`}
+                                value={service.cod_servicio}
+                              >
+                                {service.nombre_servicio}
+                              </MenuItem>
+                            ))
+                          : ""}
+                      </Field>
+                      <FormHelperText>{errors.servicios}</FormHelperText>
+                    </div>
+                  ) : (
+                    <Field
+                      required
+                      label="Servicios"
+                      name="cod_servicios"
+                      select
+                      disabled
+                      component={TextFormField}
+                    >
+                      <MenuItem value=""></MenuItem>
+                    </Field>
+                  )}
                 </Grid>
 
                 <Grid item xs={12}>
