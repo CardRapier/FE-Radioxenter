@@ -1,11 +1,15 @@
 import { Field, Form, Formik } from "formik";
 
 import BackDropLoading from "../../BackDropLoading";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import Container from "@material-ui/core/Container";
 import FormButtons from "../../FormButtons";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
 import TextFormField from "../../Form/TextFormField";
-import Typography from "@material-ui/core/Typography";
 import { api_services } from "../../../api_app";
 import { give_error_message } from "../../../utils.js";
 import { service_initial_values } from "./initial_values_admin";
@@ -68,69 +72,74 @@ export default function ServiceForm(props) {
       {({ resetForm, isSubmitting }) => (
         <Form>
           <Grid container direction="column">
-            <Grid item container className={classes.title}>
-              <Typography
-                component="h1"
-                variant="h5"
-                align="left"
-                color="textPrimary"
-                gutterBottom
-              >
-                {data === undefined ? "Crear" : "Editar"} Servicio
-              </Typography>
-            </Grid>
-            <Grid item container>
-              <Field
-                required
-                label="Nombre del Servicio"
-                name="nombre_servicio"
-                component={TextFormField}
-              />
-            </Grid>
-            <Grid item container>
-              <Field
-                required
-                multiline
-                label="Descripcion del Servicio"
-                name="descripcion_servicio"
-                component={TextFormField}
-              />
-            </Grid>
-            <Grid item container spacing={3}>
-              <Grid item xs={6}>
-                <Field
-                  required
-                  label="Precio"
-                  name="precio_servicio"
-                  type="number"
-                  component={TextFormField}
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                <Field
-                  required
-                  label="Iva"
-                  name="iva_servicio"
-                  component={TextFormField}
-                  type="number"
-                />
-              </Grid>
-            </Grid>
-            <Grid
-              item
-              container
-              justify="flex-end"
-              spacing={3}
-              className={classes.buttons}
+            <Container
+              className="form-paper"
+              elevation={3}
+              component={Card}
+              fixed
             >
-              <FormButtons
-                to={"/Administrador"}
-                data={data}
-                isSubmitting={isSubmitting}
-                resetForm={() => resetForm}
+              <CardHeader
+                title={
+                  data === undefined ? "Crear Servicio" : "Editar Servicio"
+                }
               />
-            </Grid>
+              <CardContent>
+                <Grid item container>
+                  <Field
+                    required
+                    label="Nombre del Servicio"
+                    name="nombre_servicio"
+                    component={TextFormField}
+                  />
+                </Grid>
+                <Grid item container>
+                  <Field
+                    required
+                    multiline
+                    label="Descripcion del Servicio"
+                    name="descripcion_servicio"
+                    component={TextFormField}
+                  />
+                </Grid>
+                <Grid item container spacing={3}>
+                  <Grid item xs={6}>
+                    <Field
+                      required
+                      label="Precio"
+                      name="precio_servicio"
+                      type="number"
+                      component={TextFormField}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <Field
+                      required
+                      label="Iva"
+                      name="iva_servicio"
+                      component={TextFormField}
+                      type="number"
+                    />
+                  </Grid>
+                </Grid>
+              </CardContent>
+              <CardActions disableSpacing>
+                <Grid
+                  item
+                  container
+                  justify="flex-end"
+                  spacing={3}
+                  className={classes.buttons}
+                >
+                  <FormButtons
+                    to={"/Administrador"}
+                    data={data}
+                    isSubmitting={isSubmitting}
+                    resetForm={() => resetForm}
+                  />
+                </Grid>
+              </CardActions>
+            </Container>
           </Grid>
 
           <BackDropLoading isSubmitting={isSubmitting} />

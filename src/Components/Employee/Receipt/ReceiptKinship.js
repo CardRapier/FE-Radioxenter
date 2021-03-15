@@ -4,12 +4,16 @@ import { api_process, api_type_document } from "../../../api_app";
 
 import BackDropLoading from "../../BackDropLoading";
 import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
 import { TextField } from "@material-ui/core";
 import TextFormField from "../../Form/TextFormField";
-import Typography from "@material-ui/core/Typography";
 import { give_error_message } from "../../../utils";
 import { makeStyles } from "@material-ui/core/styles";
 import { tutor_initial_values } from "../Forms/initial_values_employee";
@@ -73,135 +77,129 @@ export default function ReceiptKinship(props) {
         {({ resetForm, isSubmitting, values }) => (
           <Form>
             <Grid container direction="column">
-              <Grid item container className={classes.title}>
-                <Typography
-                  component="h1"
-                  variant="h5"
-                  align="left"
-                  color="textPrimary"
-                  gutterBottom
-                >
-                  Tutor
-                </Typography>
-              </Grid>
-
-              <Grid item container spacing={3}>
-                <Grid item xs={12} sm={6}>
-                  <Field
-                    required
-                    label="Nombre"
-                    name="nombres_tutor"
-                    component={TextFormField}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <Field
-                    required
-                    label="Apellidos"
-                    name="apellidos_tutor"
-                    component={TextFormField}
-                  />
-                </Grid>
-              </Grid>
-              <Grid
-                item
-                container
-                spacing={3}
-                justify="center"
-                alignItems="center"
+              <Container
+                className="form-paper"
+                elevation={3}
+                component={Card}
+                fixed
               >
-                <Grid item xs={12} sm={6}>
-                  {type_document.length !== 0 ? (
-                    <Field
-                      component={TextFormField}
-                      required
-                      label="Tipo de documento"
-                      name="cod_tipo_documento"
-                      fullWidth
-                      select
-                    >
-                      {type_document.map((type) => (
-                        <MenuItem
-                          key={type.cod_tipo_documento}
-                          value={type.cod_tipo_documento}
+                <CardHeader title="Tutor" />
+                <CardContent>
+                  <Grid item container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <Field
+                        required
+                        label="Nombre"
+                        name="nombres_tutor"
+                        component={TextFormField}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <Field
+                        required
+                        label="Apellidos"
+                        name="apellidos_tutor"
+                        component={TextFormField}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    spacing={3}
+                    justify="center"
+                    alignItems="center"
+                  >
+                    <Grid item xs={12} sm={6}>
+                      {type_document.length !== 0 ? (
+                        <Field
+                          component={TextFormField}
+                          required
+                          label="Tipo de documento"
+                          name="cod_tipo_documento"
+                          fullWidth
+                          select
                         >
-                          {type.nombre_tipo_documento}
-                        </MenuItem>
-                      ))}
-                    </Field>
-                  ) : (
-                    <TextField
-                      label="Tipo de documento"
-                      fullWidth
-                      required
-                      value={"    "}
-                      select
+                          {type_document.map((type) => (
+                            <MenuItem
+                              key={type.cod_tipo_documento}
+                              value={type.cod_tipo_documento}
+                            >
+                              {type.nombre_tipo_documento}
+                            </MenuItem>
+                          ))}
+                        </Field>
+                      ) : (
+                        <TextField
+                          label="Tipo de documento"
+                          fullWidth
+                          required
+                          value={"    "}
+                          select
+                        >
+                          <MenuItem value={"    "}> </MenuItem>
+                        </TextField>
+                      )}
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <Field
+                        required
+                        label="Documento"
+                        name="documento_tutor"
+                        component={TextFormField}
+                        type="number"
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid item container spacing={3}>
+                    <Grid item xs>
+                      <Field
+                        component={TextFormField}
+                        required
+                        fullWidth
+                        label="Parentesco"
+                        name="parentesco_tutor"
+                      />
+                    </Grid>
+                  </Grid>
+                </CardContent>
+                <CardActions disableSpacing>
+                  <Grid container item justify="flex-end">
+                    <Button
+                      component={Link}
+                      to={"/Empleado/"}
+                      className={classes.button}
+                      variant="contained"
+                      size="small"
+                      color="primary"
                     >
-                      <MenuItem value={"    "}> </MenuItem>
-                    </TextField>
-                  )}
-                </Grid>
+                      Volver
+                    </Button>
 
-                <Grid item xs={12} sm={6}>
-                  <Field
-                    required
-                    label="Documento"
-                    name="documento_tutor"
-                    component={TextFormField}
-                    type="number"
-                  />
-                </Grid>
-              </Grid>
-              <Grid item container spacing={3}>
-                <Grid item xs>
-                  <Field
-                    component={TextFormField}
-                    required
-                    fullWidth
-                    label="Parentesco"
-                    name="parentesco_tutor"
-                  />
-                </Grid>
-              </Grid>
+                    <Button
+                      className={classes.button}
+                      variant="contained"
+                      size="small"
+                      color="primary"
+                      onClick={() => resetForm({})}
+                    >
+                      Limpiar
+                    </Button>
 
-              <Grid
-                container
-                item
-                justify="flex-end"
-                className={classes.marginT}
-              >
-                <Button
-                  component={Link}
-                  to={"/Empleado/"}
-                  className={classes.button}
-                  variant="contained"
-                  size="small"
-                  color="primary"
-                >
-                  Volver
-                </Button>
-
-                <Button
-                  className={classes.button}
-                  variant="contained"
-                  size="small"
-                  color="primary"
-                  onClick={() => resetForm({})}
-                >
-                  Limpiar
-                </Button>
-
-                <Button
-                  className={classes.button}
-                  variant="contained"
-                  size="small"
-                  color="primary"
-                  type="submit"
-                >
-                  Crear
-                </Button>
-              </Grid>
+                    <Button
+                      className={classes.button}
+                      variant="contained"
+                      size="small"
+                      color="primary"
+                      type="submit"
+                    >
+                      Crear
+                    </Button>
+                  </Grid>
+                </CardActions>
+              </Container>
             </Grid>
 
             <BackDropLoading isSubmitting={isSubmitting} />

@@ -1,6 +1,11 @@
 import { Field, Form, Formik } from "formik";
 
 import BackDropLoading from "../../BackDropLoading";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import Container from "@material-ui/core/Container";
 import FormButtons from "../../FormButtons";
 import Grid from "@material-ui/core/Grid";
 import { KeyboardDatePicker } from "formik-material-ui-pickers";
@@ -8,7 +13,6 @@ import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import React from "react";
 import TextFormField from "../../Form/TextFormField";
-import Typography from "@material-ui/core/Typography";
 import { agreement_initial_values } from "./initial_values_admin";
 import { agreement_schema } from "./validation_schemas_admin";
 import { api_agreements } from "../../../api_app";
@@ -70,75 +74,80 @@ export default function AgreementForm(props) {
         {({ resetForm, isSubmitting, errors, values }) => (
           <Form>
             <Grid container direction="column">
-              <Grid item container className={classes.title}>
-                <Typography
-                  component="h1"
-                  variant="h5"
-                  align="left"
-                  color="textPrimary"
-                  gutterBottom
-                >
-                  Editar Convenio
-                </Typography>
-              </Grid>
+              <Container
+                className="form-paper"
+                elevation={3}
+                component={Card}
+                fixed
+              >
+                <CardHeader title="Editar Convenio" />
 
-              <Grid item container>
-                <Field
-                  disabled
-                  label="Razon Social"
-                  name="nom_entidad"
-                  component={TextFormField}
-                />
-              </Grid>
+                <CardContent>
+                  <Grid item container>
+                    <Field
+                      disabled
+                      label="Razon Social"
+                      name="nom_entidad"
+                      component={TextFormField}
+                    />
+                  </Grid>
 
-              <Grid item container>
-                <Field
-                  disabled
-                  label="Servicio"
-                  name="nom_servicio"
-                  component={TextFormField}
-                />
-              </Grid>
+                  <Grid item container>
+                    <Field
+                      disabled
+                      label="Servicio"
+                      name="nom_servicio"
+                      component={TextFormField}
+                    />
+                  </Grid>
 
-              <Grid item container>
-                <Field
-                  required
-                  type={"number"}
-                  label="Valor del servicio"
-                  name="valor_servicio"
-                  component={TextFormField}
-                />
-              </Grid>
+                  <Grid item container>
+                    <Field
+                      required
+                      type={"number"}
+                      label="Valor del servicio"
+                      name="valor_servicio"
+                      component={TextFormField}
+                    />
+                  </Grid>
 
-              <Grid item container className={classes.paddingTop3} spacing={3}>
-                <Grid item xs={6}>
-                  <Field
-                    required
-                    format="DD/MM/yyyy"
-                    component={KeyboardDatePicker}
-                    label="Fecha Inicial"
-                    name="fecha_inicial_convenio"
-                    fullWidth
+                  <Grid
+                    item
+                    container
+                    className={classes.paddingTop3}
+                    spacing={3}
+                  >
+                    <Grid item xs={6}>
+                      <Field
+                        required
+                        format="DD/MM/yyyy"
+                        component={KeyboardDatePicker}
+                        label="Fecha Inicial"
+                        name="fecha_inicial_convenio"
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Field
+                        required
+                        format="DD/MM/yyyy"
+                        component={KeyboardDatePicker}
+                        label="Fecha Final"
+                        name="fecha_final_convenio"
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
+                </CardContent>
+                <CardActions disableSpacing>
+                  <FormButtons
+                    to={"/Administrador/Convenios"}
+                    data={data}
+                    isSubmitting={isSubmitting}
+                    resetForm={() => resetForm}
                   />
-                </Grid>
-                <Grid item xs={6}>
-                  <Field
-                    required
-                    format="DD/MM/yyyy"
-                    component={KeyboardDatePicker}
-                    label="Fecha Final"
-                    name="fecha_final_convenio"
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-
-              <FormButtons
-                to={"/Administrador/Convenios"}
-                data={data}
-                isSubmitting={isSubmitting}
-                resetForm={() => resetForm}
-              />
+                </CardActions>
+              </Container>
             </Grid>
             <BackDropLoading isSubmitting={isSubmitting} />
           </Form>

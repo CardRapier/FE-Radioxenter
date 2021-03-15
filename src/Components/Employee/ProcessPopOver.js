@@ -86,9 +86,10 @@ function ProcessPopOver(props) {
         className={classes.root}
       >
         {rows.map((row, index) => (
-          <React.Fragment>
-            <ListItem key={`${index}-list-popover`} alignItems="flex-start">
+          <React.Fragment key={`${index}-list-fragment1`}>
+            <ListItem alignItems="flex-start">
               <ListItemText
+                key={`${index}-list-text`}
                 primary={`${row.data.nombres_usuario} ${row.data.apellidos_usuario} - ${row.data.documento_usuario}`}
                 secondary={
                   <React.Fragment>

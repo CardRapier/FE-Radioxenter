@@ -3,7 +3,12 @@ import { api_packages, api_services } from "../../../api_app";
 import { give_error_message, remove_abbreviation } from "../../../utils.js";
 
 import BackDropLoading from "../../BackDropLoading";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
 import Chip from "@material-ui/core/Chip";
+import Container from "@material-ui/core/Container";
 import FormButtons from "../../FormButtons";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Grid from "@material-ui/core/Grid";
@@ -12,7 +17,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
 import { Select } from "formik-material-ui";
 import TextFormField from "../../Form/TextFormField";
-import Typography from "@material-ui/core/Typography";
 import { package_initial_values } from "./initial_values_admin";
 import { package_schema } from "./validation_schemas_admin";
 import { useSnackbar } from "notistack";
@@ -138,104 +142,113 @@ export default function ServiceForm(props) {
       {({ resetForm, isSubmitting, errors, values }) => (
         <Form>
           <Grid container direction="column">
-            <Grid item container className={classes.title}>
-              <Typography
-                component="h1"
-                variant="h5"
-                align="left"
-                color="textPrimary"
-                gutterBottom
-              >
-                {data === undefined ? "Crear" : "Editar"} Paquete
-              </Typography>
-            </Grid>
-            <Grid item container>
-              <Field
-                required
-                label="Nombre del Paquete"
-                name="nombre_paquete"
-                component={TextFormField}
+            <Container
+              className="form-paper"
+              elevation={3}
+              component={Card}
+              fixed
+            >
+              <CardHeader
+                title={data === undefined ? "Crear Paquete" : "Editar Paquete"}
               />
-            </Grid>
-            <Grid item container>
-              <Field
-                required
-                type="number"
-                label="Precio"
-                name="precio_paquete"
-                component={TextFormField}
-              />
-            </Grid>
 
-            <Grid item container justify="center" className={classes.services}>
-              <Grid item xs={12}>
-                {services.length !== 0 ? (
-                  <div>
-                    <InputLabel id="servicios_label">Servicios</InputLabel>
-                    <Field
-                      name={`servicios`}
-                      type="select"
-                      component={Select}
-                      label_id="servicios_label"
-                      multiple
-                      required
-                      fullWidth
-                      renderValue={(selected) => (
-                        <div className={classes.chips}>
-                          {selected.map((value, index) => (
-                            <Chip
-                              key={`${value}-${index}`}
-                              label={services
-                                .filter(
-                                  (service) => service.cod_servicio === value
-                                )
-                                .map((x) => x.nombre_servicio)}
-                              className={classes.chip}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    >
-                      {services.map((service, index) => (
-                        <MenuItem
-                          key={`menu-${index}`}
-                          value={service.cod_servicio}
-                        >
-                          {service.nombre_servicio}
-                        </MenuItem>
-                      ))}
-                    </Field>
-                    <FormHelperText>{errors.servicios}</FormHelperText>
-                  </div>
-                ) : (
+              <CardContent>
+                <Grid item container>
                   <Field
                     required
-                    label="Servicios"
-                    name="servicios"
-                    select
-                    disabled
+                    label="Nombre del Paquete"
+                    name="nombre_paquete"
                     component={TextFormField}
-                  >
-                    <MenuItem value=""></MenuItem>
-                  </Field>
-                )}
-              </Grid>
-            </Grid>
+                  />
+                </Grid>
+                <Grid item container>
+                  <Field
+                    required
+                    type="number"
+                    label="Precio"
+                    name="precio_paquete"
+                    component={TextFormField}
+                  />
+                </Grid>
 
-            <Grid
-              item
-              container
-              justify="flex-end"
-              spacing={3}
-              className={classes.buttons}
-            >
-              <FormButtons
-                to={"/Administrador/Paquetes"}
-                data={data}
-                isSubmitting={isSubmitting}
-                resetForm={() => resetForm}
-              />
-            </Grid>
+                <Grid
+                  item
+                  container
+                  justify="center"
+                  className={classes.services}
+                >
+                  <Grid item xs={12}>
+                    {services.length !== 0 ? (
+                      <div>
+                        <InputLabel id="servicios_label">Servicios</InputLabel>
+                        <Field
+                          name={`servicios`}
+                          type="select"
+                          component={Select}
+                          label_id="servicios_label"
+                          multiple
+                          required
+                          fullWidth
+                          renderValue={(selected) => (
+                            <div className={classes.chips}>
+                              {selected.map((value, index) => (
+                                <Chip
+                                  key={`${value}-${index}`}
+                                  label={services
+                                    .filter(
+                                      (service) =>
+                                        service.cod_servicio === value
+                                    )
+                                    .map((x) => x.nombre_servicio)}
+                                  className={classes.chip}
+                                />
+                              ))}
+                            </div>
+                          )}
+                        >
+                          {services.map((service, index) => (
+                            <MenuItem
+                              key={`menu-${index}`}
+                              value={service.cod_servicio}
+                            >
+                              {service.nombre_servicio}
+                            </MenuItem>
+                          ))}
+                        </Field>
+                        <FormHelperText>{errors.servicios}</FormHelperText>
+                      </div>
+                    ) : (
+                      <Field
+                        required
+                        label="Servicios"
+                        name="servicios"
+                        select
+                        disabled
+                        component={TextFormField}
+                      >
+                        <MenuItem value=""></MenuItem>
+                      </Field>
+                    )}
+                  </Grid>
+                </Grid>
+              </CardContent>
+              <CardActions disableSpacing>
+                <Grid
+                  item
+                  container
+                  justify="flex-end"
+                  spacing={3}
+                  className={classes.buttons}
+                >
+                  <FormButtons
+                    to={"/Administrador/Paquetes"}
+                    data={data}
+                    isSubmitting={isSubmitting}
+                    resetForm={() => resetForm}
+                  />
+                </Grid>
+              </CardActions>
+            </Container>
           </Grid>
           <BackDropLoading isSubmitting={isSubmitting} />
         </Form>

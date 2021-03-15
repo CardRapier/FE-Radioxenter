@@ -4,6 +4,11 @@ import { Text, Text1, Text2, Text3 } from "./ConsentText.js";
 
 import BackDropLoading from "../../BackDropLoading.js";
 import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import SignatureCanvas from "react-signature-canvas";
 import Typography from "@material-ui/core/Typography";
@@ -84,95 +89,83 @@ export default function ConsentForm(props) {
   return (
     <React.Fragment>
       <Grid container direction="column">
-        <Grid container className={classes.title} item spacing={4}>
-          <Grid item>
-            <Typography
-              component="h1"
-              variant="h5"
-              align="left"
-              color="textPrimary"
-              gutterBottom
-            >
-              Documento de Consentimiento
-            </Typography>
-          </Grid>
-        </Grid>
-        {/*//TODO: Añadir diferentes formas de mostrar el consentimiento*/}
-        <Grid container item spacing={4}>
-          <Typography variant="h6">
-            Yo,
-            {tutor !== undefined
-              ? ` ${tutor.nombres_tutor} ${tutor.apellidos_tutor} identificado con el documento ${tutor.documento_tutor} tutor de ${data.nombres_usuario} ${data.apellidos_usuario}, identificado por el documento ${data.documento_usuario}`
-              : data !== undefined
-              ? ` ${data.nombres_usuario} ${data.apellidos_usuario} identificado con el documento ${data.documento_usuario}`
-              : ""}
-          </Typography>
-          <Typography variant="body1">{text}</Typography>
-          <Typography variant="body1">{text1}</Typography>
-          <Typography variant="body1">{text2}</Typography>
-          <Typography variant="body1">{text3}</Typography>
-          {/*//TODO: Añadir datos del usuario que firmara*/}
-          <Grid container item justify="flex-end">
-            <Grid item>
-              {/*<div id="imageBox" className={classes.signature}></div>*/}
-              <SignatureCanvas
-                penColor="black"
-                ref={(ref) => {
-                  refSignature = ref;
-                }}
-                canvasProps={{
-                  width: 500,
-                  height: 200,
-                  className: classes.signature,
-                }}
-              />
+        <Container className="form-paper" elevation={3} component={Card} fixed>
+          <CardHeader title="Consentimiento" />
+          <CardContent>
+            {/*//TODO: Añadir diferentes formas de mostrar el consentimiento*/}
+            <Grid container item spacing={4}>
+              <Typography variant="h6">
+                Yo,
+                {tutor !== undefined
+                  ? ` ${tutor.nombres_tutor} ${tutor.apellidos_tutor} identificado con el documento ${tutor.documento_tutor} tutor de ${data.nombres_usuario} ${data.apellidos_usuario}, identificado por el documento ${data.documento_usuario}`
+                  : data !== undefined
+                  ? ` ${data.nombres_usuario} ${data.apellidos_usuario} identificado con el documento ${data.documento_usuario}`
+                  : ""}
+              </Typography>
+              <Typography variant="body1">{text}</Typography>
+              <Typography variant="body1">{text1}</Typography>
+              <Typography variant="body1">{text2}</Typography>
+              <Typography variant="body1">{text3}</Typography>
+              {/*//TODO: Añadir datos del usuario que firmara*/}
+              <Grid container item justify="flex-end">
+                <Grid item>
+                  {/*<div id="imageBox" className={classes.signature}></div>*/}
+                  <SignatureCanvas
+                    penColor="black"
+                    ref={(ref) => {
+                      refSignature = ref;
+                    }}
+                    canvasProps={{
+                      width: 500,
+                      height: 200,
+                      className: classes.signature,
+                    }}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          className={classes.buttons}
-          justify="flex-end"
-          item
-          spacing={1}
-        >
-          <Grid item>
-            <Button
-              component={Link}
-              to={"/Empleado/"}
-              variant="contained"
-              color="primary"
-              size="small"
-            >
-              Volver
-            </Button>
-          </Grid>
+          </CardContent>
+          <CardActions disableSpacing>
+            <Grid container justify="flex-end" item spacing={1}>
+              <Grid item>
+                <Button
+                  component={Link}
+                  to={"/Empleado/"}
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                >
+                  Volver
+                </Button>
+              </Grid>
 
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={clear}
-              size="small"
-            >
-              Limpiar
-            </Button>
-          </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={clear}
+                  size="small"
+                >
+                  Limpiar
+                </Button>
+              </Grid>
 
-          <Grid item>
-            <Button
-              className={classes.button}
-              variant="contained"
-              size="small"
-              color="primary"
-              onClick={submit}
-            >
-              Terminar
-            </Button>
-          </Grid>
-        </Grid>
-        {redirect === true ? <Redirect to="/Empleado/" /> : ""}
+              <Grid item>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                  onClick={submit}
+                >
+                  Terminar
+                </Button>
+              </Grid>
+            </Grid>
+          </CardActions>
+        </Container>
       </Grid>
+      {redirect === true ? <Redirect to="/Empleado/" /> : ""}
       <BackDropLoading isSubmitting={submitting} />
     </React.Fragment>
   );

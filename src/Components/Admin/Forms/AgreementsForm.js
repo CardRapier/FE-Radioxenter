@@ -3,7 +3,12 @@ import { api_agreements, api_entities, api_services } from "../../../api_app";
 import { give_error_message, remove_abbreviations } from "../../../utils";
 
 import BackDropLoading from "../../BackDropLoading";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
 import Chip from "@material-ui/core/Chip";
+import Container from "@material-ui/core/Container";
 import FormButtons from "../../FormButtons";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Grid from "@material-ui/core/Grid";
@@ -15,7 +20,6 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import React from "react";
 import { Select } from "formik-material-ui";
 import TextFormField from "../../Form/TextFormField";
-import Typography from "@material-ui/core/Typography";
 import { agreements_initial_values } from "./initial_values_admin";
 import { agreements_schema } from "./validation_schemas_admin";
 import { useSnackbar } from "notistack";
@@ -142,155 +146,169 @@ export default function AgreementsForm(props) {
         {({ resetForm, isSubmitting, errors, values }) => (
           <Form>
             <Grid container direction="column">
-              <Grid item container className={classes.title}>
-                <Typography
-                  component="h1"
-                  variant="h5"
-                  align="left"
-                  color="textPrimary"
-                  gutterBottom
-                >
-                  {data === undefined ? "Crear" : "Editar"} Convenio
-                </Typography>
-              </Grid>
-              <Grid item container>
-                {entities.length !== 0 && data === undefined ? (
-                  <Field
-                    required
-                    label="Entidad"
-                    name="cod_entidad"
-                    select
-                    component={TextFormField}
-                  >
-                    {entities.map((entity, index) => (
-                      <MenuItem
-                        key={`entity-${index}`}
-                        value={entity.cod_entidad}
-                      >
-                        {entity.razon_social_entidad}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                ) : (
-                  <Field
-                    required
-                    label="Entidad"
-                    name="cod_entidad"
-                    select
-                    disabled
-                    component={TextFormField}
-                  >
-                    <MenuItem value=""></MenuItem>
-                  </Field>
-                )}
-              </Grid>
-
-              <Grid item container className={classes.paddingTop3} spacing={3}>
-                <Grid item xs={6}>
-                  <Field
-                    required
-                    format="DD/MM/yyyy"
-                    component={KeyboardDatePicker}
-                    label="Fecha Inicial"
-                    name="fecha_inicial_convenio"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <Field
-                    required
-                    format="DD/MM/yyyy"
-                    component={KeyboardDatePicker}
-                    label="Fecha Final"
-                    name="fecha_final_convenio"
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid
-                item
-                container
-                justify="center"
-                className={classes.services}
+              <Container
+                className="form-paper"
+                elevation={3}
+                component={Card}
+                fixed
               >
-                <Grid item xs={12}>
-                  {services.length !== 0 ? (
-                    <div>
-                      <InputLabel id="servicios_label">Servicios</InputLabel>
+                <CardHeader
+                  title={
+                    data === undefined ? "Crear Convenio" : "Editar Convenio"
+                  }
+                />
+                <CardContent>
+                  <Grid item container>
+                    {entities.length !== 0 && data === undefined ? (
                       <Field
-                        name={"cod_servicios"}
-                        component={Select}
-                        multiple
                         required
-                        fullWidth
-                        renderValue={(selected) => (
-                          <div className={classes.chips}>
-                            {selected.map((value, index) => (
-                              <Chip
-                                key={`chips-${index}`}
-                                label={services
-                                  .filter(
-                                    (service) => service.cod_servicio === value
-                                  )
-                                  .map((x) => x.nombre_servicio)}
-                                className={classes.chip}
-                              />
-                            ))}
-                          </div>
-                        )}
-                      >
-                        {services !== undefined
-                          ? services.map((service, index) => (
-                              <MenuItem
-                                key={`menu-${index}`}
-                                value={service.cod_servicio}
-                              >
-                                {service.nombre_servicio}
-                              </MenuItem>
-                            ))
-                          : ""}
-                      </Field>
-                      <FormHelperText>{errors.servicios}</FormHelperText>
-                    </div>
-                  ) : (
-                    <Field
-                      required
-                      label="Servicios"
-                      name="cod_servicios"
-                      select
-                      disabled
-                      component={TextFormField}
-                    >
-                      <MenuItem value=""></MenuItem>
-                    </Field>
-                  )}
-                </Grid>
-
-                <Grid item xs={12}>
-                  {values.cod_servicios.map((code, index) => {
-                    return (
-                      <Field
-                        key={`prices-${index}`}
-                        required
-                        label={`Precio ${services
-                          .filter((service) => service.cod_servicio === code)
-                          .map((x) => x.nombre_servicio)}`}
-                        name={`precios_servicios.${index}`}
+                        label="Entidad"
+                        name="cod_entidad"
+                        select
                         component={TextFormField}
-                        type={"number"}
-                      />
-                    );
-                  })}
-                </Grid>
-              </Grid>
+                      >
+                        {entities.map((entity, index) => (
+                          <MenuItem
+                            key={`entity-${index}`}
+                            value={entity.cod_entidad}
+                          >
+                            {entity.razon_social_entidad}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    ) : (
+                      <Field
+                        required
+                        label="Entidad"
+                        name="cod_entidad"
+                        select
+                        disabled
+                        component={TextFormField}
+                      >
+                        <MenuItem value=""></MenuItem>
+                      </Field>
+                    )}
+                  </Grid>
 
-              <FormButtons
-                to={"/Administrador/Convenios"}
-                data={data}
-                isSubmitting={isSubmitting}
-                resetForm={() => resetForm}
-              />
+                  <Grid
+                    item
+                    container
+                    className={classes.paddingTop3}
+                    spacing={3}
+                  >
+                    <Grid item xs={6}>
+                      <Field
+                        required
+                        format="DD/MM/yyyy"
+                        component={KeyboardDatePicker}
+                        label="Fecha Inicial"
+                        name="fecha_inicial_convenio"
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Field
+                        required
+                        format="DD/MM/yyyy"
+                        component={KeyboardDatePicker}
+                        label="Fecha Final"
+                        name="fecha_final_convenio"
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid
+                    item
+                    container
+                    justify="center"
+                    className={classes.services}
+                  >
+                    <Grid item xs={12}>
+                      {services.length !== 0 ? (
+                        <div>
+                          <InputLabel id="servicios_label">
+                            Servicios
+                          </InputLabel>
+                          <Field
+                            name={"cod_servicios"}
+                            component={Select}
+                            multiple
+                            required
+                            fullWidth
+                            renderValue={(selected) => (
+                              <div className={classes.chips}>
+                                {selected.map((value, index) => (
+                                  <Chip
+                                    key={`chips-${index}`}
+                                    label={services
+                                      .filter(
+                                        (service) =>
+                                          service.cod_servicio === value
+                                      )
+                                      .map((x) => x.nombre_servicio)}
+                                    className={classes.chip}
+                                  />
+                                ))}
+                              </div>
+                            )}
+                          >
+                            {services !== undefined
+                              ? services.map((service, index) => (
+                                  <MenuItem
+                                    key={`menu-${index}`}
+                                    value={service.cod_servicio}
+                                  >
+                                    {service.nombre_servicio}
+                                  </MenuItem>
+                                ))
+                              : ""}
+                          </Field>
+                          <FormHelperText>{errors.servicios}</FormHelperText>
+                        </div>
+                      ) : (
+                        <Field
+                          required
+                          label="Servicios"
+                          name="cod_servicios"
+                          select
+                          disabled
+                          component={TextFormField}
+                        >
+                          <MenuItem value=""></MenuItem>
+                        </Field>
+                      )}
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      {values.cod_servicios.map((code, index) => {
+                        return (
+                          <Field
+                            key={`prices-${index}`}
+                            required
+                            label={`Precio ${services
+                              .filter(
+                                (service) => service.cod_servicio === code
+                              )
+                              .map((x) => x.nombre_servicio)}`}
+                            name={`precios_servicios.${index}`}
+                            component={TextFormField}
+                            type={"number"}
+                          />
+                        );
+                      })}
+                    </Grid>
+                  </Grid>
+                </CardContent>
+                <CardActions disableSpacing>
+                  <FormButtons
+                    to={"/Administrador/Convenios"}
+                    data={data}
+                    isSubmitting={isSubmitting}
+                    resetForm={() => resetForm}
+                  />
+                </CardActions>
+              </Container>
             </Grid>
 
             <BackDropLoading isSubmitting={isSubmitting} />

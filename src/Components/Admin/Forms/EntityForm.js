@@ -7,7 +7,12 @@ import {
 } from "../../../api_app";
 
 import BackDropLoading from "../../BackDropLoading";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
 import Chip from "@material-ui/core/Chip";
+import Container from "@material-ui/core/Container";
 import FormButtons from "../../FormButtons";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Grid from "@material-ui/core/Grid";
@@ -17,7 +22,6 @@ import React from "react";
 import { Select } from "formik-material-ui";
 import TextField from "@material-ui/core/TextField";
 import TextFormField from "../../Form/TextFormField";
-import Typography from "@material-ui/core/Typography";
 import { entity_initial_values } from "./initial_values_admin";
 import { entity_schema } from "./validation_schemas_admin";
 import { give_error_message } from "../../../utils.js";
@@ -151,279 +155,291 @@ export default function EntityForm(props) {
       {({ resetForm, isSubmitting, values, errors }) => (
         <Form>
           <Grid container direction="column">
-            <Grid item container className={classes.title}>
-              <Typography
-                component="h1"
-                variant="h5"
-                align="left"
-                color="textPrimary"
-                gutterBottom
-              >
-                {data === undefined ? "Crear" : "Editar"} Entidad
-              </Typography>
-            </Grid>
-            <Grid item container spacing={3}>
-              <Grid item xs={6}>
-                <Field
-                  required
-                  label="Razon Social"
-                  name="razon_social_entidad"
-                  component={TextFormField}
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                <Field
-                  required
-                  label="Nombre Comercial"
-                  name="nombre_comercial_entidad"
-                  component={TextFormField}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid item container spacing={3}>
-              <Grid item xs={6}>
-                <Field
-                  required
-                  label="NIT"
-                  name="nit_entidad"
-                  component={TextFormField}
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                <Field
-                  required
-                  label="Direccion"
-                  name="direccion_entidad"
-                  component={TextFormField}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid
-              item
-              container
-              spacing={3}
-              justify="center"
-              alignItems="center"
+            <Container
+              className="form-paper"
+              elevation={3}
+              component={Card}
+              fixed
             >
-              <Grid item xs={6}>
-                <Field
-                  required
-                  label="Telefono"
-                  name="telefono_entidad"
-                  component={TextFormField}
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                {type_receipts.length !== 0 ? (
-                  <Field
-                    component={TextFormField}
-                    required
-                    label="Tipo de Facturación"
-                    name="cod_tipo_facturacion"
-                    fullWidth
-                    select
-                  >
-                    {type_receipts.map((type, index) => (
-                      <MenuItem
-                        key={`menu-receipt-${index}`}
-                        value={type.cod_tipo_facturacion}
-                      >
-                        {type.nombre_tipo_facturacion}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                ) : (
-                  <div>
-                    <TextField
-                      label="Tipo de Facturación"
-                      fullWidth
+              <CardHeader
+                title={data === undefined ? "Crear Entidad" : "Editar Entidad"}
+              />
+              <CardContent>
+                <Grid item container spacing={3}>
+                  <Grid item xs={6}>
+                    <Field
                       required
-                      value={"    "}
+                      label="Razon Social"
+                      name="razon_social_entidad"
+                      component={TextFormField}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <Field
+                      required
+                      label="Nombre Comercial"
+                      name="nombre_comercial_entidad"
+                      component={TextFormField}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid item container spacing={3}>
+                  <Grid item xs={6}>
+                    <Field
+                      required
+                      label="NIT"
+                      name="nit_entidad"
+                      component={TextFormField}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <Field
+                      required
+                      label="Direccion"
+                      name="direccion_entidad"
+                      component={TextFormField}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid
+                  item
+                  container
+                  spacing={3}
+                  justify="center"
+                  alignItems="center"
+                >
+                  <Grid item xs={6}>
+                    <Field
+                      required
+                      label="Telefono"
+                      name="telefono_entidad"
+                      component={TextFormField}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    {type_receipts.length !== 0 ? (
+                      <Field
+                        component={TextFormField}
+                        required
+                        label="Tipo de Facturación"
+                        name="cod_tipo_facturacion"
+                        fullWidth
+                        select
+                      >
+                        {type_receipts.map((type, index) => (
+                          <MenuItem
+                            key={`menu-receipt-${index}`}
+                            value={type.cod_tipo_facturacion}
+                          >
+                            {type.nombre_tipo_facturacion}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    ) : (
+                      <div>
+                        <TextField
+                          label="Tipo de Facturación"
+                          fullWidth
+                          required
+                          value={"    "}
+                          select
+                        >
+                          <MenuItem value={"    "}> </MenuItem>
+                        </TextField>
+                      </div>
+                    )}
+                  </Grid>
+                </Grid>
+
+                <Grid item>
+                  {type_payments.length !== 0 ? (
+                    <Field
+                      component={TextFormField}
+                      required
+                      label="Forma de pago entidad"
+                      name="cod_forma_de_pago_entidad"
+                      fullWidth
                       select
                     >
-                      <MenuItem value={"    "}> </MenuItem>
-                    </TextField>
-                  </div>
-                )}
-              </Grid>
-            </Grid>
-
-            <Grid item>
-              {type_payments.length !== 0 ? (
-                <Field
-                  component={TextFormField}
-                  required
-                  label="Forma de pago entidad"
-                  name="cod_forma_de_pago_entidad"
-                  fullWidth
-                  select
-                >
-                  {type_payments.map((type, index) => (
-                    <MenuItem
-                      key={`menu-payments-${index}`}
-                      value={type.cod_forma_de_pago_entidad}
-                    >
-                      {type.nombre_forma_de_pago_entidad}
-                    </MenuItem>
-                  ))}
-                </Field>
-              ) : (
-                <div>
-                  <TextField
-                    label="Forma de pago entidad"
-                    fullWidth
-                    required
-                    value={"    "}
-                    select
-                  >
-                    <MenuItem value={"    "}> </MenuItem>
-                  </TextField>
-                </div>
-              )}
-            </Grid>
-
-            <Grid item container spacing={3}>
-              <Grid item xs={6}>
-                <Field
-                  required
-                  label="Nombre representante"
-                  name="nombre_representante"
-                  component={TextFormField}
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                <Field
-                  required
-                  label="Cedula Representante"
-                  name="cedula_representante"
-                  component={TextFormField}
-                  type="number"
-                />
-              </Grid>
-            </Grid>
-
-            <Grid item container spacing={3}>
-              <Grid item xs={6}>
-                <Field
-                  required
-                  label="Telefono representante"
-                  name="telefono_representante"
-                  component={TextFormField}
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                <Field
-                  required
-                  label="Correo Representante"
-                  name="correo_representante"
-                  component={TextFormField}
-                />
-              </Grid>
-            </Grid>
-            <Grid item container spacing={3}>
-              <Grid item xs={6}>
-                <Field
-                  label="Nombre Contacto"
-                  name="nombre_contacto"
-                  component={TextFormField}
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                <Field
-                  label="Cedula Contacto"
-                  name="cedula_contacto"
-                  component={TextFormField}
-                  type="number"
-                />
-              </Grid>
-            </Grid>
-
-            <Grid item container spacing={3}>
-              <Grid item xs={6}>
-                <Field
-                  label="Telefono Contacto"
-                  name="telefono_contacto"
-                  component={TextFormField}
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                <Field
-                  label="Correo Contacto"
-                  name="correo_contacto"
-                  component={TextFormField}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid item container justify="center" className={classes.services}>
-              <Grid item xs={12}>
-                {doctors.length !== 0 ? (
-                  <div>
-                    <InputLabel id="doctors_label">Doctores</InputLabel>
-                    <Field
-                      name={`doctores_entidad`}
-                      type="select"
-                      component={Select}
-                      label_id="doctors_label"
-                      multiple
-                      required
-                      fullWidth
-                      renderValue={(selected) => (
-                        <div className={classes.chips}>
-                          {selected.map((value, index) => (
-                            <Chip
-                              key={`${value}-${index}`}
-                              label={doctors
-                                .filter((doctor) => doctor.cod_doctor === value)
-                                .map(
-                                  (x) =>
-                                    `${x.nombres_doctor} ${x.apellidos_doctor}`
-                                )}
-                              className={classes.chip}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    >
-                      {doctors.map((doctor, index) => (
+                      {type_payments.map((type, index) => (
                         <MenuItem
-                          key={`menu-${index}`}
-                          value={doctor.cod_doctor}
+                          key={`menu-payments-${index}`}
+                          value={type.cod_forma_de_pago_entidad}
                         >
-                          {`${doctor.nombres_doctor} ${doctor.apellidos_doctor}`}
+                          {type.nombre_forma_de_pago_entidad}
                         </MenuItem>
                       ))}
                     </Field>
-                    <FormHelperText>{errors.doctores_entidad}</FormHelperText>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </Grid>
-            </Grid>
-            <Grid
-              item
-              container
-              justify="flex-end"
-              spacing={3}
-              className={classes.buttons}
-            >
-              <FormButtons
-                to={"/Administrador/Entidades"}
-                data={data}
-                isSubmitting={isSubmitting}
-                resetForm={() => resetForm}
-              />
-            </Grid>
+                  ) : (
+                    <div>
+                      <TextField
+                        label="Forma de pago entidad"
+                        fullWidth
+                        required
+                        value={"    "}
+                        select
+                      >
+                        <MenuItem value={"    "}> </MenuItem>
+                      </TextField>
+                    </div>
+                  )}
+                </Grid>
+
+                <Grid item container spacing={3}>
+                  <Grid item xs={6}>
+                    <Field
+                      required
+                      label="Nombre representante"
+                      name="nombre_representante"
+                      component={TextFormField}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <Field
+                      required
+                      label="Cedula Representante"
+                      name="cedula_representante"
+                      component={TextFormField}
+                      type="number"
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid item container spacing={3}>
+                  <Grid item xs={6}>
+                    <Field
+                      required
+                      label="Telefono representante"
+                      name="telefono_representante"
+                      component={TextFormField}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <Field
+                      required
+                      label="Correo Representante"
+                      name="correo_representante"
+                      component={TextFormField}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid item container spacing={3}>
+                  <Grid item xs={6}>
+                    <Field
+                      label="Nombre Contacto"
+                      name="nombre_contacto"
+                      component={TextFormField}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <Field
+                      label="Cedula Contacto"
+                      name="cedula_contacto"
+                      component={TextFormField}
+                      type="number"
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid item container spacing={3}>
+                  <Grid item xs={6}>
+                    <Field
+                      label="Telefono Contacto"
+                      name="telefono_contacto"
+                      component={TextFormField}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <Field
+                      label="Correo Contacto"
+                      name="correo_contacto"
+                      component={TextFormField}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid
+                  item
+                  container
+                  justify="center"
+                  className={classes.services}
+                >
+                  <Grid item xs={12}>
+                    {doctors.length !== 0 ? (
+                      <div>
+                        <InputLabel id="doctors_label">Doctores</InputLabel>
+                        <Field
+                          name={`doctores_entidad`}
+                          type="select"
+                          component={Select}
+                          label_id="doctors_label"
+                          multiple
+                          required
+                          fullWidth
+                          renderValue={(selected) => (
+                            <div className={classes.chips}>
+                              {selected.map((value, index) => (
+                                <Chip
+                                  key={`${value}-${index}`}
+                                  label={doctors
+                                    .filter(
+                                      (doctor) => doctor.cod_doctor === value
+                                    )
+                                    .map(
+                                      (x) =>
+                                        `${x.nombres_doctor} ${x.apellidos_doctor}`
+                                    )}
+                                  className={classes.chip}
+                                />
+                              ))}
+                            </div>
+                          )}
+                        >
+                          {doctors.map((doctor, index) => (
+                            <MenuItem
+                              key={`menu-${index}`}
+                              value={doctor.cod_doctor}
+                            >
+                              {`${doctor.nombres_doctor} ${doctor.apellidos_doctor}`}
+                            </MenuItem>
+                          ))}
+                        </Field>
+                        <FormHelperText>
+                          {errors.doctores_entidad}
+                        </FormHelperText>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </Grid>
+                </Grid>
+              </CardContent>
+              <CardActions disableSpacing>
+                <Grid
+                  item
+                  container
+                  justify="flex-end"
+                  spacing={3}
+                  className={classes.buttons}
+                >
+                  <FormButtons
+                    to={"/Administrador/Entidades"}
+                    data={data}
+                    isSubmitting={isSubmitting}
+                    resetForm={() => resetForm}
+                  />
+                </Grid>
+              </CardActions>
+            </Container>
           </Grid>
           <BackDropLoading isSubmitting={isSubmitting} />
         </Form>
