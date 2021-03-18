@@ -107,3 +107,13 @@ export const api_receipts = axios.create({
   baseURL: process.env.REACT_APP_API_ROUTE + "/api/facturas/",
   headers: headers,
 });
+
+export const api_numerations = axios.create({
+  baseURL: process.env.REACT_APP_API_ROUTE + "/api/numeracion/",
+  headers: headers,
+});
+
+export const api_transactions = axios.create({
+  baseURL: process.env.REACT_APP_API_ROUTE + "/api/transacciones/",
+  headers: headers,
+});

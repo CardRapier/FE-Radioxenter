@@ -138,3 +138,51 @@ export const employee_schema = yup.object({
   telefono_empleado: yup.string().required("Campo requerido"),
   usuario_empleado: yup.string().required("Campo requerido"),
 });
+
+const enumeration_schema = yup.object({
+  numeracion_inicial: yup
+    .number()
+    .integer("Debe ser un numero entero")
+    .required("Campo requerido")
+    .positive("Debe ser positivo"),
+  numeracion_final: yup
+    .number()
+    .integer("Debe ser un numero entero")
+    .required("Campo requerido")
+    .positive("Debe ser positivo")
+    .when(
+      "numeracion_inicial",
+      (numeracion_inicial, yup) =>
+        numeracion_inicial &&
+        yup.min(
+          numeracion_inicial,
+          "La numeracion final debe ser un numero mayor a la inicial"
+        )
+    ),
+  numeracion_aumento: yup
+    .number()
+    .integer("Debe ser un numero entero")
+    .required("Campo requerido")
+    .positive("Debe ser positivo")
+    .when(
+      "numeracion_final",
+      (numeracion_final, yup) =>
+        numeracion_final &&
+        yup.max(
+          numeracion_final - 1,
+          "El aumento debe ser menor a la numeracion final"
+        )
+    ),
+  numeracion_actual: yup
+    .number()
+    .integer("Debe ser un numero entero")
+    .required("Campo requerido")
+    .positive("Debe ser positivo"),
+});
+
+export const enumerations_schema = yup.object({
+  formA: enumeration_schema,
+  formB: enumeration_schema,
+  formC: enumeration_schema,
+  formD: enumeration_schema,
+});

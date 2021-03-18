@@ -24,6 +24,7 @@ import React from "react";
 import ServiceDescription from "./Descriptions/ServiceDescription";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
+import TransactionsEntity from "./Modals/TransactionsEntity";
 import { makeStyles } from "@material-ui/core/styles";
 import { remove_abbreviations_ofString } from "../../utils";
 
@@ -33,21 +34,15 @@ const useStyles = makeStyles((theme) => ({
       borderBottom: "unset",
     },
   },
-  tableRow: {
-    marginTop: theme.spacing(2),
-    marginBottom: 2,
-  },
-
-  actionsPadding: {
-    margin: 4,
-  },
 }));
 
 export default function AdminRow(props) {
   const { tableCells, row, data, subdata } = props;
   const classes = useStyles();
   const [fetchData, setFetchData] = React.useState();
+  const [stateReceipts, setStateReceipts] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  let validated = false;
   React.useEffect(() => {
     if (data.title === "Entidades") {
       api_period_payments.get("/").then((res) => {
@@ -81,6 +76,10 @@ export default function AdminRow(props) {
       "SE-",
       "PA-",
     ]);
+  }
+
+  if (subdata !== undefined) {
+    validated = true;
   }
   return (
     <React.Fragment>
@@ -125,7 +124,11 @@ export default function AdminRow(props) {
 
                   case "Entidades":
                     return fetchData !== undefined ? (
-                      <EntitiesDescription row={row} data={fetchData} />
+                      <EntitiesDescription
+                        subdata={subdata}
+                        row={row}
+                        data={fetchData}
+                      />
                     ) : (
                       ""
                     );
@@ -148,24 +151,45 @@ export default function AdminRow(props) {
                 container
                 justify="flex-end"
                 alignItems="center"
-                className={classes.tableRow}
-                spacing={4}
+                spacing={1}
               >
+                {data.title === "Entidades" && validated === true ? (
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      onClick={() => setStateReceipts(true)}
+                      color="primary"
+                      size="small"
+                    >
+                      Transacciones
+                    </Button>
+
+                    <TransactionsEntity
+                      validated={validated}
+                      subdata={subdata}
+                      row={row}
+                      stateReceipts={stateReceipts}
+                      setStateReceipts={setStateReceipts}
+                    />
+                  </Grid>
+                ) : (
+                  ""
+                )}
                 {data.actions.map((action, index) => (
-                  <Button
-                    component={Link}
-                    key={index}
-                    to={{
-                      pathname: action.action,
-                      data: row,
-                    }}
-                    variant="contained"
-                    color="primary"
-                    size={"small"}
-                    className={classes.actionsPadding}
-                  >
-                    {action.name}
-                  </Button>
+                  <Grid key={`${index}-options`} item>
+                    <Button
+                      component={Link}
+                      to={{
+                        pathname: action.action,
+                        data: row,
+                      }}
+                      variant="contained"
+                      color="primary"
+                      size={"small"}
+                    >
+                      {action.name}
+                    </Button>
+                  </Grid>
                 ))}
               </Grid>
             </Box>

@@ -72,3 +72,13 @@ export const employee_initial_values = {
   cod_tipo_empleado: 1,
   contrasenia_empleado: "",
 };
+
+export const enumeration_initial_values = {
+  cod_numeracion: 0,
+  numeracion_siglas: "",
+  numeracion_nombre: "",
+  numeracion_inicial: 0,
+  numeracion_final: 0,
+  numeracion_aumento: 0,
+  numeracion_actual: 0,
+};

@@ -39,9 +39,20 @@ const remove_abbreviations_ofString = (text, abbreviations) => {
   return text;
 };
 
+const omitPropertyFromJson = (obj, props) => {
+  let clone = Object.assign({}, obj);
+  for (let i in props) {
+    let name = `${props[i]}`;
+    delete clone[name];
+  }
+
+  return clone;
+};
+
 export {
   give_error_message,
   remove_abbreviation,
   remove_abbreviations,
   remove_abbreviations_ofString,
+  omitPropertyFromJson,
 };

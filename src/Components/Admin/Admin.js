@@ -11,6 +11,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import DoctorForm from "./Forms/DoctorForm";
 import EmployeeForm from "./Forms/EmployeeForm";
 import EntityForm from "./Forms/EntityForm";
+import EnumerationContainer from "./Forms/EnumerationContainer";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
@@ -247,6 +248,12 @@ export default function Admin() {
               exact
               path="/Administrador/EditarDoctor"
               component={DoctorForm}
+            />
+
+            <Route
+              exact
+              path="/Administrador/Enumeracion"
+              component={EnumerationContainer}
             />
           </Grid>
           <Grid item xs={false} sm={1} md={3}></Grid>

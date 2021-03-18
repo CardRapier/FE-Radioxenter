@@ -5,6 +5,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
+import FormatListNumberedIcon from "@material-ui/icons/FormatListNumbered";
 import HomeIcon from "@material-ui/icons/Home";
 import IconButton from "@material-ui/core/IconButton";
 import { Link } from "react-router-dom";
@@ -109,6 +110,18 @@ export default function AdminDrawer(props) {
               <PermContactCalendarIcon />
             </ListItemIcon>
             <ListItemText primary={"Doctores"} />
+          </ListItem>
+
+          <ListItem
+            button
+            component={Link}
+            key={"Enumeration"}
+            to="/Administrador/Enumeracion"
+          >
+            <ListItemIcon>
+              <FormatListNumberedIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Enumeración"} />
           </ListItem>
 
           <ListItem button component={Link} key={"Empleado"} to="/Empleado">

@@ -85,33 +85,39 @@ function ProcessPopOver(props) {
         style={{ maxHeight: "100%", overflow: "auto" }}
         className={classes.root}
       >
-        {rows.map((row, index) => (
-          <React.Fragment key={`${index}-list-fragment1`}>
-            <ListItem alignItems="flex-start">
-              <ListItemText
-                key={`${index}-list-text`}
-                primary={`${row.data.nombres_usuario} ${row.data.apellidos_usuario} - ${row.data.documento_usuario}`}
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={classes.inline}
-                      color="textPrimary"
-                    >
-                      {renderLink(row.procesosGenerales.actual, row)}
-                    </Typography>
+        {rows.length === 0 ? (
+          <ListItem alignItems="flex-start">
+            <ListItemText primary={`No hay procesos actualmente.`} />
+          </ListItem>
+        ) : (
+          rows.map((row, index) => (
+            <React.Fragment key={`${index}-list-fragment1`}>
+              <ListItem alignItems="flex-start">
+                <ListItemText
+                  key={`${index}-list-text`}
+                  primary={`${row.data.nombres_usuario} ${row.data.apellidos_usuario} - ${row.data.documento_usuario}`}
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={classes.inline}
+                        color="textPrimary"
+                      >
+                        {renderLink(row.procesosGenerales.actual, row)}
+                      </Typography>
 
-                    {` — ${row.procesosGenerales.pendientes.map(
-                      (process) => ` ${process}`
-                    )}  pendientes`}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-          </React.Fragment>
-        ))}
+                      {` — ${row.procesosGenerales.pendientes.map(
+                        (process) => ` ${process}`
+                      )}  pendientes`}
+                    </React.Fragment>
+                  }
+                />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+            </React.Fragment>
+          ))
+        )}
       </List>
     </Popover>
   );

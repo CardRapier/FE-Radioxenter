@@ -26,6 +26,7 @@ const data = {
         "Telefono",
       ],
       actions: [{ name: "Editar", action: "/Administrador/EditarEntidad" }],
+      additional_actions: true,
     },
     agreements: {
       title: "Convenios",

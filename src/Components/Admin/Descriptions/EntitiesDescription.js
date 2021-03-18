@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//TODO: Mostrar doctores de la entidad
 export default function EntitiesDescription(props) {
   const classes = useStyles();
   const { row, data } = props;

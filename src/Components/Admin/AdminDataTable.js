@@ -1,9 +1,11 @@
 import {
   api_doctors,
+  api_doctors_entities,
   api_employees,
   api_entities,
   api_packages,
   api_services,
+  api_transactions,
   api_type_document,
   api_type_employee,
 } from "../../api_app";
@@ -22,6 +24,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow";
+import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { remove_abbreviation } from "../../utils";
 
@@ -72,6 +75,19 @@ export default function AdminDataTable(props) {
         .then((res) => {
           setRows(res.data.respuesta);
           setLoaded(true);
+          axios
+            .all([api_transactions.get("/"), api_doctors_entities.get("/")])
+            .then(
+              axios.spread((...responses) => {
+                const transactions = responses[0].data.respuesta;
+                const doctor_entity = responses[1].data.respuesta;
+                setSubData({
+                  transactions: transactions,
+                  doctor_entity: doctor_entity,
+                });
+              })
+            )
+            .catch((error) => setLoaded(true));
         })
         .catch((error) => {
           setLoaded(true);
@@ -98,24 +114,24 @@ export default function AdminDataTable(props) {
           setLoaded(true);
         });
     } else if (data.title === "Empleados") {
-      api_type_employee
-        .get("/")
-        .then((res) => {
-          setSubData({ type_employees: res.data.respuesta });
-          api_type_document.get("/").then((res) => {
-            setSubData((subdata) => ({
-              ...subdata,
-              type_documents: res.data.respuesta,
-            }));
-            api_employees.get("/").then((res) => {
+      api_type_employee.get("/").then((res) => {
+        setSubData({ type_employees: res.data.respuesta });
+        api_type_document.get("/").then((res) => {
+          setSubData((subdata) => ({
+            ...subdata,
+            type_documents: res.data.respuesta,
+          }));
+          api_employees
+            .get("/")
+            .then((res) => {
               setRows(res.data.respuesta);
               setLoaded(true);
+            })
+            .catch((error) => {
+              setLoaded(true);
             });
-          });
-        })
-        .catch((error) => {
-          setLoaded(true);
         });
+      });
     } else if (data.title === "Doctores") {
       api_doctors
         .get("/")
@@ -189,6 +205,7 @@ export default function AdminDataTable(props) {
                         row.direccion_entidad,
                         row.telefono_entidad,
                       ]}
+                      subdata={subdata}
                       row={row}
                       data={data}
                     />

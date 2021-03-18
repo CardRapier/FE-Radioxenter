@@ -4,7 +4,8 @@ div.gallery img {
 }
 
 .form-paper {
-  margin-top: 50px;
+  margin-top: 25px;
+  margin-bottom: 50px;
   padding: 10px
 }
 
@@ -43,3 +44,10 @@ div.gallery img {
 .custom-shape-divider-bottom-1615612475 .shape-fill {
   fill: #3f51b5c2;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
