@@ -26,7 +26,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProcessTable(props) {
   const {
+    doctorEntities,
     rows,
+    handleCompleteProcess,
     handleChangeServiceStatus,
     handleChangeShipmentStatus,
     filter,
@@ -92,6 +94,8 @@ export default function ProcessTable(props) {
             ).map((row, index) => (
               <ProcessRow
                 key={`${index}-row`}
+                doctorEntities={doctorEntities}
+                type_shipment={type_shipment}
                 row={row}
                 type_document={
                   type_document.length !== 0
@@ -113,6 +117,7 @@ export default function ProcessTable(props) {
                 }
                 changeServices={handleChangeServiceStatus}
                 changeShipments={handleChangeShipmentStatus}
+                handleCompleteProcess={handleCompleteProcess}
               />
             ))
           )}

@@ -383,7 +383,6 @@ export default function EntityForm(props) {
                           component={Select}
                           label_id="doctors_label"
                           multiple
-                          required
                           fullWidth
                           renderValue={(selected) => (
                             <div className={classes.chips}>

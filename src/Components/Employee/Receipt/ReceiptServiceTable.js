@@ -14,7 +14,7 @@ export default function ReceiptServiceTable(props) {
   const { servicesSelected, remove_service, evaluate_total_value } = props;
   return (
     <React.Fragment>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} elevation={3}>
         <Table aria-label="table">
           <TableHead>
             <TableRow>

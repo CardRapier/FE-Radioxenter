@@ -1,8 +1,10 @@
+import BackDropLoading from "../../BackDropLoading";
 import Grid from "@material-ui/core/Grid";
 import ProcessTable from "./ProcessTable";
 import React from "react";
 import { TextField } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
+import { api_doctors_entities } from "../../../api_app";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -17,10 +19,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Proccess(props) {
-  const { rows, handleChangeServiceStatus, handleChangeShipmentStatus } = props;
+export default function Process(props) {
+  const {
+    rows,
+    handleCompleteProcess,
+    handleChangeServiceStatus,
+    handleChangeShipmentStatus,
+  } = props;
   const [query, setQuery] = React.useState({ query: "" });
   const classes = useStyles();
+  const [loaded, setLoaded] = React.useState(false);
+  const [doctorEntities, setDoctorEntities] = React.useState([]);
+  React.useEffect(() => {
+    api_doctors_entities.get("/").then((res) => {
+      setDoctorEntities(res.data.respuesta);
+      setLoaded(true);
+    });
+  }, []);
   return (
     <React.Fragment>
       <Grid container direction={"column"}>
@@ -65,7 +80,9 @@ export default function Proccess(props) {
           <Grid item className={classes.margintop}>
             <Grid item xs>
               <ProcessTable
+                doctorEntities={doctorEntities}
                 rows={rows}
+                handleCompleteProcess={handleCompleteProcess}
                 handleChangeServiceStatus={handleChangeServiceStatus}
                 handleChangeShipmentStatus={handleChangeShipmentStatus}
                 filter={{ query: query.query }}
@@ -74,6 +91,7 @@ export default function Proccess(props) {
           </Grid>
         </Grid>
       </Grid>
+      <BackDropLoading isSubmitting={!loaded} />
     </React.Fragment>
   );
 }

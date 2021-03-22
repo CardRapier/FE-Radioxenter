@@ -5,6 +5,7 @@ import {
   api_entities,
   api_process,
   api_services,
+  api_type_consent,
 } from "../../../api_app";
 
 import AddIcon from "@material-ui/icons/Add";
@@ -15,16 +16,21 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
+import { CheckboxWithLabel } from "formik-material-ui";
 import Container from "@material-ui/core/Container";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/Button";
 import { KeyboardDatePicker } from "formik-material-ui-pickers";
+import MenuItem from "@material-ui/core/MenuItem";
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MuiTextField from "@material-ui/core/TextField";
 import React from "react";
 import ReceiptServiceTable from "./ReceiptServiceTable";
-import Typography from "@material-ui/core/Typography";
+import TextFormField from "../../Form/TextFormField";
+import axios from "axios";
 import { give_error_message } from "../../../utils";
 import { makeStyles } from "@material-ui/core/styles";
 import publicIp from "public-ip";
@@ -67,6 +73,7 @@ export default function ReceiptCreate(props) {
 
   const [doctors, setDoctors] = React.useState([]);
   const [entitiesAgreements, setEntitiesAgreements] = React.useState([]);
+  const [typeConsent, setTypeConsent] = React.useState([]);
 
   function add_service(service) {
     if (service !== null) {
@@ -171,6 +178,20 @@ export default function ReceiptCreate(props) {
     return response;
   };
 
+  const validated_selected_consents = (consents) => {
+    let size = Object.keys(consents).length;
+    if (size !== 0) {
+      let keys = Object.keys(consents);
+      for (let i in keys) {
+        if (consents[keys[i]] === true) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  };
+
   React.useEffect(
     () => {
       publicIp.v4().then((e) => setIpv4(e));
@@ -181,6 +202,20 @@ export default function ReceiptCreate(props) {
           setServices(filter_services(res.data.respuesta, "SE-"));
           setPackages(filter_services(res.data.respuesta, "PA-"));
           setAgreements(res.data.respuesta);
+
+          axios
+            .all([
+              api_doctors.get("/"),
+              api_entities.get("/convenios"),
+              api_type_consent.get("/"),
+            ])
+            .then(
+              axios.spread((...res) => {
+                setDoctors(res[0].data.respuesta);
+                setEntitiesAgreements(res[1].data.respuesta);
+                setTypeConsent(res[2].data.respuesta);
+              })
+            );
         })
         .catch((error) => {
           enqueueSnackbar(
@@ -190,62 +225,68 @@ export default function ReceiptCreate(props) {
             }
           );
         });
-      api_doctors.get("/").then((res) => {
-        setDoctors(res.data.respuesta);
-      });
-
-      api_entities.get("/convenios").then((res) => {
-        setEntitiesAgreements(res.data.respuesta);
-      });
     },
     [props.location, enqueueSnackbar],
     []
   );
+
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Formik
         enableReinitialize
-        initialValues={{ ...receipt_initial_values }}
+        initialValues={{
+          ...receipt_initial_values,
+        }}
         onSubmit={(values, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          if (validate_selected_services() === true) {
-            let petitionData = { ...values };
-            let final_data = {
-              ...petitionData,
-              documento_usuario: data.documento_usuario,
-              valor_transaccion: evaluate_total_value(),
-              cod_entidad_doctor:
-                values.entity !== null && values.doctor !== null
-                  ? evaluate_entity_doctor(values.entity, values.doctor)
-                      .cod_entidad_doctor
-                  : null,
-              motivo: motive,
-              ipv4: ipv4,
-              servicios: servicesSelected,
-            };
+          if (validate_selected_services()) {
+            if (validated_selected_consents(values.consentimiento)) {
+              let petitionData = { ...values };
+              let final_data = {
+                ...petitionData,
+                documento_usuario: `${data.documento_usuario}`,
+                valor_transaccion: evaluate_total_value(),
+                cod_entidad_doctor:
+                  values.entity !== null && values.doctor !== null
+                    ? evaluate_entity_doctor(values.entity, values.doctor)
+                        .cod_entidad_doctor
+                    : null,
+                motivo: motive,
+                ipv4: ipv4,
+                servicios: servicesSelected,
+              };
 
-            delete final_data.doctor;
-            delete final_data.entity;
-            delete final_data.service;
+              delete final_data.doctor;
+              delete final_data.entity;
+              delete final_data.service;
 
-            api_process
-              .post("agregarTransaccion", final_data)
-              .then(function (response) {
-                setSubmitting(false);
-                enqueueSnackbar(
-                  "Se ha agregado la transaccion exitososamente!",
-                  {
-                    variant: "success",
-                  }
-                );
-                setRedirect(true);
-              })
-              .catch(function (error) {
-                setSubmitting(false);
-                enqueueSnackbar(give_error_message(error.response), {
-                  variant: "error",
+              api_process
+                .post("agregarTransaccion", final_data)
+                .then(function (response) {
+                  setSubmitting(false);
+                  enqueueSnackbar(
+                    "Se ha agregado la transaccion exitososamente!",
+                    {
+                      variant: "success",
+                    }
+                  );
+                  setRedirect(true);
+                })
+                .catch(function (error) {
+                  setSubmitting(false);
+                  enqueueSnackbar(give_error_message(error.response), {
+                    variant: "error",
+                  });
                 });
-              });
+            } else {
+              setSubmitting(false);
+              enqueueSnackbar(
+                "Se deben seleccionar consentimientos a firmar ",
+                {
+                  variant: "error",
+                }
+              );
+            }
           } else {
             setSubmitting(false);
             enqueueSnackbar("Se deben seleccionar servicios ", {
@@ -256,247 +297,274 @@ export default function ReceiptCreate(props) {
       >
         {({ resetForm, isSubmitting, values }) => (
           <Form>
-            <Grid container direction={"column"}>
-              <Container
-                className="form-paper"
-                elevation={3}
-                component={Card}
-                fixed
-              >
-                <CardHeader
-                  title={
-                    data === undefined ? "Crear Servicio" : "Editar Servicio"
-                  }
-                />
-                <CardContent>
-                  <Grid container item className={classes.title} spacing={4}>
-                    <Grid item>
-                      <Typography
-                        component="h1"
-                        variant="h5"
-                        align="left"
-                        color="textPrimary"
-                        gutterBottom
-                      >
-                        Transacción
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid container item>
-                    <Grid container direction="column">
-                      <Grid
-                        item
-                        container
-                        spacing={3}
-                        justify="flex-start"
-                        alignItems="flex-start"
-                      >
-                        <Grid item xs={12} sm={6}>
-                          <MuiTextField
-                            id="user"
-                            disabled
-                            value={
-                              data !== undefined && tutor === undefined
-                                ? `${data.nombres_usuario} ${data.apellidos_usuario}`
-                                : tutor !== undefined
-                                ? `${tutor.nombres_tutor} ${tutor.apellidos_tutor}`
-                                : ""
-                            }
-                            fullWidth
-                            label="Usuario"
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                          <Field
-                            format="DD/MM/yyyy"
-                            component={KeyboardDatePicker}
-                            label="Fecha"
-                            name="fecha_transaccion"
-                            fullWidth
-                            disabled
-                          />
-                        </Grid>
-                      </Grid>
-                      <Grid item container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                          <Field
-                            name="doctor"
-                            label={"Nombre Doctor/Doctora"}
-                            required
-                            disableClearable
-                            component={AutocompleteForm}
-                            options={doctors}
-                            getOptionLabel={(option) =>
-                              `${option.nombres_doctor} ${option.apellidos_doctor}`
-                            }
-                            onChange={(value, setFieldValue) => {
-                              let entity = entitiesAgreements.find(
-                                (e) =>
-                                  e.cod_entidad ===
-                                  value.Entidad_doctors[0].cod_entidad
-                              );
-                              setFieldValue("entity", entity);
-                              if (values.tipo_compra === "Convenio") {
-                                setFieldValue(
-                                  "service",
-                                  filter_agreements(entity)[0]
-                                );
-                              }
-                            }}
-                          />
-                        </Grid>
-
-                        <Grid item xs={12} sm={6}>
-                          <Field
-                            name="entity"
-                            label={"Entidad"}
-                            required
-                            component={AutocompleteForm}
-                            disableClearable
-                            options={
-                              values.doctor != null
-                                ? filter_entities(values.doctor)
-                                : entitiesAgreements
-                            }
-                            getOptionLabel={(option) =>
-                              `${option.nombre_comercial_entidad}`
-                            }
-                          />
-                        </Grid>
-                      </Grid>
-
-                      <Grid
-                        item
-                        container
-                        spacing={3}
-                        className={classes.paddingBot}
-                      >
-                        <Grid item xs={12}>
-                          <MuiTextField
-                            value={motive}
-                            required
-                            onChange={handleChange}
-                            fullWidth
-                            label="Motivo del procedimiento"
-                            multiline
-                          />
-                        </Grid>
-                      </Grid>
-
-                      <Grid item container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                          <Field
-                            name="tipo_compra"
-                            label={"Tipo de Compra"}
-                            required
-                            disableClearable
-                            component={AutocompleteForm}
-                            options={
-                              values.entity !== null &&
-                              values.entity.Convenios !== undefined &&
-                              values.entity.Convenios.length !== 0
-                                ? ["Servicio", "Paquete", "Convenio"]
-                                : ["Servicio", "Paquete"]
-                            }
-                            onChange={(value, setFieldValue) => {
-                              if (value === "Servicio") {
-                                setFieldValue("service", services[0]);
-                              } else if (value === "Paquete") {
-                                setFieldValue("service", packages[0]);
-                              } else {
-                                setFieldValue(
-                                  "service",
-                                  filter_agreements(values.entity)[0]
-                                );
-                              }
-                            }}
-                          />
-                        </Grid>
-
-                        <Grid item xs={10} sm={5}>
-                          <Field
-                            name="service"
-                            label={(() => {
-                              if (values.tipo_compra === "Servicio") {
-                                return "Servicios";
-                              } else if (values.tipo_compra === "Paquete") {
-                                return "Paquetes";
-                              } else {
-                                return "Convenios";
-                              }
-                            })()}
-                            component={AutocompleteForm}
-                            options={(() => {
-                              if (values.tipo_compra === "Servicio") {
-                                return services;
-                              } else if (values.tipo_compra === "Paquete") {
-                                return packages;
-                              } else {
-                                return filter_agreements(values.entity);
-                              }
-                            })()}
-                            getOptionLabel={(option) => option.nombre_servicio}
-                          />
-                        </Grid>
-                        <Grid item xs={2} sm={1}>
-                          <IconButton
-                            onClick={() => add_service(values.service)}
-                          >
-                            <AddIcon></AddIcon>
-                          </IconButton>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                          <ReceiptServiceTable
-                            servicesSelected={servicesSelected}
-                            remove_service={remove_service}
-                            evaluate_total_value={evaluate_total_value}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-                <CardActions disableSpacing>
+            <Container
+              className="form-paper"
+              elevation={3}
+              component={Card}
+              fixed
+            >
+              <CardHeader title={"Transacción"} />
+              <CardContent>
+                <Grid spacing={1} container item direction="column">
                   <Grid
-                    container
                     item
-                    justify="flex-end"
-                    className={classes.buttons}
+                    container
+                    spacing={4}
+                    justify="flex-start"
+                    alignItems="flex-start"
                   >
-                    <Button
-                      component={Link}
-                      to={"/Empleado/"}
-                      className={classes.button}
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                    >
-                      Volver
-                    </Button>
-
-                    <Button
-                      size="small"
-                      className={classes.button}
-                      variant="contained"
-                      color="primary"
-                      onClick={() => resetForm({})}
-                    >
-                      Limpiar
-                    </Button>
-                    <Button
-                      className={classes.button}
-                      variant="contained"
-                      size="small"
-                      color="primary"
-                      type="submit"
-                    >
-                      Crear
-                    </Button>
+                    <Grid item xs={12} sm={6}>
+                      <MuiTextField
+                        id="user"
+                        disabled
+                        value={
+                          data !== undefined && tutor === undefined
+                            ? `${data.nombres_usuario} ${data.apellidos_usuario}`
+                            : tutor !== undefined
+                            ? `${tutor.nombres_tutor} ${tutor.apellidos_tutor}`
+                            : ""
+                        }
+                        fullWidth
+                        label="Usuario"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Field
+                        format="DD/MM/yyyy"
+                        component={KeyboardDatePicker}
+                        label="Fecha"
+                        name="fecha_transaccion"
+                        fullWidth
+                        disabled
+                      />
+                    </Grid>
                   </Grid>
-                </CardActions>
-              </Container>
-            </Grid>
+                  <Grid item container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <Field
+                        name="doctor"
+                        label={"Nombre Doctor/Doctora"}
+                        required
+                        disableClearable
+                        component={AutocompleteForm}
+                        options={doctors}
+                        getOptionLabel={(option) =>
+                          `${option.nombres_doctor} ${option.apellidos_doctor}`
+                        }
+                        onChange={(value, setFieldValue) => {
+                          let entity = entitiesAgreements.find(
+                            (e) =>
+                              e.cod_entidad ===
+                              value.Entidad_doctors[0].cod_entidad
+                          );
+                          setFieldValue("entity", entity);
+                          if (values.tipo_compra === "Convenio") {
+                            setFieldValue(
+                              "service",
+                              filter_agreements(entity)[0]
+                            );
+                          }
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <Field
+                        name="entity"
+                        label={"Entidad"}
+                        required
+                        component={AutocompleteForm}
+                        disableClearable
+                        options={
+                          values.doctor != null
+                            ? filter_entities(values.doctor)
+                            : entitiesAgreements
+                        }
+                        getOptionLabel={(option) =>
+                          `${option.nombre_comercial_entidad}`
+                        }
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid item container spacing={3}>
+                    <Grid item xs={12}>
+                      <MuiTextField
+                        value={motive}
+                        required
+                        onChange={handleChange}
+                        fullWidth
+                        label="Motivo del procedimiento"
+                        multiline
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid item container spacing={3}>
+                    <Grid item xs={6}>
+                      <Field
+                        required
+                        label="Candidato de Satisfacción?"
+                        name="satisfaccion"
+                        select
+                        component={TextFormField}
+                      >
+                        <MenuItem value={false}>No</MenuItem>
+                        <MenuItem value={true}>Si</MenuItem>
+                      </Field>
+                    </Grid>
+                    <Grid
+                      container
+                      justify="flex-start"
+                      alignItems="flex-end"
+                      item
+                      xs={6}
+                    >
+                      <FormLabel component="legend">
+                        Consentimientos a firmar
+                        <FormGroup aria-label="position" row>
+                          {typeConsent.map((type, index) => (
+                            <Field
+                              key={`${index}-type-consent`}
+                              component={CheckboxWithLabel}
+                              type="checkbox"
+                              name={`consentimiento.${type.cod_tipo_consentimiento}`}
+                              Label={{
+                                label: `${type.nombre_tipo_consentimiento.replace(
+                                  "Consentimiento ",
+                                  ""
+                                )}`,
+                              }}
+                            />
+                          ))}
+                        </FormGroup>
+                      </FormLabel>
+                    </Grid>
+                  </Grid>
+
+                  <Grid item container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <Field
+                        name="tipo_compra"
+                        label={"Tipo de Compra"}
+                        required
+                        disableClearable
+                        component={AutocompleteForm}
+                        options={
+                          values.entity !== null &&
+                          values.entity.Convenios !== undefined &&
+                          values.entity.Convenios.length !== 0
+                            ? ["Servicio", "Paquete", "Convenio"]
+                            : ["Servicio", "Paquete"]
+                        }
+                        onChange={(value, setFieldValue) => {
+                          if (value === "Servicio") {
+                            setFieldValue("service", services[0]);
+                          } else if (value === "Paquete") {
+                            setFieldValue("service", packages[0]);
+                          } else {
+                            setFieldValue(
+                              "service",
+                              filter_agreements(values.entity)[0]
+                            );
+                          }
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={10} sm={5}>
+                      <Field
+                        name="service"
+                        label={(() => {
+                          if (values.tipo_compra === "Servicio") {
+                            return "Servicios";
+                          } else if (values.tipo_compra === "Paquete") {
+                            return "Paquetes";
+                          } else {
+                            return "Convenios";
+                          }
+                        })()}
+                        component={AutocompleteForm}
+                        options={(() => {
+                          if (values.tipo_compra === "Servicio") {
+                            return services;
+                          } else if (values.tipo_compra === "Paquete") {
+                            return packages;
+                          } else {
+                            return filter_agreements(values.entity);
+                          }
+                        })()}
+                        getOptionLabel={(option) => option.nombre_servicio}
+                      />
+                    </Grid>
+                    <Grid
+                      container
+                      justify="flex-start"
+                      alignItems="flex-end"
+                      item
+                      xs={2}
+                      sm={1}
+                    >
+                      <IconButton onClick={() => add_service(values.service)}>
+                        <AddIcon></AddIcon>
+                      </IconButton>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <ReceiptServiceTable
+                        servicesSelected={servicesSelected}
+                        remove_service={remove_service}
+                        evaluate_total_value={evaluate_total_value}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <pre>{JSON.stringify(values, null, 2)}</pre>
+              </CardContent>
+              <CardActions disableSpacing>
+                <Grid
+                  container
+                  item
+                  justify="flex-end"
+                  className={classes.buttons}
+                >
+                  <Button
+                    component={Link}
+                    to={"/Empleado/"}
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                  >
+                    Volver
+                  </Button>
+
+                  <Button
+                    size="small"
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      setMotive("");
+                      setServicesSelected([]);
+                      resetForm({});
+                    }}
+                  >
+                    Limpiar
+                  </Button>
+                  <Button
+                    className={classes.button}
+                    variant="contained"
+                    size="small"
+                    color="primary"
+                    type="submit"
+                  >
+                    Crear
+                  </Button>
+                </Grid>
+              </CardActions>
+            </Container>
+
             <BackDropLoading isSubmitting={isSubmitting} />
             {redirect === true ? (
               <Redirect
@@ -504,7 +572,7 @@ export default function ReceiptCreate(props) {
                   pathname: "/Empleado/Consentimiento",
                   data: data,
                   tutor: tutor,
-                  transaccion: values,
+                  transaction: values,
                 }}
               />
             ) : (

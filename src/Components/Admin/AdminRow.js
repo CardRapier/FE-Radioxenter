@@ -182,6 +182,7 @@ export default function AdminRow(props) {
                       to={{
                         pathname: action.action,
                         data: row,
+                        subdata: subdata,
                       }}
                       variant="contained"
                       color="primary"

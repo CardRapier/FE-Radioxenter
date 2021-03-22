@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 2,
   },
 }));
-//TODO: Filtrar xd
+
 export default function Receipts() {
   const classes = useStyles();
   const [query, setQuery] = React.useState({ query: "" });

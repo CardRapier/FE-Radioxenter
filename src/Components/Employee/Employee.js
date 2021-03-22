@@ -6,12 +6,11 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import BackDropLoading from "../BackDropLoading";
 import Button from "@material-ui/core/Button";
 import ConsentForm from "./Consent/ConsentForm";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import Proccess from "./Process/Proccess";
+import Process from "./Process/Process";
 import ProcessPopOver from "./ProcessPopOver";
 import React from "react";
 import ReceiptCreate from "./Receipt/ReceiptCreate";
@@ -111,6 +110,12 @@ export default function Employee() {
     });
   };
 
+  const handleCompleteProcess = (documento_usuario) => {
+    socket.emit("completar_procesos", {
+      documento_usuario: documento_usuario,
+    });
+  };
+
   React.useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
     socket.on("data", (msg) => {
@@ -122,7 +127,6 @@ export default function Employee() {
 
   return (
     <React.Fragment>
-      <CssBaseline />
       <Grid container direction="column">
         <Grid item>
           <AppBar
@@ -188,8 +192,9 @@ export default function Employee() {
               exact
               path="/Empleado/Procesos"
               render={() => (
-                <Proccess
+                <Process
                   rows={rows}
+                  handleCompleteProcess={handleCompleteProcess}
                   handleChangeServiceStatus={handleChangeServiceStatus}
                   handleChangeShipmentStatus={handleChangeShipmentStatus}
                 />

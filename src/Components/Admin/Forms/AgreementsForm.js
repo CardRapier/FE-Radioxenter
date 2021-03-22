@@ -70,7 +70,7 @@ export default function AgreementsForm(props) {
       setData(props.location.data);
     }
   }, [props.location]);
-
+  console.log(entities);
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Formik
@@ -159,7 +159,7 @@ export default function AgreementsForm(props) {
                 />
                 <CardContent>
                   <Grid item container>
-                    {entities.length !== 0 && data === undefined ? (
+                    {entities.length !== 0 ? (
                       <Field
                         required
                         label="Entidad"

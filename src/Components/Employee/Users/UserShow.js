@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 2,
   },
 }));
-//TODO: Filter users by document and name
+
 export default function UserShow() {
   const classes = useStyles();
   const [query, setQuery] = React.useState({ query: "" });

@@ -36,4 +36,21 @@ export const receipt_initial_values = {
   fecha_transaccion: moment(),
   cod_entidad_doctor: 0,
   servicios: [],
+  satisfaccion: false,
+  consentimiento: {},
+};
+
+export const satisfaction_initial_values = {
+  experiencia_satisfaccion: "1",
+  ubicacion_satisfaccion: "1",
+  recomendacion_satifasfaccion: "1",
+  privacidad_satisfaccion: "1",
+  indicacion_satisfaccion: "1",
+  amabilidad_atencion_satisfaccion: "1",
+  amabilidad_radiologo_satisfaccion: "1",
+  presentacion_satisfaccion: "1",
+  tiempo_espera_satisfaccion: "1",
+  tiempo_entrega_satisfaccion: "1",
+  entrega_recomendacion_satisfaccion: false,
+  sugerencias_satisfaccion: "",
 };

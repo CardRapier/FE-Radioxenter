@@ -24,7 +24,6 @@ export default function EnumerationContainer() {
   React.useEffect(() => {
     api_numerations.get("/").then((res) => setNumeration(res.data.respuesta));
   }, []);
-  console.log(numeration);
   return (
     <Formik
       enableReinitialize

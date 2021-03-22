@@ -1,20 +1,17 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TablePagination,
-  TableRow,
-} from "@material-ui/core";
-
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import Draggable from "react-draggable";
+import Paper from "@material-ui/core/Paper";
 import React from "react";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableFooter from "@material-ui/core/TableFooter";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../../TablePaginationActions";
+import TableRow from "@material-ui/core/TableRow";
 import TransactionsRow from "./TransactionsRow";
 
 function PaperComponent(props) {
@@ -57,7 +54,6 @@ export default function TransactionsEntity(props) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  console.log(data);
 
   return (
     <Dialog

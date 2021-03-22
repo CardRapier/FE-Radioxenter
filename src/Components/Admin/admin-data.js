@@ -25,7 +25,10 @@ const data = {
         "Direccion",
         "Telefono",
       ],
-      actions: [{ name: "Editar", action: "/Administrador/EditarEntidad" }],
+      actions: [
+        { name: "Editar", action: "/Administrador/EditarEntidad" },
+        { name: "Facturar", action: "/Administrador/FacturarEntidad" },
+      ],
       additional_actions: true,
     },
     agreements: {
@@ -33,10 +36,7 @@ const data = {
       link: "/Administrador/CrearConvenio",
       filter: { id: "razon_social_entidad", label: "Entidad" },
       header: ["Entidad", "Convenios"],
-      actions: [
-        { name: "Editar", action: "/Administrador/EditarConvenios" },
-        { name: "Facturar", action: "/Administrador/Facturar" },
-      ],
+      actions: [{ name: "Editar", action: "/Administrador/EditarConvenios" }],
     },
 
     employees: {

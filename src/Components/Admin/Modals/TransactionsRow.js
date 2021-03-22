@@ -16,8 +16,6 @@ export default function TransactionsRow(props) {
 
   doctor = filter_doctor();
 
-  console.log(row);
-  console.log(doctor);
   return (
     <React.Fragment>
       <TableRow>

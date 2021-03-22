@@ -1,8 +1,11 @@
-import { Divider, List, ListItem, ListItemText } from "@material-ui/core";
-
+import Divider from "@material-ui/core/Divider";
 import { Link } from "react-router-dom";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import Popover from "@material-ui/core/Popover";
 import React from "react";
+import SatisfactionModal from "./Satisfaction/SatisfactionModal";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -23,6 +26,8 @@ const useStyles = makeStyles((theme) => ({
 function ProcessPopOver(props) {
   const classes = useStyles();
   const { id, open, anchorEl, onClose, rows } = props;
+  const [survey, setSurvey] = React.useState(false);
+
   const renderLink = (actual, row) => {
     let text = `Proceso actual: ${actual}`;
     let tutor = row.data.tutor === true ? row.tutor : undefined;
@@ -56,10 +61,25 @@ function ProcessPopOver(props) {
             pathname: "/Empleado/Consentimiento",
             data: row.data,
             tutor: tutor,
+            transaction: row.transaccion,
           }}
         >
           {text}
         </Link>
+      );
+    } else if (actual === "Satisfaccion") {
+      return (
+        <React.Fragment>
+          <Link to="/Empleado/Procesos" onClick={() => setSurvey(true)}>
+            {text}
+          </Link>
+          <SatisfactionModal
+            survey={survey}
+            setSurvey={setSurvey}
+            data={row.data}
+            tutor={tutor}
+          />
+        </React.Fragment>
       );
     } else {
       return <Link to="/Empleado/Procesos">{text}</Link>;
@@ -107,9 +127,15 @@ function ProcessPopOver(props) {
                         {renderLink(row.procesosGenerales.actual, row)}
                       </Typography>
 
-                      {` — ${row.procesosGenerales.pendientes.map(
+                      {` ${
+                        row.procesosGenerales.pendientes.length === 0 ? "" : "-"
+                      } ${row.procesosGenerales.pendientes.map(
                         (process) => ` ${process}`
-                      )}  pendientes`}
+                      )} ${
+                        row.procesosGenerales.pendientes.length === 0
+                          ? ""
+                          : "pendientes"
+                      } `}
                     </React.Fragment>
                   }
                 />

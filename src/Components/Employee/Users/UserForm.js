@@ -42,6 +42,7 @@ export default function UserForm(props) {
 
   if (props.location.hasOwnProperty("data")) {
     data = props.location.data;
+    data.documento_usuario = +data.documento_usuario;
   }
   if (props.location.hasOwnProperty("receipt")) {
     receipt = props.location.receipt;
@@ -84,7 +85,11 @@ export default function UserForm(props) {
         initialValues={
           data === undefined
             ? user_initial_values
-            : { ...data, esNuevo: false, tutor: false }
+            : {
+                ...data,
+                esNuevo: false,
+                tutor: false,
+              }
         }
         onSubmit={(values, { setSubmitting, resetForm }) => {
           values.documento_usuario = `${values.documento_usuario}`;
@@ -277,32 +282,12 @@ export default function UserForm(props) {
 
                   <Grid item container spacing={3} alignItems="center">
                     <Grid item xs={6}>
-                      {type_shipment !== undefined ? (
-                        type_shipment.find(
-                          (type) =>
-                            values.cod_tipo_pref_entrega ===
-                            type.cod_tipo_pref_entrega
-                        ).nombre_tipo_pref_entrega === "Correo" ? (
-                          <Field
-                            label="Correo"
-                            required
-                            name="correo_usuario"
-                            component={TextFormField}
-                          />
-                        ) : (
-                          <Field
-                            label="Correo"
-                            name="correo_usuario"
-                            component={TextFormField}
-                          />
-                        )
-                      ) : (
-                        <Field
-                          label="Correo"
-                          name="correo_usuario"
-                          component={TextFormField}
-                        />
-                      )}
+                      <Field
+                        required
+                        label="Correo"
+                        name="correo_usuario"
+                        component={TextFormField}
+                      />
                     </Grid>
 
                     <Grid item xs={6}>
@@ -493,6 +478,7 @@ export default function UserForm(props) {
                 </CardActions>
               </Container>
             </Grid>
+            <pre>{JSON.stringify(values, null, 2)}</pre>
             <BackDropLoading isSubmitting={isSubmitting} />
             {renderRedirect(values)}
           </Form>

@@ -1,6 +1,6 @@
 import { Link, Redirect } from "react-router-dom";
 import React, { useState } from "react";
-import { Text, Text1, Text2, Text3 } from "./ConsentText.js";
+import { api_process, api_type_consent } from "../../../api_app.js";
 
 import BackDropLoading from "../../BackDropLoading.js";
 import Button from "@material-ui/core/Button";
@@ -8,11 +8,11 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
+import ConsentContent from "./ConsentContent.js";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import SignatureCanvas from "react-signature-canvas";
-import Typography from "@material-ui/core/Typography";
-import { api_process } from "../../../api_app.js";
+import { Typography } from "@material-ui/core";
 import { give_error_message } from "../../../utils.js";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
@@ -33,21 +33,79 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const validated_selected_consents = (consents) => {
+  let true_values = [];
+  for (let i in consents) {
+    if (consents[i]) {
+      true_values.push(i);
+    }
+  }
+  return true_values;
+};
+
+const validate_empty = (conditions, covid, true_values) => {
+  for (let i in true_values) {
+    if (true_values[i].nombre_tipo_consentimiento === "Consentimiento Covid") {
+      for (let j in Object.values(covid)) {
+        if (Object.values(covid)[j] === "") {
+          return `el campo ${Object.keys(covid)[j]} esta vacio`;
+        }
+      }
+    } else if (
+      true_values[i].nombre_tipo_consentimiento ===
+        "Consentimiento Intraoral" &&
+      conditions.condicion_intraoral === ""
+    ) {
+      return `Las condiciones del consentimiento Intraoral estan vacias`;
+    } else if (
+      true_values[i].nombre_tipo_consentimiento ===
+        "Consentimiento Extraoral" &&
+      conditions.condicion_extraoral === ""
+    ) {
+      return `Las condiciones del consentimiento Extraoral estan vacias`;
+    }
+  }
+  return "true";
+};
+
 export default function ConsentForm(props) {
-  const { data, tutor } = props.location;
-  const classes = useStyles();
+  let { data, tutor, transaction } = props.location;
+  const [conditions, setConditions] = useState({
+    condicion_intraoral: "",
+    condicion_extraoral: "",
+  });
+
+  const [covid, setCovid] = React.useState({
+    riesgo_elevado: "",
+    informado_directrices: "",
+    confirmacion_solicitud: "",
+    confirmacion_sintomas: "",
+    declaracion_contacto: "",
+    presentado_covid: false,
+    cuarentena: false,
+    entender_distancia: "",
+    toma_temperatura: "",
+  });
+
+  const [typeConsent, setTypeConsent] = React.useState([]);
   const [submitting, setSubmitting] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
-  let refSignature = {};
-
   const [redirect, setRedirect] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const classes = useStyles();
+  let refSignature = {};
+  let true_values;
 
-  //TODO: FIX TEXT MESSAGE
+  React.useState(() => {
+    api_type_consent.get("/").then((res) => setTypeConsent(res.data.respuesta));
+  });
 
-  const text = Text;
-  const text1 = Text1;
-  const text2 = Text2;
-  const text3 = Text3;
+  if (transaction !== undefined && typeConsent !== undefined) {
+    true_values = validated_selected_consents(transaction.consentimiento);
+    transaction = typeConsent.filter(
+      (element, index) =>
+        element.cod_tipo_consentimiento === +true_values[index]
+    );
+  }
 
   const clear = () => {
     refSignature.clear();
@@ -57,32 +115,41 @@ export default function ConsentForm(props) {
     setSubmitting(true);
     var signature_ref = refSignature.getTrimmedCanvas();
     var signature_image = signature_ref.toDataURL("image/png");
-
-    if (refSignature.isEmpty() === false) {
-      api_process
-        .post("crearConsentimiento", {
-          signature: signature_image,
-          documento_usuario: data.documento_usuario,
-        })
-        .then((res) => {
-          enqueueSnackbar("Se ha agregado la transaccion exitososamente!", {
-            variant: "success",
+    let error = validate_empty(conditions, covid, transaction);
+    if (error === "true") {
+      if (!refSignature.isEmpty()) {
+        api_process
+          .post("crearConsentimiento", {
+            signature: signature_image,
+            documento_usuario: data.documento_usuario,
+            condiciones: conditions,
+            covid: covid,
+          })
+          .then((res) => {
+            enqueueSnackbar("Se ha agregado la transaccion exitososamente!", {
+              variant: "success",
+            });
+            setRedirect(true);
+            setSubmitting(false);
+          })
+          .catch(function (error) {
+            setSubmitting(false);
+            enqueueSnackbar(give_error_message(error.response), {
+              variant: "error",
+            });
           });
-          setRedirect(true);
-          setSubmitting(false);
-        })
-        .catch(function (error) {
-          setSubmitting(false);
-          enqueueSnackbar(give_error_message(error.response), {
-            variant: "error",
-          });
-        });
+      } else {
+        setSubmitting(false);
+        enqueueSnackbar(
+          "El formato de firma está vacío, por favor coloque su firma",
+          { variant: "error" }
+        );
+      }
     } else {
       setSubmitting(false);
-      enqueueSnackbar(
-        "El formato de firma está vacío, por favor coloque su firma",
-        { variant: "error" }
-      );
+      enqueueSnackbar(error, {
+        variant: "error",
+      });
     }
   };
 
@@ -92,39 +159,47 @@ export default function ConsentForm(props) {
         <Container className="form-paper" elevation={3} component={Card} fixed>
           <CardHeader title="Consentimiento" />
           <CardContent>
-            {/*//TODO: Añadir diferentes formas de mostrar el consentimiento*/}
-            <Grid container item spacing={4}>
-              <Typography variant="h6">
-                Yo,
-                {tutor !== undefined
-                  ? ` ${tutor.nombres_tutor} ${tutor.apellidos_tutor} identificado con el documento ${tutor.documento_tutor} tutor de ${data.nombres_usuario} ${data.apellidos_usuario}, identificado por el documento ${data.documento_usuario}`
-                  : data !== undefined
-                  ? ` ${data.nombres_usuario} ${data.apellidos_usuario} identificado con el documento ${data.documento_usuario}`
+            <ConsentContent
+              conditions={conditions}
+              setConditions={setConditions}
+              tutor={tutor}
+              data={data}
+              covid={covid}
+              setCovid={setCovid}
+              transaction={transaction}
+            />
+          </CardContent>
+          <Grid container item justify="flex-end">
+            <Grid item>
+              {/*<div id="imageBox" className={classes.signature}></div>*/}
+              <SignatureCanvas
+                penColor="black"
+                ref={(ref) => {
+                  refSignature = ref;
+                }}
+                canvasProps={{
+                  width: 500,
+                  height: 200,
+                  className: classes.signature,
+                }}
+              />
+              <Typography variant="body2">
+                {data !== undefined
+                  ? tutor !== undefined
+                    ? `Nombre: ${tutor.nombres_tutor} ${tutor.apellidos_tutor}`
+                    : `Nombre: ${data.nombres_usuario} ${data.apellidos_usuario}`
                   : ""}
               </Typography>
-              <Typography variant="body1">{text}</Typography>
-              <Typography variant="body1">{text1}</Typography>
-              <Typography variant="body1">{text2}</Typography>
-              <Typography variant="body1">{text3}</Typography>
-              {/*//TODO: Añadir datos del usuario que firmara*/}
-              <Grid container item justify="flex-end">
-                <Grid item>
-                  {/*<div id="imageBox" className={classes.signature}></div>*/}
-                  <SignatureCanvas
-                    penColor="black"
-                    ref={(ref) => {
-                      refSignature = ref;
-                    }}
-                    canvasProps={{
-                      width: 500,
-                      height: 200,
-                      className: classes.signature,
-                    }}
-                  />
-                </Grid>
-              </Grid>
+
+              <Typography variant="body2">
+                {data !== undefined
+                  ? tutor !== undefined
+                    ? `Documento: ${tutor.documento_tutor}`
+                    : `Documento: ${data.documento_usuario}`
+                  : ""}
+              </Typography>
             </Grid>
-          </CardContent>
+          </Grid>
           <CardActions disableSpacing>
             <Grid container justify="flex-end" item spacing={1}>
               <Grid item>
