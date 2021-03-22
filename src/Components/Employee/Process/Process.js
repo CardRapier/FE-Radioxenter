@@ -31,10 +31,13 @@ export default function Process(props) {
   const [loaded, setLoaded] = React.useState(false);
   const [doctorEntities, setDoctorEntities] = React.useState([]);
   React.useEffect(() => {
-    api_doctors_entities.get("/").then((res) => {
-      setDoctorEntities(res.data.respuesta);
-      setLoaded(true);
-    });
+    api_doctors_entities
+      .get("/")
+      .then((res) => {
+        setDoctorEntities(res.data.respuesta);
+        setLoaded(true);
+      })
+      .catch((error) => setLoaded(true));
   }, []);
   return (
     <React.Fragment>
