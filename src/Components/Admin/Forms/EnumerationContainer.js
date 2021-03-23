@@ -20,10 +20,15 @@ import { useSnackbar } from "notistack";
 export default function EnumerationContainer() {
   const [numeration, setNumeration] = React.useState([]);
   const { enqueueSnackbar } = useSnackbar();
+  const [loading, setloading] = React.useState(true);
 
   React.useEffect(() => {
-    api_numerations.get("/").then((res) => setNumeration(res.data.respuesta));
+    api_numerations.get("/").then((res) => {
+      setNumeration(res.data.respuesta);
+      setloading(false);
+    });
   }, []);
+
   return (
     <Formik
       enableReinitialize
@@ -76,7 +81,6 @@ export default function EnumerationContainer() {
               variant: "error",
             });
           });
-        setSubmitting(false);
       }}
     >
       {({ values, isSubmitting, resetForm }) => (
@@ -129,6 +133,7 @@ export default function EnumerationContainer() {
             </Container>
           </Grid>
           <BackDropLoading isSubmitting={isSubmitting} />
+          <BackDropLoading isSubmitting={loading} />
         </Form>
       )}
     </Formik>
