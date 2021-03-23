@@ -70,7 +70,6 @@ export default function AgreementsForm(props) {
       setData(props.location.data);
     }
   }, [props.location]);
-  console.log(entities);
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Formik

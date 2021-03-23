@@ -45,6 +45,7 @@ export default function EmployeeForm(props) {
       setData(props.location.data);
     }
   }, [props.location]);
+  console.log(data);
   return (
     <Formik
       enableReinitialize
@@ -52,19 +53,7 @@ export default function EmployeeForm(props) {
       initialValues={
         data === undefined
           ? employee_initial_values
-          : {
-              nombres_empleado: data.nombres_empleado,
-              apellidos_empleado: data.apellidos_empleado,
-              cod_tipo_documento: data.cod_tipo_documento,
-              documento_empleado: data.documento_empleado,
-              direccion_empleado: data.direccion_empleado,
-              correo_empleado: data.correo_empleado,
-              fnacimiento_empleado: data.fnacimiento_empleado,
-              telefono_empleado: data.telefono_empleado,
-              usuario_empleado: data.usuario_empleado,
-              cod_tipo_empleado: data.cod_tipo_documento,
-              contrasenia_empleado: "",
-            }
+          : { ...data, contrasenia_empleado: "" }
       }
       onSubmit={(values, { setSubmitting, resetForm }) => {
         values.documento_empleado = `${values.documento_empleado}`;
@@ -319,6 +308,7 @@ export default function EmployeeForm(props) {
             </Container>
           </Grid>
           <BackDropLoading isSubmitting={isSubmitting} />
+          <pre>{JSON.stringify(values, null, 2)}</pre>
         </Form>
       )}
     </Formik>

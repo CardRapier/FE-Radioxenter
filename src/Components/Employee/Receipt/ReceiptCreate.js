@@ -519,7 +519,6 @@ export default function ReceiptCreate(props) {
                     </Grid>
                   </Grid>
                 </Grid>
-                <pre>{JSON.stringify(values, null, 2)}</pre>
               </CardContent>
               <CardActions disableSpacing>
                 <Grid

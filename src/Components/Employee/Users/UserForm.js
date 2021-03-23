@@ -478,7 +478,7 @@ export default function UserForm(props) {
                 </CardActions>
               </Container>
             </Grid>
-            <pre>{JSON.stringify(values, null, 2)}</pre>
+
             <BackDropLoading isSubmitting={isSubmitting} />
             {renderRedirect(values)}
           </Form>
