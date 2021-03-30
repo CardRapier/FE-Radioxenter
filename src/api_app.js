@@ -127,3 +127,13 @@ export const api_satisfaction = axios.create({
   baseURL: process.env.REACT_APP_API_ROUTE + "/api/satisfacciones/",
   headers: headers,
 });
+
+export const api_nota_credito = axios.create({
+  baseURL: process.env.REACT_APP_API_ROUTE + "/api/notacredito/",
+  headers: headers,
+});
+
+export const api_consents = axios.create({
+  baseURL: process.env.REACT_APP_API_ROUTE + "/api/consentimientos/",
+  headers: headers,
+});

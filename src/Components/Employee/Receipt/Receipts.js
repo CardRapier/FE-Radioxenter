@@ -28,7 +28,8 @@ export default function Receipts() {
   const [query, setQuery] = React.useState({ query: "" });
   const [receipts, setReceipts] = useState([]);
   const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
+
+  const fetch_receipts = async () => {
     api_receipts
       .get("/")
       .then((res) => {
@@ -38,8 +39,13 @@ export default function Receipts() {
       .catch((error) => {
         setLoaded(true);
       });
+  };
+
+  useEffect(() => {
+    fetch_receipts();
     return () => {};
   }, []);
+
   return (
     <React.Fragment>
       <Grid container direction={"column"}>
@@ -86,7 +92,9 @@ export default function Receipts() {
             <Grid item xs>
               <ReceiptTable
                 receipts={receipts}
+                setLoaded={setLoaded}
                 filter={{ query: query.query }}
+                fetch_receipts={fetch_receipts}
               />
             </Grid>
           </Grid>

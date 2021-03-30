@@ -15,11 +15,13 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import PermContactCalendarIcon from "@material-ui/icons/PermContactCalendar";
 import React from "react";
+import SubjectIcon from "@material-ui/icons/Subject";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import ViewCompactIcon from "@material-ui/icons/ViewCompact";
 import { useTheme } from "@material-ui/core/styles";
 
 export default function AdminDrawer(props) {
+  const { setState } = props;
   const classes = props.classes;
   const theme = useTheme();
 
@@ -27,9 +29,9 @@ export default function AdminDrawer(props) {
     <div>
       <Drawer
         className={classes.drawer}
-        variant="persistent"
         anchor="left"
         open={props.state}
+        onClose={() => setState(false)}
       >
         <div className={classes.drawerHeader}>
           <IconButton onClick={() => props.setState(false)}>
@@ -122,6 +124,18 @@ export default function AdminDrawer(props) {
               <FormatListNumberedIcon />
             </ListItemIcon>
             <ListItemText primary={"Enumeración"} />
+          </ListItem>
+
+          <ListItem
+            button
+            component={Link}
+            key={"Consents"}
+            to="/Administrador/Consentimientos"
+          >
+            <ListItemIcon>
+              <SubjectIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Consentimientos"} />
           </ListItem>
 
           <ListItem button component={Link} key={"Empleado"} to="/Empleado">

@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import React from "react";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
+import UserConsentModal from "./UserConsentModal";
 import UserData from "./UserData";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -44,7 +45,9 @@ export default function UserRow(props) {
     row.cod_departamento = city_department.cod_departamento;
   }
   const [open, setOpen] = React.useState(false);
+  const [modal, setModal] = React.useState(false);
   const classes = useRowStyles();
+
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
@@ -84,42 +87,59 @@ export default function UserRow(props) {
                 justify="flex-end"
                 alignItems="center"
                 className={classes.tableRow}
-                spacing={4}
+                spacing={1}
               >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.button}
-                  component={Link}
-                  to={{
-                    pathname: "/Empleado/EditarUsuario",
-                    data: row,
-                    fetched_data: fetched_data,
-                    receipt: false,
-                  }}
-                  size="small"
-                >
-                  Editar
-                </Button>
-                <Button
-                  component={Link}
-                  to={{
-                    pathname: "/Empleado/EditarUsuario",
-                    data: row,
-                    fetched_data: fetched_data,
-                    receipt: true,
-                  }}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                >
-                  Facturar
-                </Button>
+                <Grid item>
+                  <Button
+                    row={row}
+                    onClick={() => setModal(true)}
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                  >
+                    Consentimientos
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    component={Link}
+                    to={{
+                      pathname: "/Empleado/EditarUsuario",
+                      data: row,
+                      fetched_data: fetched_data,
+                      receipt: false,
+                    }}
+                    size="small"
+                  >
+                    Editar
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    component={Link}
+                    to={{
+                      pathname: "/Empleado/EditarUsuario",
+                      data: row,
+                      fetched_data: fetched_data,
+                      receipt: true,
+                    }}
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                  >
+                    Facturar
+                  </Button>
+                </Grid>
               </Grid>
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
+      {modal && (
+        <UserConsentModal modal={modal} setModal={setModal} row={row} />
+      )}
     </React.Fragment>
   );
 }

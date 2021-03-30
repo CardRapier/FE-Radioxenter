@@ -15,11 +15,11 @@ export default function SatisfactionModal(props) {
         aria-labelledby="dialog-title"
       >
         <DialogTitle id="dialog-title">
-          Formulario de Satisfacción - {data.nombres_usuario}{" "}
+          Formulario de Satisfacción - {data.nombres_usuario}
           {data.apellidos_usuario}
         </DialogTitle>
         <DialogContent>
-          <SatisfactionForm data={data} />
+          <SatisfactionForm data={data} setSurvey={setSurvey} />
         </DialogContent>
       </Dialog>
     </React.Fragment>

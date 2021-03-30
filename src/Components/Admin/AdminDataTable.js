@@ -12,7 +12,7 @@ import {
 
 import AdminRow from "./AdminRow";
 import BackDropLoading from "../BackDropLoading";
-import { Grid } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
 import Table from "@material-ui/core/Table";
@@ -24,7 +24,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow";
-import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { remove_abbreviation } from "../../utils";
 
@@ -74,19 +73,20 @@ export default function AdminDataTable(props) {
         .get("/convenios")
         .then((res) => {
           setRows(res.data.respuesta);
-          setLoaded(true);
-          axios
-            .all([api_transactions.get("/"), api_doctors_entities.get("/")])
-            .then(
-              axios.spread((...responses) => {
-                const transactions = responses[0].data.respuesta;
-                const doctor_entity = responses[1].data.respuesta;
-                setSubData({
-                  transactions: transactions,
-                  doctor_entity: doctor_entity,
-                });
-              })
-            )
+          api_transactions
+            .get("/")
+            .then((res) => setSubData({ transactions: res.data.respuesta }))
+            .catch((error) => setLoaded(true));
+
+          api_doctors_entities
+            .get("/")
+            .then((res) => {
+              setSubData((subdata) => ({
+                ...subdata,
+                doctor_entity: res.data.respuesta,
+              }));
+              setLoaded(true);
+            })
             .catch((error) => setLoaded(true));
         })
         .catch((error) => {
@@ -319,7 +319,7 @@ export default function AdminDataTable(props) {
                 inputProps: { "aria-label": "rows per page" },
                 native: true,
               }}
-              labelRowsPerPage="Filas por pagina"
+              labelRowsPerPage="Filas por página"
               onChangePage={handleChangePage}
               onChangeRowsPerPage={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}

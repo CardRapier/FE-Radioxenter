@@ -1,20 +1,20 @@
 import { Form, Formik } from "formik";
-import { give_error_message, omitPropertyFromJson } from "../../../utils";
+import { give_error_message, omitPropertyFromJson } from "../../utils";
 
-import BackDropLoading from "../../BackDropLoading";
+import BackDropLoading from "../BackDropLoading";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 import Container from "@material-ui/core/Container";
-import EnumerationForm from "./EnumerationForm";
-import FormButtons from "../../FormButtons";
+import EnumerationForm from "./Forms/EnumerationForm";
+import FormButtons from "../FormButtons";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
-import { api_numerations } from "../../../api_app";
+import { api_numerations } from "../../api_app";
 import axios from "axios";
-import { enumeration_initial_values } from "./initial_values_admin";
-import { enumerations_schema } from "./validation_schemas_admin";
+import { enumeration_initial_values } from "./Forms/initial_values_admin";
+import { enumerations_schema } from "./Forms/validation_schemas_admin";
 import { useSnackbar } from "notistack";
 
 export default function EnumerationContainer() {
@@ -23,11 +23,19 @@ export default function EnumerationContainer() {
   const [loading, setloading] = React.useState(true);
 
   React.useEffect(() => {
-    api_numerations.get("/").then((res) => {
-      setNumeration(res.data.respuesta);
-      setloading(false);
-    });
-  }, []);
+    api_numerations
+      .get("/")
+      .then((res) => {
+        setNumeration(res.data.respuesta);
+        setloading(false);
+      })
+      .catch((error) => {
+        setloading(false);
+        enqueueSnackbar("No hay datos", {
+          variant: "error",
+        });
+      });
+  }, [enqueueSnackbar]);
 
   return (
     <Formik

@@ -1,7 +1,9 @@
+import EntitiesDoctorDescription from "./EntitiesDoctorDescription";
 import Grid from "@material-ui/core/Grid";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import React from "react";
+import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -14,7 +16,17 @@ const useStyles = makeStyles((theme) => ({
 //TODO: Mostrar doctores de la entidad
 export default function EntitiesDescription(props) {
   const classes = useStyles();
-  const { row, data } = props;
+  const { row, data, subdata } = props;
+
+  //Returns the doctors from this entity, if its empty below wont show anything
+  const give_doctors_entity = () => {
+    return subdata.doctor_entity.filter(
+      (element) => element.cod_entidad === row.cod_entidad
+    );
+  };
+
+  let doctors = give_doctors_entity();
+
   return (
     <Grid container direction="column" justify="center" alignItems="stretch">
       <Grid item container className={classes.row}>
@@ -121,6 +133,24 @@ export default function EntitiesDescription(props) {
             disabled
             value={row.correo_contacto !== undefined ? row.correo_contacto : ""}
           />
+        </Grid>
+        <Grid item xs={1} />
+      </Grid>
+
+      <Grid item container>
+        <Grid item xs={5} />
+        <Grid item>
+          <Typography variant={"h6"}>Doctores</Typography>
+        </Grid>
+      </Grid>
+
+      <Grid item container className={classes.row}>
+        <Grid item xs={1} />
+
+        <Grid item xs={10}>
+          {doctors.length !== 0 && (
+            <EntitiesDoctorDescription subdata={doctors} />
+          )}
         </Grid>
         <Grid item xs={1} />
       </Grid>

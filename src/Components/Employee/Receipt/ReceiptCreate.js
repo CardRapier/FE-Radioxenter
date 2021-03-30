@@ -30,7 +30,6 @@ import MuiTextField from "@material-ui/core/TextField";
 import React from "react";
 import ReceiptServiceTable from "./ReceiptServiceTable";
 import TextFormField from "../../Form/TextFormField";
-import axios from "axios";
 import { give_error_message } from "../../../utils";
 import { makeStyles } from "@material-ui/core/styles";
 import publicIp from "public-ip";
@@ -203,19 +202,13 @@ export default function ReceiptCreate(props) {
           setPackages(filter_services(res.data.respuesta, "PA-"));
           setAgreements(res.data.respuesta);
 
-          axios
-            .all([
-              api_doctors.get("/"),
-              api_entities.get("/convenios"),
-              api_type_consent.get("/"),
-            ])
-            .then(
-              axios.spread((...res) => {
-                setDoctors(res[0].data.respuesta);
-                setEntitiesAgreements(res[1].data.respuesta);
-                setTypeConsent(res[2].data.respuesta);
-              })
-            );
+          api_doctors.get("/").then((res) => setDoctors(res.data.respuesta));
+          api_entities
+            .get("/convenios")
+            .then((res) => setEntitiesAgreements(res.data.respuesta));
+          api_type_consent
+            .get("/")
+            .then((res) => setTypeConsent(res.data.respuesta));
         })
         .catch((error) => {
           enqueueSnackbar(

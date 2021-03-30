@@ -70,6 +70,7 @@ const validate_empty = (conditions, covid, true_values) => {
 
 export default function ConsentForm(props) {
   let { data, tutor, transaction } = props.location;
+
   const [conditions, setConditions] = useState({
     condicion_intraoral: "",
     condicion_extraoral: "",
@@ -99,11 +100,10 @@ export default function ConsentForm(props) {
     api_type_consent.get("/").then((res) => setTypeConsent(res.data.respuesta));
   });
 
-  if (transaction !== undefined && typeConsent !== undefined) {
+  if (transaction !== undefined && typeConsent.length !== 0) {
     true_values = validated_selected_consents(transaction.consentimiento);
-    transaction = typeConsent.filter(
-      (element, index) =>
-        element.cod_tipo_consentimiento === +true_values[index]
+    transaction = typeConsent.filter((element, index) =>
+      true_values.includes(`${element.cod_tipo_consentimiento}`)
     );
   }
 
@@ -159,15 +159,17 @@ export default function ConsentForm(props) {
         <Container className="form-paper" elevation={3} component={Card} fixed>
           <CardHeader title="Consentimiento" />
           <CardContent>
-            <ConsentContent
-              conditions={conditions}
-              setConditions={setConditions}
-              tutor={tutor}
-              data={data}
-              covid={covid}
-              setCovid={setCovid}
-              transaction={transaction}
-            />
+            {typeConsent.length !== 0 && (
+              <ConsentContent
+                conditions={conditions}
+                setConditions={setConditions}
+                tutor={tutor}
+                data={data}
+                covid={covid}
+                setCovid={setCovid}
+                transaction={transaction}
+              />
+            )}
           </CardContent>
           <Grid container item justify="flex-end">
             <Grid item>

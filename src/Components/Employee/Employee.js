@@ -1,6 +1,5 @@
 import { Redirect, Route } from "react-router-dom";
 
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AppBar from "@material-ui/core/AppBar";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import BackDropLoading from "../BackDropLoading";
@@ -157,9 +156,7 @@ export default function Employee() {
               >
                 <AssignmentIcon />
               </Button>
-              <Button color="inherit">
-                <AccountCircleIcon />
-              </Button>
+
               <Button
                 color="inherit"
                 onClick={() => {

@@ -1,6 +1,5 @@
 import { Redirect, Route } from "react-router-dom";
 
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AdminDrawer from "./AdminDrawer";
 import AdminShow from "./AdminShow";
 import AgreementForm from "./Forms/AgreementForm";
@@ -11,7 +10,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import DoctorForm from "./Forms/DoctorForm";
 import EmployeeForm from "./Forms/EmployeeForm";
 import EntityForm from "./Forms/EntityForm";
-import EnumerationContainer from "./Forms/EnumerationContainer";
+import EnumerationContainer from "../Admin/EnumerationContainer";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
@@ -21,6 +20,7 @@ import React from "react";
 import ReceiptEntityForm from "./Forms/ReceiptEntityForm";
 import ServiceForm from "./Forms/ServiceForm";
 import Toolbar from "@material-ui/core/Toolbar";
+import TypeConsentForm from "./Forms/TypeConsentForm";
 import Typography from "@material-ui/core/Typography";
 import auth from "../Auth/auth";
 import clsx from "clsx";
@@ -110,9 +110,6 @@ export default function Admin() {
                 className={classes.title}
               ></Typography>
 
-              <Button color="inherit">
-                <AccountCircleIcon />
-              </Button>
               <Button
                 color="inherit"
                 onClick={() => {
@@ -261,6 +258,12 @@ export default function Admin() {
               exact
               path="/Administrador/Enumeracion"
               component={EnumerationContainer}
+            />
+
+            <Route
+              exact
+              path="/Administrador/Consentimientos"
+              component={TypeConsentForm}
             />
           </Grid>
           <Grid item xs={false} sm={1} md={3}></Grid>

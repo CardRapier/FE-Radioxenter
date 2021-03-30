@@ -16,7 +16,9 @@ import { give_error_message } from "../../../utils";
 import { satisfaction_initial_values } from "../Forms/initial_values_employee";
 import { useSnackbar } from "notistack";
 
-export default function SatisfactionForm() {
+export default function SatisfactionForm(props) {
+  const { data, setSurvey } = props;
+
   const { enqueueSnackbar } = useSnackbar();
   return (
     <React.Fragment>
@@ -26,10 +28,11 @@ export default function SatisfactionForm() {
         onSubmit={(values, { setSubmitting }) => {
           setSubmitting(true);
           api_satisfaction
-            .post("/", values)
+            .post("/", { ...values, documento_usuario: data.documento_usuario })
             .then((res) => {
               setSubmitting(false);
-              enqueueSnackbar("Se ha creado exitosamente!", {
+              setSurvey(false);
+              enqueueSnackbar("Se ha enviado el formulario exitosamente!", {
                 variant: "success",
               });
             })

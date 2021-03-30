@@ -39,6 +39,7 @@ export default function Process(props) {
       })
       .catch((error) => setLoaded(true));
   }, []);
+
   return (
     <React.Fragment>
       <Grid container direction={"column"}>

@@ -59,6 +59,15 @@ export default function ReceiptEntityForm(props) {
         />
         <CardContent>
           <List>
+            {transactionsSelected.length === 0 ? (
+              <Grid container justify="center" alignItems="center">
+                <Typography variant="h6">
+                  No hay transaccion a facturar
+                </Typography>
+              </Grid>
+            ) : (
+              ""
+            )}
             {transactionsSelected.map((value, index) => (
               <React.Fragment key={`shipment-list-item-${index}`}>
                 <ListItem

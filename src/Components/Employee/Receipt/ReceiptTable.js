@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
 import ReceiptRow from "./ReceiptRow";
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ReceiptTable(props) {
-  const { receipts, filter } = props;
+  const { receipts, filter, fetch_receipts, setLoaded } = props;
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -55,9 +55,7 @@ export default function ReceiptTable(props) {
           {receipts.length === 0 ? (
             <TableRow>
               <TableCell key={"single-row"} colSpan={6}>
-                <Grid container justify="center" alignItems="center">
-                  No hay datos para mostrar
-                </Grid>
+                <Box textAlign="center">No hay datos para mostrar</Box>
               </TableCell>
             </TableRow>
           ) : (
@@ -71,7 +69,14 @@ export default function ReceiptTable(props) {
                   )
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : receipts
-            ).map((row, index) => <ReceiptRow key={`${index}-row`} row={row} />)
+            ).map((row, index) => (
+              <ReceiptRow
+                setLoaded={setLoaded}
+                key={`${index}-row`}
+                row={row}
+                fetch_receipts={fetch_receipts}
+              />
+            ))
           )}
 
           {emptyRows > 0 && emptyRows !== 5 && (

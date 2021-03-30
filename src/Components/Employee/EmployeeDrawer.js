@@ -23,9 +23,9 @@ export default function EmployeeDrawer(props) {
     <div>
       <Drawer
         className={classes.drawer}
-        variant="persistent"
         anchor="left"
         open={props.state}
+        onClose={() => props.setState(false)}
       >
         <div className={classes.drawerHeader}>
           <IconButton onClick={() => props.setState(false)}>

@@ -78,9 +78,10 @@ export default function AdminRow(props) {
     ]);
   }
 
-  if (subdata !== undefined) {
+  if (subdata !== undefined && subdata.hasOwnProperty("transactions")) {
     validated = true;
   }
+
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
