@@ -146,11 +146,15 @@ export default function ConsentIntraOral(props) {
         <Typography variant="body2" style={{ fontWeight: 600 }}>
           YO
           {tutor !== undefined
-            ? ` ${tutor.nombres_tutor.toUpperCase()} ${tutor.apellidos_tutor.toUpperCase()} CON DOCUMENTO DE IDENTIDAD NUMERO ${tutor.documento_tutor.toUpperCase()} 
+            ? ` ${tutor.nombres_tutor.toUpperCase()} ${tutor.apellidos_tutor.toUpperCase()} CON DOCUMENTO DE IDENTIDAD NUMERO ${
+                tutor.documento_tutor
+              } 
             EN CALIDAD DE ${tutor.parentesco_tutor.toUpperCase()} DEL MENOR ${data.nombres_usuario.toUpperCase()} ${data.apellidos_usuario.toUpperCase()} DECIDO LIBRE Y VOLUNTARIAMENTE ACEPTAR EL PROCEDIMIENTO SUGERIDO Y
             ASUMO LA RESPONSABILIDAD Y LAS CONSECUENCIAS QUE ELLO ACARREE`
             : data !== undefined
-            ? ` ${data.nombres_usuario.toUpperCase()} ${data.apellidos_usuario.toUpperCase()} CON DOCUMENTO DE IDENTIDAD NUMERO ${data.documento_usuario.toUpperCase()}
+            ? ` ${data.nombres_usuario.toUpperCase()} ${data.apellidos_usuario.toUpperCase()} CON DOCUMENTO DE IDENTIDAD NUMERO ${
+                data.documento_usuario
+              }
             DECIDO LIBRE Y VOLUNTARIAMENTE ACEPTAR EL PROCEDIMIENTO SUGERIDO Y
             ASUMO LA RESPONSABILIDAD Y LAS CONSECUENCIAS QUE ELLO ACARREE.`
             : ""}
