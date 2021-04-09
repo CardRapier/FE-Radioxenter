@@ -1,18 +1,18 @@
 import * as yup from "yup";
 
 export const entity_schema = yup.object({
-  razon_social_entidad: yup.string().required("Campo requerido"),
-  nombre_comercial_entidad: yup.string().required("Campo requerido"),
-  nit_entidad: yup.string().required("Campo requerido"),
-  direccion_entidad: yup.string().required("Campo requerido"),
-  telefono_entidad: yup.string().required("Campo requerido"),
-  nombre_representante: yup.string().required("Campo requerido"),
+  razon_social_entidad: yup.string().trim().required("Campo requerido"),
+  nombre_comercial_entidad: yup.string().trim().required("Campo requerido"),
+  nit_entidad: yup.string().trim().required("Campo requerido"),
+  direccion_entidad: yup.string().trim().required("Campo requerido"),
+  telefono_entidad: yup.string().trim().required("Campo requerido"),
+  nombre_representante: yup.string().trim().required("Campo requerido"),
   cedula_representante: yup
     .number()
     .integer("Debe ser un numero entero")
     .required("Campo requerido")
     .positive("Debe ser positivo"),
-  telefono_representante: yup.string().required("Campo requerido"),
+  telefono_representante: yup.string().trim().required("Campo requerido"),
   correo_representante: yup
     .string()
     .email("Debe ser un correo")
@@ -30,8 +30,8 @@ export const entity_schema = yup.object({
 });
 
 export const service_schema = yup.object({
-  nombre_servicio: yup.string().required("Campo requerido"),
-  descripcion_servicio: yup.string().required("Campo requerido"),
+  nombre_servicio: yup.string().trim().required("Campo requerido"),
+  descripcion_servicio: yup.string().trim().required("Campo requerido"),
   precio_servicio: yup
     .number()
     .required("Campo requerido")
@@ -48,7 +48,7 @@ export const service_schema = yup.object({
 });
 
 export const package_schema = yup.object({
-  nombre_paquete: yup.string().required("Campo requerido"),
+  nombre_paquete: yup.string().trim().required("Campo requerido"),
   precio_paquete: yup
     .number()
     .required("Campo requerido")
@@ -106,10 +106,10 @@ export const agreement_schema = yup.object({
 });
 
 export const doctor_schema = yup.object({
-  nombres_doctor: yup.string().required("Campo requerido"),
-  apellidos_doctor: yup.string().required("Campo requerido"),
-  direccion_doctor: yup.string().required("Campo requerido"),
-  telefono_doctor: yup.string().required("Campo requerido"),
+  nombres_doctor: yup.string().trim().required("Campo requerido"),
+  apellidos_doctor: yup.string().trim().required("Campo requerido"),
+  direccion_doctor: yup.string().trim().required("Campo requerido"),
+  telefono_doctor: yup.string().trim().required("Campo requerido"),
   documento_doctor: yup
     .number()
     .integer("Debe ser un numero entero")
@@ -122,21 +122,21 @@ export const doctor_schema = yup.object({
 });
 
 export const employee_schema = yup.object({
-  nombres_empleado: yup.string().required("Campo requerido"),
-  apellidos_empleado: yup.string().required("Campo requerido"),
+  nombres_empleado: yup.string().trim().required("Campo requerido"),
+  apellidos_empleado: yup.string().trim().required("Campo requerido"),
   documento_empleado: yup
     .number()
     .integer("Debe ser un numero entero")
     .required("Campo requerido")
     .positive("Debe ser positivo"),
-  direccion_empleado: yup.string().required("Campo requerido"),
+  direccion_empleado: yup.string().trim().required("Campo requerido"),
   correo_empleado: yup
     .string()
     .email("Debe ser un correo")
     .required("El correo es requerido"),
   fnacimiento_empleado: yup.date(),
-  telefono_empleado: yup.string().required("Campo requerido"),
-  usuario_empleado: yup.string().required("Campo requerido"),
+  telefono_empleado: yup.string().trim().required("Campo requerido"),
+  usuario_empleado: yup.string().trim().required("Campo requerido"),
 });
 
 const enumeration_schema = yup.object({

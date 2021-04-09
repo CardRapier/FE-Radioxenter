@@ -46,7 +46,10 @@ export default function AdminRow(props) {
   React.useEffect(() => {
     if (data.title === "Entidades") {
       api_period_payments.get("/").then((res) => {
-        setFetchData({ periods: res.data.respuesta });
+        setFetchData((fetchData) => ({
+          ...fetchData,
+          periods: res.data.respuesta,
+        }));
         api_type_receipt.get("/").then((res) => {
           setFetchData((fetchData) => ({
             ...fetchData,
@@ -60,7 +63,10 @@ export default function AdminRow(props) {
       });
     } else if (data.title === "Doctores") {
       api_type_shipment.get("/").then((res) => {
-        setFetchData({ type_shipments: res.data.respuesta });
+        setFetchData((fetchData) => ({
+          ...fetchData,
+          type_shipments: res.data.respuesta,
+        }));
         api_type_document.get("/").then((res) => {
           setFetchData((fetchData) => ({
             ...fetchData,

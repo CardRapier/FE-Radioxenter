@@ -1,6 +1,5 @@
 import * as yup from "yup";
 
-// TODO: Add Validations
 export const user_schema = yup.object({
   documento_usuario: yup
     .number()

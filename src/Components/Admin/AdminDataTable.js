@@ -70,28 +70,34 @@ export default function AdminDataTable(props) {
         });
     } else if (data.title === "Entidades") {
       api_entities
-        .get("/convenios")
+        .get("/")
         .then((res) => {
           setRows(res.data.respuesta);
-          api_transactions
-            .get("/")
-            .then((res) => setSubData({ transactions: res.data.respuesta }))
-            .catch((error) => setLoaded(true));
-
-          api_doctors_entities
-            .get("/")
-            .then((res) => {
-              setSubData((subdata) => ({
-                ...subdata,
-                doctor_entity: res.data.respuesta,
-              }));
-              setLoaded(true);
-            })
-            .catch((error) => setLoaded(true));
         })
         .catch((error) => {
           setLoaded(true);
         });
+
+      api_transactions
+        .get("/")
+        .then((res) =>
+          setSubData((subdata) => ({
+            ...subdata,
+            transactions: res.data.respuesta,
+          }))
+        )
+        .catch((error) => setLoaded(true));
+
+      api_doctors_entities
+        .get("/")
+        .then((res) => {
+          setSubData((subdata) => ({
+            ...subdata,
+            doctor_entity: res.data.respuesta,
+          }));
+          setLoaded(true);
+        })
+        .catch((error) => setLoaded(true));
     } else if (data.title === "Convenios") {
       api_entities
         .get("/convenios")
@@ -115,7 +121,10 @@ export default function AdminDataTable(props) {
         });
     } else if (data.title === "Empleados") {
       api_type_employee.get("/").then((res) => {
-        setSubData({ type_employees: res.data.respuesta });
+        setSubData((subdata) => ({
+          ...subdata,
+          type_employees: res.data.respuesta,
+        }));
         api_type_document.get("/").then((res) => {
           setSubData((subdata) => ({
             ...subdata,

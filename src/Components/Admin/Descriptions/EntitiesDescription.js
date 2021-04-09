@@ -13,19 +13,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-//TODO: Mostrar doctores de la entidad
 export default function EntitiesDescription(props) {
   const classes = useStyles();
   const { row, data, subdata } = props;
 
-  //Returns the doctors from this entity, if its empty below wont show anything
-  const give_doctors_entity = () => {
-    return subdata.doctor_entity.filter(
-      (element) => element.cod_entidad === row.cod_entidad
-    );
-  };
+  const [doctors, setDoctors] = React.useState([]);
 
-  let doctors = give_doctors_entity();
+  React.useEffect(() => {
+    let filtered_data = [];
+    if (subdata.doctor_entity !== undefined) {
+      filtered_data = subdata.doctor_entity.filter(
+        (element) => element.cod_entidad === row.cod_entidad
+      );
+    }
+    setDoctors(filtered_data);
+  }, [subdata, row.cod_entidad]);
 
   return (
     <Grid container direction="column" justify="center" alignItems="stretch">
@@ -137,23 +139,25 @@ export default function EntitiesDescription(props) {
         <Grid item xs={1} />
       </Grid>
 
-      <Grid item container>
-        <Grid item xs={5} />
-        <Grid item>
-          <Typography variant={"h6"}>Doctores</Typography>
-        </Grid>
-      </Grid>
+      {doctors.length !== 0 && (
+        <div>
+          <Grid item container>
+            <Grid item xs={5} />
+            <Grid item>
+              <Typography variant={"h6"}>Doctores</Typography>
+            </Grid>
+          </Grid>
 
-      <Grid item container className={classes.row}>
-        <Grid item xs={1} />
+          <Grid item container className={classes.row}>
+            <Grid item xs={1} />
 
-        <Grid item xs={10}>
-          {doctors.length !== 0 && (
-            <EntitiesDoctorDescription subdata={doctors} />
-          )}
-        </Grid>
-        <Grid item xs={1} />
-      </Grid>
+            <Grid item xs={10}>
+              <EntitiesDoctorDescription subdata={doctors} />
+            </Grid>
+            <Grid item xs={1} />
+          </Grid>
+        </div>
+      )}
     </Grid>
   );
 }
