@@ -67,7 +67,7 @@ export default function UserRow(props) {
           {row.nombres_usuario + " " + row.apellidos_usuario}
         </TableCell>
         <TableCell align="center">{row.correo_usuario}</TableCell>
-        <TableCell align="center">{row.telefono_usuario}</TableCell>
+        <TableCell align="center">{row.celular_usuario}</TableCell>
         <TableCell align="center">{row.genero_usuario}</TableCell>
       </TableRow>
       <TableRow>
