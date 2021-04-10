@@ -160,15 +160,38 @@ export default function ConsentForm(props) {
           <CardHeader title="Consentimiento" />
           <CardContent>
             {typeConsent.length !== 0 && (
-              <ConsentContent
-                conditions={conditions}
-                setConditions={setConditions}
-                tutor={tutor}
-                data={data}
-                covid={covid}
-                setCovid={setCovid}
-                transaction={transaction}
-              />
+              <React.Fragment>
+                <ConsentContent
+                  conditions={conditions}
+                  setConditions={setConditions}
+                  tutor={tutor}
+                  data={data}
+                  covid={covid}
+                  setCovid={setCovid}
+                  transaction={transaction}
+                />
+                <Typography style={{ fontWeight: 600 }} variant="body2">
+                  Respetado(a) Paciente, por favor lea el texto a continuación
+                  antes de proceder al servicio: RadioXenter Ltda. solicitará el
+                  suministro de algunos de sus datos personales con el exclusivo
+                  fin de atender su solicitud de prestación de servicios de
+                  Radiología Oral, facturarlos y generar los indicadores de
+                  calidad correspondientes. Dichos datos serán tratados en forma
+                  estrictamente confidencial y serán procesados, utilizados,
+                  protegidos y almacenados de conformidad con las normas legales
+                  vigentes sobre protección de datos personales.
+                </Typography>
+                <br />
+                <Typography
+                  style={{ fontWeight: 600 }}
+                  variant="body2"
+                  color="secondary"
+                >
+                  Por medio de la siguiente firma, acepta utilizar esta para
+                  diligencias los consentimientos necesarios para prestar él
+                  servicio:
+                </Typography>
+              </React.Fragment>
             )}
           </CardContent>
           <Grid container item justify="flex-end">

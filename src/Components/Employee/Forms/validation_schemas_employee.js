@@ -1,6 +1,8 @@
 import * as yup from "yup";
 
 export const user_schema = yup.object({
+  nombres_usuario: yup.string().trim().required("Campo requerido"),
+  apellidos_usuario: yup.string().trim().required("Campo requerido"),
   documento_usuario: yup
     .number()
     .integer("Debe ser un numero entero")
@@ -14,6 +16,8 @@ export const user_schema = yup.object({
 });
 
 export const tutor_schema = yup.object({
+  nombres_tutor: yup.string().trim().required("Campo requerido"),
+  apellidos_tutor: yup.string().trim().required("Campo requerido"),
   documento_tutor: yup
     .number()
     .integer("Debe ser un numero entero")

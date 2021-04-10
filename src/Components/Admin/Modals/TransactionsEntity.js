@@ -2,6 +2,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Draggable from "react-draggable";
+import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
 import Table from "@material-ui/core/Table";
@@ -77,16 +78,29 @@ export default function TransactionsEntity(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(rowsPerPage > 0
-              ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : data
-            ).map((row, index) => (
-              <TransactionsRow
-                key={`${index}-row`}
-                row={row}
-                subdata={subdata}
-              />
-            ))}
+            {data.length === 0 ? (
+              <TableRow>
+                <TableCell key={"single-row"} colSpan={6}>
+                  <Grid container justify="center" alignItems="center">
+                    No hay usuarios seleccionados
+                  </Grid>
+                </TableCell>
+              </TableRow>
+            ) : (
+              (rowsPerPage > 0
+                ? data.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : data
+              ).map((row, index) => (
+                <TransactionsRow
+                  key={`${index}-row`}
+                  row={row}
+                  subdata={subdata}
+                />
+              ))
+            )}
 
             {emptyRows > 0 && emptyRows !== 5 && (
               <TableRow style={{ height: 53 * emptyRows }}>

@@ -15,7 +15,7 @@ export default function ReceiptServiceTable(props) {
   return (
     <React.Fragment>
       <TableContainer component={Paper} elevation={3}>
-        <Table aria-label="table">
+        <Table size="small" aria-label="table">
           <TableHead>
             <TableRow>
               <TableCell key={"Servicio"}>Servicio</TableCell>
