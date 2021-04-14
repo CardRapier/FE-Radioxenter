@@ -338,7 +338,9 @@ export default function ReceiptCreate(props) {
                         required
                         disableClearable
                         component={AutocompleteForm}
-                        options={doctors}
+                        options={doctors.filter(
+                          (e) => e.Entidad_doctors.length !== 0
+                        )}
                         getOptionLabel={(option) =>
                           `${option.nombres_doctor} ${option.apellidos_doctor}`
                         }
@@ -543,7 +545,7 @@ export default function ReceiptCreate(props) {
                 </Grid>
               </CardActions>
             </Container>
-
+            <pre>{JSON.stringify(values, null, 2)}</pre>
             <BackDropLoading isSubmitting={isSubmitting} />
             {redirect === true ? (
               <Redirect
