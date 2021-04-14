@@ -364,6 +364,7 @@ export default function ReceiptCreate(props) {
                         name="entity"
                         label={"Entidad"}
                         required
+                        disable={values.doctor === null}
                         component={AutocompleteForm}
                         disableClearable
                         options={
