@@ -137,8 +137,7 @@ export default function ReceiptCreate(props) {
       entitiesAgreements.find(
         (entity) => entity.cod_entidad === entity_doctor.cod_entidad
       )
-    );
-
+    ).filter((e) => e !== undefined);
     return filtered_entities;
   };
 
@@ -187,6 +186,27 @@ export default function ReceiptCreate(props) {
     }
 
     return false;
+  };
+
+  //its for set the options in the doctor field
+  const set_options_doctors = (doctorsList) => {
+    let doctors_entity = [];
+    let doctors_agreements = [];
+    if (doctors.length !== 0) {
+      doctors_entity = doctorsList.filter(
+        (e) => e.Entidad_doctors.length !== 0
+      );
+      doctors_agreements = doctors_entity.filter(
+        (e) =>
+          e.Entidad_doctors.filter(
+            (element) =>
+              entitiesAgreements.find(
+                (entity) => entity.cod_entidad === element.cod_entidad
+              ) !== undefined
+          ).length !== 0
+      );
+    }
+    return doctors_agreements;
   };
 
   React.useEffect(
@@ -338,9 +358,7 @@ export default function ReceiptCreate(props) {
                         required
                         disableClearable
                         component={AutocompleteForm}
-                        options={doctors.filter(
-                          (e) => e.Entidad_doctors.length !== 0
-                        )}
+                        options={set_options_doctors(doctors)}
                         getOptionLabel={(option) =>
                           `${option.nombres_doctor} ${option.apellidos_doctor}`
                         }
@@ -545,7 +563,6 @@ export default function ReceiptCreate(props) {
                 </Grid>
               </CardActions>
             </Container>
-            <pre>{JSON.stringify(values, null, 2)}</pre>
             <BackDropLoading isSubmitting={isSubmitting} />
             {redirect === true ? (
               <Redirect
