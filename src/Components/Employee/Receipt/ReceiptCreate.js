@@ -1,3 +1,4 @@
+import { CheckboxWithLabel, Switch } from "formik-material-ui";
 import { Field, Form, Formik } from "formik";
 import { Link, Redirect } from "react-router-dom";
 import {
@@ -16,12 +17,13 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
-import { CheckboxWithLabel } from "formik-material-ui";
 import Container from "@material-ui/core/Container";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/Button";
+import { InputLabel } from "@material-ui/core";
 import { KeyboardDatePicker } from "formik-material-ui-pickers";
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -415,10 +417,27 @@ export default function ReceiptCreate(props) {
                   <Grid item container spacing={3}>
                     <Grid
                       container
-                      justify="flex-start"
-                      alignItems="flex-end"
+                      justify="center"
+                      alignItems="center"
                       item
-                      xs={12}
+                      xs={6}
+                    >
+                      <InputLabel htmlFor="test">
+                        ¿Paga el cliente el convenio?
+                      </InputLabel>
+                      <Field
+                        component={Switch}
+                        type="checkbox"
+                        name="paga_cliente"
+                      />
+                    </Grid>
+
+                    <Grid
+                      container
+                      justify="center"
+                      alignItems="center"
+                      item
+                      xs={6}
                     >
                       <FormLabel component="legend">
                         Consentimientos a firmar
@@ -563,6 +582,7 @@ export default function ReceiptCreate(props) {
                 </Grid>
               </CardActions>
             </Container>
+            <pre>{JSON.stringify(values, null, 2)}</pre>
             <BackDropLoading isSubmitting={isSubmitting} />
             {redirect === true ? (
               <Redirect
