@@ -115,6 +115,7 @@ export default function ProcessTable(props) {
                       ).nombre_tipo_pref_entrega
                     : ""
                 }
+                labelRowsPerPage="Filas por página"
                 changeServices={handleChangeServiceStatus}
                 changeShipments={handleChangeShipmentStatus}
                 handleCompleteProcess={handleCompleteProcess}

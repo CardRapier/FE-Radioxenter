@@ -48,7 +48,7 @@ export default function UserDatatable(props) {
             <TableCell align="center">Nombre</TableCell>
             <TableCell align="center">Correo</TableCell>
             <TableCell align="center">Celular</TableCell>
-            <TableCell align="center">Genero</TableCell>
+            <TableCell align="center">Género</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -93,6 +93,7 @@ export default function UserDatatable(props) {
                 inputProps: { "aria-label": "rows per page" },
                 native: true,
               }}
+              labelRowsPerPage="Filas por página"
               onChangePage={handleChangePage}
               onChangeRowsPerPage={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}

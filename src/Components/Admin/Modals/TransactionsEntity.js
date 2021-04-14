@@ -82,7 +82,7 @@ export default function TransactionsEntity(props) {
               <TableRow>
                 <TableCell key={"single-row"} colSpan={6}>
                   <Grid container justify="center" alignItems="center">
-                    No hay usuarios seleccionados
+                    No hay transacciones
                   </Grid>
                 </TableCell>
               </TableRow>
@@ -119,6 +119,7 @@ export default function TransactionsEntity(props) {
                   inputProps: { "aria-label": "Fila por pagina" },
                   native: true,
                 }}
+                labelRowsPerPage="Filas por página"
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActions}

@@ -86,7 +86,7 @@ export default function AgreementForm(props) {
                   <Grid item container>
                     <Field
                       disabled
-                      label="Razon Social"
+                      label="Razón Social"
                       name="nom_entidad"
                       component={TextFormField}
                     />

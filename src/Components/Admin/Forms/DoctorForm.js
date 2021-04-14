@@ -146,7 +146,7 @@ export default function DoctorForm(props) {
                   <Grid item xs={6}>
                     <Field
                       required
-                      label="Telefono"
+                      label="Teléfono"
                       name="telefono_doctor"
                       component={TextFormField}
                     />

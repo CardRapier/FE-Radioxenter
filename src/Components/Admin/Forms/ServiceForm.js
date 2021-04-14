@@ -96,7 +96,7 @@ export default function ServiceForm(props) {
                   <Field
                     required
                     multiline
-                    label="Descripcion del Servicio"
+                    label="Descripción del Servicio"
                     name="descripcion_servicio"
                     component={TextFormField}
                   />

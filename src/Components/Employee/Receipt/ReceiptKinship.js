@@ -61,7 +61,7 @@ export default function ReceiptKinship(props) {
             })
             .then(function (response) {
               setSubmitting(false);
-              enqueueSnackbar("Se ha agregado el tutor exitososamente!", {
+              enqueueSnackbar("Se ha agregado el tutor exitosamente!", {
                 variant: "success",
               });
               setRedirect(true);

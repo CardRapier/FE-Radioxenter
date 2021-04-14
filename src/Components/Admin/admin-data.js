@@ -19,11 +19,11 @@ const data = {
       link: "/Administrador/CrearEntidad",
       filter: { id: "nombre_comercial_entidad", label: "Nombre Comercial" },
       header: [
-        "Razon Social",
+        "Razón Social",
         "Nombre Comercial",
         "NIT",
-        "Direccion",
-        "Telefono",
+        "Dirección",
+        "Teléfono",
       ],
       actions: [
         { name: "Editar", action: "/Administrador/EditarEntidad" },
@@ -57,7 +57,7 @@ const data = {
       title: "Doctores",
       link: "/Administrador/CrearDoctor",
       filter: { id: "nombres_doctor", label: "Nombre" },
-      header: ["Nombre", "Telefono", "Correo"],
+      header: ["Nombre", "Teléfono", "Correo"],
       actions: [{ name: "Editar", action: "/Administrador/EditarDoctor" }],
     },
   },

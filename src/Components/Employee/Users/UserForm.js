@@ -102,7 +102,7 @@ export default function UserForm(props) {
               .post("crearUsuario", { ...send_values, cod_usuario: null })
               .then(function (response) {
                 setSubmitting(false);
-                enqueueSnackbar("Se ha agregado el usuario exitososamente!", {
+                enqueueSnackbar("Se ha agregado el usuario exitosamente!", {
                   variant: "success",
                 });
                 setRedirect({ redirect: true, tutor: values.tutor });
@@ -324,7 +324,7 @@ export default function UserForm(props) {
                         <Grid item container spacing={3}>
                           <Grid item xs={6}>
                             <Field
-                              label="Telefono"
+                              label="Teléfono"
                               name="telefono_usuario"
                               component={TextFormField}
                             />
@@ -350,7 +350,7 @@ export default function UserForm(props) {
 
                           <Grid item xs={6}>
                             <Field
-                              label="Genero"
+                              label="Género"
                               name="genero_usuario"
                               component={TextFormField}
                             />

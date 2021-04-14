@@ -155,7 +155,7 @@ export default function EmployeeForm(props) {
                   <Grid item xs={6}>
                     <Field
                       required
-                      label="Telefono"
+                      label="Teléfono"
                       name="telefono_empleado"
                       component={TextFormField}
                     />

@@ -22,7 +22,7 @@ export default function ProcessConfirm(props) {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title">
-          {"Esta seguro que quiere completar este proceso?"}
+          {"¿Está seguro que quiere completar este proceso?"}
         </DialogTitle>
         <DialogActions>
           <Button onClick={() => setModalState(false)} color="primary">

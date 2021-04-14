@@ -169,7 +169,7 @@ export default function EntityForm(props) {
                   <Grid item xs={6}>
                     <Field
                       required
-                      label="Razon Social"
+                      label="Razón Social"
                       name="razon_social_entidad"
                       component={TextFormField}
                     />
@@ -198,7 +198,7 @@ export default function EntityForm(props) {
                   <Grid item xs={6}>
                     <Field
                       required
-                      label="Direccion"
+                      label="Dirección"
                       name="direccion_entidad"
                       component={TextFormField}
                     />
@@ -215,7 +215,7 @@ export default function EntityForm(props) {
                   <Grid item xs={6}>
                     <Field
                       required
-                      label="Telefono"
+                      label="Teléfono"
                       name="telefono_entidad"
                       component={TextFormField}
                     />
@@ -315,7 +315,7 @@ export default function EntityForm(props) {
                   <Grid item xs={6}>
                     <Field
                       required
-                      label="Telefono representante"
+                      label="Teléfono representante"
                       name="telefono_representante"
                       component={TextFormField}
                     />
@@ -352,7 +352,7 @@ export default function EntityForm(props) {
                 <Grid item container spacing={3}>
                   <Grid item xs={6}>
                     <Field
-                      label="Telefono Contacto"
+                      label="Teléfono Contacto"
                       name="telefono_contacto"
                       component={TextFormField}
                     />

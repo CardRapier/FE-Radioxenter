@@ -43,7 +43,7 @@ export default function ReceiptEntityModal(props) {
         .then((res) => {
           setSubmitting(false);
           setstateAlert(false);
-          enqueueSnackbar("Se ha agregado la transaccion exitososamente!", {
+          enqueueSnackbar("Se ha agregado la transacción exitosamente!", {
             variant: "success",
           });
         })

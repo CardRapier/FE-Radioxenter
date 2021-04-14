@@ -96,6 +96,7 @@ export default function ReceiptTable(props) {
                 inputProps: { "aria-label": "Fila por pagina" },
                 native: true,
               }}
+              labelRowsPerPage="Filas por página"
               onChangePage={handleChangePage}
               onChangeRowsPerPage={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}

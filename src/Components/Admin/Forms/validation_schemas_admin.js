@@ -68,7 +68,7 @@ export const agreements_schema = yup.object({
         fecha_inicial_convenio &&
         yup.min(
           fecha_inicial_convenio,
-          "La fecha final debe ser despues de la inicial"
+          "La fecha final debe ser después de la inicial"
         )
     ),
   cod_servicios: yup.array().of(yup.number()).required("Campo requerido"),
@@ -100,7 +100,7 @@ export const agreement_schema = yup.object({
         fecha_inicial_convenio &&
         yup.min(
           fecha_inicial_convenio,
-          "La fecha final debe ser despues de la inicial"
+          "La fecha final debe ser después de la inicial"
         )
     ),
 });

@@ -23,13 +23,11 @@ import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/Button";
 import { KeyboardDatePicker } from "formik-material-ui-pickers";
-import MenuItem from "@material-ui/core/MenuItem";
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MuiTextField from "@material-ui/core/TextField";
 import React from "react";
 import ReceiptServiceTable from "./ReceiptServiceTable";
-import TextFormField from "../../Form/TextFormField";
 import { give_error_message } from "../../../utils";
 import { makeStyles } from "@material-ui/core/styles";
 import publicIp from "public-ip";
@@ -258,7 +256,7 @@ export default function ReceiptCreate(props) {
                 .then(function (response) {
                   setSubmitting(false);
                   enqueueSnackbar(
-                    "Se ha agregado la transaccion exitososamente!",
+                    "Se ha agregado la transacción exitosamente!",
                     {
                       variant: "success",
                     }
@@ -394,24 +392,12 @@ export default function ReceiptCreate(props) {
                   </Grid>
 
                   <Grid item container spacing={3}>
-                    <Grid item xs={6}>
-                      <Field
-                        required
-                        label="Candidato de Satisfacción?"
-                        name="satisfaccion"
-                        select
-                        component={TextFormField}
-                      >
-                        <MenuItem value={false}>No</MenuItem>
-                        <MenuItem value={true}>Si</MenuItem>
-                      </Field>
-                    </Grid>
                     <Grid
                       container
                       justify="flex-start"
                       alignItems="flex-end"
                       item
-                      xs={6}
+                      xs={12}
                     >
                       <FormLabel component="legend">
                         Consentimientos a firmar

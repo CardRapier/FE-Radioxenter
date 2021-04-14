@@ -18,7 +18,7 @@ export default function UserData(props) {
       <Grid container direction="column">
         <Grid item container className={classes.dataRow}>
           <Grid item xs={4}>
-            <InputLabel htmlFor="component-address">Direccion</InputLabel>
+            <InputLabel htmlFor="component-address">Dirección</InputLabel>
             <Input
               disabled
               id="component-address"
@@ -27,7 +27,7 @@ export default function UserData(props) {
           </Grid>
 
           <Grid item xs={4}>
-            <InputLabel htmlFor="component-ocupation">Ocupacion</InputLabel>
+            <InputLabel htmlFor="component-ocupation">Ocupación</InputLabel>
             <Input
               disabled
               id="component-ocupation"
@@ -48,7 +48,7 @@ export default function UserData(props) {
         </Grid>
         <Grid item container className={classes.dataRow}>
           <Grid item xs={4}>
-            <InputLabel htmlFor="component-telephone">Telefono</InputLabel>
+            <InputLabel htmlFor="component-telephone">Teléfono</InputLabel>
             <Input
               disabled
               id="component-telephone"

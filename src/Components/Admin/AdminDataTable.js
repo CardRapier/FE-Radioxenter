@@ -186,7 +186,7 @@ export default function AdminDataTable(props) {
             <TableRow>
               <TableCell key={"single-row"} colSpan={10}>
                 <Grid container justify="center" alignItems="center">
-                  No hay servicios seleccionados
+                  No hay datos
                 </Grid>
               </TableCell>
             </TableRow>

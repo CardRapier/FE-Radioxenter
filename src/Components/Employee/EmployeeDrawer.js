@@ -78,7 +78,7 @@ export default function EmployeeDrawer(props) {
             <ListItemIcon>
               <SupervisorAccountIcon />
             </ListItemIcon>
-            <ListItemText primary={"Cambiar a modulo Administrador"} />
+            <ListItemText primary={"Cambiar a módulo Administrador"} />
           </ListItem>
         </List>
         <Divider />

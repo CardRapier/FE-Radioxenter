@@ -71,7 +71,7 @@ export default function ReceiptRow(props) {
         </TableCell>
         <TableCell align="center">{row.documento_usuario}</TableCell>
         <TableCell align="center">
-          {moment(row.fecha_factura).format("YYYY-MM-DD HH:mm:ss")}
+          {moment(row.fecha_factura).format("DD-MM-YYYY HH:mm:ss")}
         </TableCell>
         <TableCell align="center">{row.resumen_factura}</TableCell>
         <TableCell align="center">{row.valor_total_factura}</TableCell>
@@ -98,7 +98,7 @@ export default function ReceiptRow(props) {
           |
           {row.Nota_Creditos.length === 0 ? (
             <Button color="primary" onClick={() => create_nota_credito()}>
-              Crear N.Credito
+              Crear N.Crédito
             </Button>
           ) : (
             row.Nota_Creditos.map((element, index) => (
@@ -113,7 +113,7 @@ export default function ReceiptRow(props) {
                   .pop()}`}
                 target="_blank"
               >
-                Ver N.Credito
+                Ver N.Crédito
               </Button>
             ))
           )}

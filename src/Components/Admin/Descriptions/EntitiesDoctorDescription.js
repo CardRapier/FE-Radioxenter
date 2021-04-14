@@ -29,7 +29,7 @@ export default function EntitiesDoctorDescription(props) {
         <TableRow>
           <TableCell align="center">Nombre</TableCell>
           <TableCell align="center">Documento</TableCell>
-          <TableCell align="center">Telefono</TableCell>
+          <TableCell align="center">Teléfono</TableCell>
           <TableCell align="center">Correo</TableCell>
         </TableRow>
       </TableHead>
@@ -65,7 +65,7 @@ export default function EntitiesDoctorDescription(props) {
               inputProps: { "aria-label": "Fila por pagina" },
               native: true,
             }}
-            labelRowsPerPage="Filas por pagina"
+            labelRowsPerPage="Filas por página"
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
             ActionsComponent={TablePaginationActions}

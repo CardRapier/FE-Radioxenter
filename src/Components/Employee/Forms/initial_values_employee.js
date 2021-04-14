@@ -36,7 +36,6 @@ export const receipt_initial_values = {
   fecha_transaccion: moment(),
   cod_entidad_doctor: 0,
   servicios: [],
-  satisfaccion: false,
   consentimiento: {},
 };
 

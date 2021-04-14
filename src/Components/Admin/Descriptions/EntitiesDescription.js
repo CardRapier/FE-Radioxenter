@@ -51,7 +51,7 @@ export default function EntitiesDescription(props) {
         </Grid>
 
         <Grid item xs={5}>
-          <InputLabel>Tipo de facturacion</InputLabel>
+          <InputLabel>Tipo de facturación</InputLabel>
           <Input
             fullWidth
             disabled
@@ -84,7 +84,7 @@ export default function EntitiesDescription(props) {
       <Grid item container className={classes.row}>
         <Grid item xs={1} />
         <Grid item xs={5}>
-          <InputLabel>Telefono Representante</InputLabel>
+          <InputLabel>Teléfono Representante</InputLabel>
           <Input fullWidth disabled value={row.telefono_representante} />
         </Grid>
 
@@ -119,7 +119,7 @@ export default function EntitiesDescription(props) {
       <Grid item container className={classes.row}>
         <Grid item xs={1} />
         <Grid item xs={5}>
-          <InputLabel>Telefono Contacto</InputLabel>
+          <InputLabel>Teléfono Contacto</InputLabel>
           <Input
             fullWidth
             disabled

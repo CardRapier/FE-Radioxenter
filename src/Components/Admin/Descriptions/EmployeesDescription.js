@@ -30,7 +30,7 @@ export default function EmployeesDescription(props) {
       <Grid item container className={classes.row}>
         <Grid item xs={1} />
         <Grid item xs={5}>
-          <InputLabel>Telefono</InputLabel>
+          <InputLabel>Teléfono</InputLabel>
           <Input fullWidth disabled value={row.telefono_empleado} />
         </Grid>
         <Grid item xs={5}>

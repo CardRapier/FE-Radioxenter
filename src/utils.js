@@ -1,9 +1,17 @@
 const give_error_message = (error) => {
-  return error.status === 422
-    ? `Ha ocurrido un error con ${
+  let error_message = ``;
+  if (error.status === 422) {
+    if (error.data.error.split('"').length === 2) {
+      error_message = `Ha ocurrido un error con ${
         error.data.error.split('"')[1]
-      }, intente de nuevo.`
-    : error.data.error;
+      }, intente de nuevo.`;
+    } else {
+      error_message = error.data.error;
+    }
+  } else {
+    error_message = error.data.error;
+  }
+  return error_message;
 };
 
 const remove_abbreviation = (services, abbreviation) => {

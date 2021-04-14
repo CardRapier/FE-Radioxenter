@@ -142,7 +142,7 @@ export default function AdminDrawer(props) {
             <ListItemIcon>
               <SupervisorAccountIcon />
             </ListItemIcon>
-            <ListItemText primary={"Cambiar a Modulo Empleado"} />
+            <ListItemText primary={"Cambiar a módulo Empleado"} />
           </ListItem>
         </List>
         <Divider />

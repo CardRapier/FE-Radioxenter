@@ -2,7 +2,6 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
 import Switch from "@material-ui/core/Switch";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -26,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ConsentCovid(props) {
   const { covid, setCovid, tutor, data } = props;
-
   const classes = useStyles();
   return (
     <Grid
@@ -69,20 +67,20 @@ export default function ConsentCovid(props) {
               a la toma de Radiografías y/o estudios diagnósticos, existe un
               riesgo elevado de contraer el virus por el solo hecho de
               permanecer en el Centro de Radiología. `}
-              <TextField
-                margin="none"
-                value={covid.riesgo_elevado}
+              NO
+              <Switch
+                checked={covid.riesgo_elevado}
                 onChange={(event) =>
                   setCovid({
                     ...covid,
-                    riesgo_elevado: event.target.value,
+                    riesgo_elevado: event.target.checked,
                   })
                 }
-                required
-                label=""
-                className={classes.botMar}
+                size="small"
+                name="riesgo_elevado"
+                color="primary"
               />
-              (Iniciales)
+              SÍ
             </li>
             <li>
               {`He sido informado que las directrices de todas las instituciones
@@ -95,42 +93,40 @@ export default function ConsentCovid(props) {
               agudización de una de estas condiciones, lo anterior es decisión y
               responsabilidad posterior a la previa evaluación por el
               profesional odontólogo remitente. `}
-              <TextField
-                margin="none"
-                value={covid.informado_directrices}
+              NO
+              <Switch
+                checked={covid.informado_directrices}
                 onChange={(event) =>
                   setCovid({
                     ...covid,
-                    informado_directrices: event.target.value,
+                    informado_directrices: event.target.checked,
                   })
                 }
-                required
-                label=""
-                className={classes.botMar}
                 size="small"
+                name="informado_directrices"
+                color="primary"
               />
-              (Iniciales)
+              SÍ
             </li>
 
             <li>
               {`Confirmo que solicito la toma de Radiografías y/o estudios
               diagnósticos por una condición clínica que está enmarcado en los
               criterios anteriormente expuestos. `}
-              <TextField
-                margin="none"
-                value={covid.confirmacion_solicitud}
+              NO
+              <Switch
+                checked={covid.confirmacion_solicitud}
                 onChange={(event) =>
                   setCovid({
                     ...covid,
-                    confirmacion_solicitud: event.target.value,
+                    confirmacion_solicitud: event.target.checked,
                   })
                 }
-                required
-                label=""
-                className={classes.botMar}
                 size="small"
+                name="confirmacion_solicitud"
+                color="primary"
               />
-              (Iniciales)
+              SÍ
             </li>
 
             <li>
@@ -145,21 +141,20 @@ export default function ConsentCovid(props) {
               síntomas de COVID-19 de la siguiente lista: Fiebre (Temperatura mayor o igual a 38°C),
               dificultad respiratoria, tos seca, secreción nasal, dolor de garganta, sensación de cansancio
               o malestar general, diarrea u otras molestias digestivas, perdida del gusto o del olfato. `}
-              <TextField
-                margin="none"
-                value={covid.confirmacion_sintomas}
+              NO
+              <Switch
+                checked={covid.confirmacion_sintomas}
                 onChange={(event) =>
                   setCovid({
                     ...covid,
-                    confirmacion_sintomas: event.target.value,
+                    confirmacion_sintomas: event.target.checked,
                   })
                 }
-                required
-                label=""
-                className={classes.botMar}
                 size="small"
+                name="confirmacion_sintomas"
+                color="primary"
               />
-              (Iniciales)
+              SÍ
             </li>
 
             <li>
@@ -168,22 +163,21 @@ export default function ConsentCovid(props) {
                 confirmación de COVID-19 o con cuadro respiratorio agudo en los últimos 14 días.
                 `
                 : `Declaro que no he estado en contacto con alguna persona con confirmación de COVID-19
-                o con cuadro respiratorio agudo en los últimos 14 días.`}
-              <TextField
-                margin="none"
-                value={covid.declaracion_contacto}
+                o con cuadro respiratorio agudo en los últimos 14 días. `}
+              NO
+              <Switch
+                checked={covid.declaracion_contacto}
                 onChange={(event) =>
                   setCovid({
                     ...covid,
-                    declaracion_contacto: event.target.value,
+                    declaracion_contacto: event.target.checked,
                   })
                 }
-                required
-                label=""
-                className={classes.botMar}
                 size="small"
+                name="declaracion_contacto"
+                color="primary"
               />
-              (Iniciales)
+              SÍ
             </li>
 
             <li>
@@ -200,7 +194,8 @@ export default function ConsentCovid(props) {
                 color="primary"
               />
               {`SÍ   En caso de haber presentado la enfermedad ¿sigue usted en
-              cuarentena? NO`}
+              cuarentena? `}
+              NO
               <Switch
                 checked={covid.cuarentena}
                 onChange={(event) =>
@@ -212,28 +207,27 @@ export default function ConsentCovid(props) {
                 name="cuarentena"
                 color="primary"
               />
-              SÍ (Iniciales)
+              SÍ
             </li>
 
             <li>
               {`Entiendo que organismos internacionales de salud recomiendan el distanciamiento social
                 de mínimo 1.8 metros, lo cual es imposible durante la toma de las Radiografías y/o
-                estudios diagnósticos `}
-              <TextField
-                margin="none"
-                value={covid.entender_distancia}
+                estudios diagnósticos: `}
+              NO
+              <Switch
+                checked={covid.entender_distancia}
                 onChange={(event) =>
                   setCovid({
                     ...covid,
-                    entender_distancia: event.target.value,
+                    entender_distancia: event.target.checked,
                   })
                 }
-                required
-                label=""
-                className={classes.botMar}
                 size="small"
+                name="entender_distancia"
+                color="primary"
               />
-              (Iniciales)
+              SÍ
             </li>
           </ul>
         </Box>

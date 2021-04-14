@@ -45,24 +45,26 @@ const validated_selected_consents = (consents) => {
 
 const validate_empty = (conditions, covid, true_values) => {
   for (let i in true_values) {
-    if (true_values[i].nombre_tipo_consentimiento === "Consentimiento Covid") {
+    //TODO: Revisar
+    /**if (true_values[i].nombre_tipo_consentimiento === "Consentimiento Covid") {
       for (let j in Object.values(covid)) {
         if (Object.values(covid)[j] === "") {
           return `el campo ${Object.keys(covid)[j]} esta vacio`;
         }
       }
-    } else if (
+    } else */
+    if (
       true_values[i].nombre_tipo_consentimiento ===
         "Consentimiento Intraoral" &&
       conditions.condicion_intraoral === ""
     ) {
-      return `Las condiciones del consentimiento Intraoral estan vacias`;
+      return `Las condiciones del consentimiento Intraoral están vaciás`;
     } else if (
       true_values[i].nombre_tipo_consentimiento ===
         "Consentimiento Extraoral" &&
       conditions.condicion_extraoral === ""
     ) {
-      return `Las condiciones del consentimiento Extraoral estan vacias`;
+      return `Las condiciones del consentimiento Extraoral están vaciás`;
     }
   }
   return "true";
@@ -76,7 +78,8 @@ export default function ConsentForm(props) {
     condicion_extraoral: "",
   });
 
-  const [covid, setCovid] = React.useState({
+  //TODO:
+  /**const [covid, setCovid] = React.useState({
     riesgo_elevado: "",
     informado_directrices: "",
     confirmacion_solicitud: "",
@@ -85,7 +88,17 @@ export default function ConsentForm(props) {
     presentado_covid: false,
     cuarentena: false,
     entender_distancia: "",
-    toma_temperatura: "",
+  });*/
+
+  const [covid, setCovid] = React.useState({
+    riesgo_elevado: true,
+    informado_directrices: true,
+    confirmacion_solicitud: true,
+    confirmacion_sintomas: true,
+    declaracion_contacto: true,
+    presentado_covid: false,
+    cuarentena: false,
+    entender_distancia: true,
   });
 
   const [typeConsent, setTypeConsent] = React.useState([]);
@@ -126,7 +139,7 @@ export default function ConsentForm(props) {
             covid: covid,
           })
           .then((res) => {
-            enqueueSnackbar("Se ha agregado la transaccion exitososamente!", {
+            enqueueSnackbar("Se ha agregado la transacción exitosamente!", {
               variant: "success",
             });
             setRedirect(true);

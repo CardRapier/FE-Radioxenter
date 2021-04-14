@@ -77,22 +77,6 @@ export default function ProcessRow(props) {
                   />
                 </Grid>
                 <Grid container item justify="flex-end" spacing={1}>
-                  {row.transaccion.satisfaccion &&
-                  row.procesosGenerales.actual === "Satisfaccion" ? (
-                    <Grid item>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        onClick={() => setSurvey(true)}
-                      >
-                        Encuesta
-                      </Button>
-                    </Grid>
-                  ) : (
-                    ""
-                  )}
-
                   <Grid item>
                     <Button
                       variant="contained"

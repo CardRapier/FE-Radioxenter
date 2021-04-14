@@ -62,7 +62,7 @@ export default function ReceiptEntityForm(props) {
             {transactionsSelected.length === 0 ? (
               <Grid container justify="center" alignItems="center">
                 <Typography variant="h6">
-                  No hay transaccion a facturar
+                  No hay transacción a facturar
                 </Typography>
               </Grid>
             ) : (
@@ -89,7 +89,7 @@ export default function ReceiptEntityForm(props) {
                   </ListItemIcon>
                   <ListItemText
                     id={`checkbox-list-label-${index}`}
-                    primary={`Transaccion Numero ${value.numero_transaccion} de valor $${value.valor_transaccion} del ${value.fecha_transaccion}. `}
+                    primary={`Transacción Numero ${value.numero_transaccion} de valor $${value.valor_transaccion} del ${value.fecha_transaccion}. `}
                     secondary={
                       <Typography
                         component="span"
