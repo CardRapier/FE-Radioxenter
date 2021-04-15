@@ -1,5 +1,4 @@
 import ConsentCovid from "./ConsentFormats/ConsentCovid";
-import ConsentCovidSwitchs from "./ConsentFormats/ConsentCovidSwitchs";
 import ConsentExtraOral from "./ConsentFormats/ConsentExtraOral";
 import ConsentIntraOral from "./ConsentFormats/ConsentIntraOral";
 import Grid from "@material-ui/core/Grid";
@@ -54,7 +53,7 @@ export default function ConsentContent(props) {
   const validated_consent = (name) => {
     if (name === "Consentimiento Covid") {
       return (
-        <ConsentCovidSwitchs
+        <ConsentCovid
           covid={covid}
           setCovid={setCovid}
           tutor={tutor}

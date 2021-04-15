@@ -18,7 +18,6 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 import Container from "@material-ui/core/Container";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
@@ -429,6 +428,7 @@ export default function ReceiptCreate(props) {
                         component={Switch}
                         type="checkbox"
                         name="paga_cliente"
+                        color="primary"
                       />
                     </Grid>
 
@@ -582,7 +582,6 @@ export default function ReceiptCreate(props) {
                 </Grid>
               </CardActions>
             </Container>
-            <pre>{JSON.stringify(values, null, 2)}</pre>
             <BackDropLoading isSubmitting={isSubmitting} />
             {redirect === true ? (
               <Redirect

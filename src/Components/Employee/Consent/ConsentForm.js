@@ -11,7 +11,9 @@ import CardHeader from "@material-ui/core/CardHeader";
 import ConsentContent from "./ConsentContent.js";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
+import MenuItem from "@material-ui/core/MenuItem";
 import SignatureCanvas from "react-signature-canvas";
+import TextField from "@material-ui/core/TextField";
 import { Typography } from "@material-ui/core";
 import { give_error_message } from "../../../utils.js";
 import { makeStyles } from "@material-ui/core/styles";
@@ -77,9 +79,7 @@ export default function ConsentForm(props) {
     condicion_intraoral: "",
     condicion_extraoral: "",
   });
-
-  //TODO:
-  /**const [covid, setCovid] = React.useState({
+  const [covid, setCovid] = React.useState({
     riesgo_elevado: "",
     informado_directrices: "",
     confirmacion_solicitud: "",
@@ -88,19 +88,9 @@ export default function ConsentForm(props) {
     presentado_covid: false,
     cuarentena: false,
     entender_distancia: "",
-  });*/
-
-  const [covid, setCovid] = React.useState({
-    riesgo_elevado: true,
-    informado_directrices: true,
-    confirmacion_solicitud: true,
-    confirmacion_sintomas: true,
-    declaracion_contacto: true,
-    presentado_covid: false,
-    cuarentena: false,
-    entender_distancia: true,
   });
 
+  const [responsibleSignature, setResponsibleSignature] = useState(1);
   const [typeConsent, setTypeConsent] = React.useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [redirect, setRedirect] = useState(false);
@@ -137,6 +127,7 @@ export default function ConsentForm(props) {
             documento_usuario: data.documento_usuario,
             condiciones: conditions,
             covid: covid,
+            responsable: responsibleSignature,
           })
           .then((res) => {
             enqueueSnackbar("Se ha agregado la transacción exitosamente!", {
@@ -201,7 +192,7 @@ export default function ConsentForm(props) {
                   color="secondary"
                 >
                   Por medio de la siguiente firma, acepta utilizar esta para
-                  diligencias los consentimientos necesarios para prestar él
+                  diligenciar los consentimientos necesarios para prestar él
                   servicio:
                 </Typography>
               </React.Fragment>
@@ -236,6 +227,17 @@ export default function ConsentForm(props) {
                     : `Documento: ${data.documento_usuario}`
                   : ""}
               </Typography>
+            </Grid>
+            <Grid item>
+              <TextField
+                select
+                value={responsibleSignature}
+                onChange={(e) => setResponsibleSignature(e.target.value)}
+                helperText="Por favor seleccionar la persona responsable del servicio"
+              >
+                <MenuItem value={1}>LINA PAOLA ALONSO SANABRIA</MenuItem>
+                <MenuItem value={2}>YOSELEN CECILIA TRIANA GALEANO</MenuItem>
+              </TextField>
             </Grid>
           </Grid>
           <CardActions disableSpacing>
