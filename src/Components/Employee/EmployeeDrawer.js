@@ -69,17 +69,21 @@ export default function EmployeeDrawer(props) {
             <ListItemText primary={"Procesos"} />
           </ListItem>
 
-          <ListItem
-            button
-            component={Link}
-            key={"Administrador"}
-            to="/Administrador"
-          >
-            <ListItemIcon>
-              <SupervisorAccountIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Cambiar a módulo Administrador"} />
-          </ListItem>
+          {localStorage.getItem("redirect") === "/Administrador" ? (
+            <ListItem
+              button
+              component={Link}
+              key={"Administrador"}
+              to="/Administrador"
+            >
+              <ListItemIcon>
+                <SupervisorAccountIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Cambiar a módulo Administrador"} />
+            </ListItem>
+          ) : (
+            ""
+          )}
         </List>
         <Divider />
       </Drawer>
