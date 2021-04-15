@@ -115,6 +115,12 @@ export default function Employee() {
     });
   };
 
+  const handleEliminateProcess = (documento_usuario) => {
+    socket.emit("eliminar_usuarios", {
+      documento_usuario: documento_usuario,
+    });
+  };
+
   React.useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
     socket.on("data", (msg) => {
@@ -194,6 +200,7 @@ export default function Employee() {
                   handleCompleteProcess={handleCompleteProcess}
                   handleChangeServiceStatus={handleChangeServiceStatus}
                   handleChangeShipmentStatus={handleChangeShipmentStatus}
+                  handleEliminateProcess={handleEliminateProcess}
                 />
               )}
             />

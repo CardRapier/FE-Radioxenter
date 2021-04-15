@@ -9,7 +9,6 @@ import ProcessConfirm from "./ProcessConfirm";
 import ProcessData from "./ProccesData";
 import ProcessShipmentData from "./ProcessShipmentData";
 import React from "react";
-import SatisfactionModal from "../Satisfaction/SatisfactionModal";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import { makeStyles } from "@material-ui/core/styles";
@@ -26,6 +25,7 @@ export default function ProcessRow(props) {
   const {
     row,
     handleCompleteProcess,
+    handleEliminateProcess,
     type_shipment,
     doctorEntities,
     changeServices,
@@ -35,7 +35,7 @@ export default function ProcessRow(props) {
   } = props;
   const [open, setOpen] = React.useState(false);
   const [modalState, setModalState] = React.useState(false);
-  const [survey, setSurvey] = React.useState(false);
+  const [modalEliminateState, setModalEliminateState] = React.useState(false);
   const classes = useRowStyles();
   return (
     <React.Fragment>
@@ -82,6 +82,16 @@ export default function ProcessRow(props) {
                       variant="contained"
                       color="primary"
                       size="small"
+                      onClick={() => setModalEliminateState(true)}
+                    >
+                      Eliminar
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
                       onClick={() => setModalState(true)}
                     >
                       Completar
@@ -96,13 +106,16 @@ export default function ProcessRow(props) {
       <ProcessConfirm
         modalState={modalState}
         setModalState={setModalState}
-        handleCompleteProcess={handleCompleteProcess}
+        handleProcess={handleCompleteProcess}
         document={row.data.documento_usuario}
+        word="completar"
       />
-      <SatisfactionModal
-        survey={survey}
-        setSurvey={setSurvey}
-        data={row.data}
+      <ProcessConfirm
+        modalState={modalEliminateState}
+        setModalState={setModalEliminateState}
+        handleProcess={handleEliminateProcess}
+        document={row.data.documento_usuario}
+        word="eliminar"
       />
     </React.Fragment>
   );

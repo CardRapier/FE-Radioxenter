@@ -2,6 +2,7 @@ import { api_nota_credito, api_receipts } from "../../../api_app";
 
 import Button from "@material-ui/core/Button";
 import React from "react";
+import ReceiptConfirm from "../Receipt/ReceiptConfirm";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import { give_error_message } from "../../../utils";
@@ -21,6 +22,7 @@ export default function ReceiptRow(props) {
   const { row, fetch_receipts, setLoaded } = props;
   const classes = useRowStyles();
   const { enqueueSnackbar } = useSnackbar();
+  const [modalState, setModalState] = React.useState(false);
 
   const create_nota_credito = async () => {
     setLoaded(false);
@@ -97,7 +99,7 @@ export default function ReceiptRow(props) {
           </Button>
           |
           {row.Nota_Creditos.length === 0 ? (
-            <Button color="primary" onClick={() => create_nota_credito()}>
+            <Button color="primary" onClick={() => setModalState(true)}>
               Crear N.Crédito
             </Button>
           ) : (
@@ -118,6 +120,11 @@ export default function ReceiptRow(props) {
             ))
           )}
         </TableCell>
+        <ReceiptConfirm
+          modalState={modalState}
+          setModalState={setModalState}
+          handleProcess={create_nota_credito}
+        />
       </TableRow>
     </React.Fragment>
   );

@@ -29,6 +29,7 @@ export default function ProcessTable(props) {
     doctorEntities,
     rows,
     handleCompleteProcess,
+    handleEliminateProcess,
     handleChangeServiceStatus,
     handleChangeShipmentStatus,
     filter,
@@ -119,6 +120,7 @@ export default function ProcessTable(props) {
                 changeServices={handleChangeServiceStatus}
                 changeShipments={handleChangeShipmentStatus}
                 handleCompleteProcess={handleCompleteProcess}
+                handleEliminateProcess={handleEliminateProcess}
               />
             ))
           )}

@@ -23,6 +23,7 @@ export default function Process(props) {
   const {
     rows,
     handleCompleteProcess,
+    handleEliminateProcess,
     handleChangeServiceStatus,
     handleChangeShipmentStatus,
   } = props;
@@ -89,6 +90,7 @@ export default function Process(props) {
                 handleCompleteProcess={handleCompleteProcess}
                 handleChangeServiceStatus={handleChangeServiceStatus}
                 handleChangeShipmentStatus={handleChangeShipmentStatus}
+                handleEliminateProcess={handleEliminateProcess}
                 filter={{ query: query.query }}
               />
             </Grid>

@@ -9,8 +9,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ProcessConfirm(props) {
-  const { modalState, setModalState, handleProcess, document, word } = props;
+export default function ReceiptConfirm(props) {
+  const { modalState, setModalState, handleProcess } = props;
 
   return (
     <React.Fragment>
@@ -22,12 +22,12 @@ export default function ProcessConfirm(props) {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title">
-          {`¿Está seguro que quiere ${word} este proceso?`}
+          {`¿Está seguro que quiere crear una nota crédito?`}
         </DialogTitle>
         <DialogActions>
           <Button
             onClick={() => {
-              handleProcess(document);
+              handleProcess();
               setModalState(false);
             }}
             color="primary"

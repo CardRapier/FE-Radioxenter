@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Receipts() {
   const classes = useStyles();
-  const [query, setQuery] = React.useState({ query: "" });
+  const [query, setQuery] = React.useState({ document: "", date: "" });
   const [receipts, setReceipts] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -72,7 +72,7 @@ export default function Receipts() {
           justify="flex-start"
           alignItems="center"
         >
-          <Grid item xs={3}></Grid>
+          <Grid item xs={2}></Grid>
           <Grid item xs={5}>
             <TextField
               id="documento"
@@ -80,9 +80,28 @@ export default function Receipts() {
               variant="outlined"
               size="small"
               type="search"
-              value={query.query}
-              onChange={(event, index, value) =>
-                setQuery({ query: event.target.value })
+              value={query.document}
+              onChange={(event) =>
+                setQuery((query) => ({
+                  ...query,
+                  document: event.target.value,
+                }))
+              }
+            />
+          </Grid>
+          <Grid item xs={5}>
+            <TextField
+              id="date"
+              label="Fecha"
+              variant="outlined"
+              size="small"
+              type="search"
+              value={query.date}
+              onChange={(event) =>
+                setQuery((query) => ({
+                  ...query,
+                  date: event.target.value,
+                }))
               }
             />
           </Grid>
@@ -93,7 +112,7 @@ export default function Receipts() {
               <ReceiptTable
                 receipts={receipts}
                 setLoaded={setLoaded}
-                filter={{ query: query.query }}
+                filter={query}
                 fetch_receipts={fetch_receipts}
               />
             </Grid>
