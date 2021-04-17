@@ -72,6 +72,8 @@ export default function DoctorForm(props) {
       }
       onSubmit={(values, { setSubmitting, resetForm }) => {
         values.documento_doctor = `${values.documento_doctor}`;
+        let send_values = { ...values };
+        delete send_values.cod_departamento;
         if (data === undefined) {
           values.documento_doctor =
             values.documento_doctor.trim() === ""

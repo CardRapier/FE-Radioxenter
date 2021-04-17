@@ -286,6 +286,7 @@ export default function UserForm(props) {
                         required
                         label="Correo"
                         name="correo_usuario"
+                        tooltip="Si el usuario no tiene correo, diligencie este campo como: na@na.com"
                         component={TextFormField}
                       />
                     </Grid>
