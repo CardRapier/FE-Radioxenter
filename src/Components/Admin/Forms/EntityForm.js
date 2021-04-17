@@ -131,6 +131,12 @@ export default function EntityForm(props) {
                   enqueueSnackbar("Los cambios han sido exitosos!", {
                     variant: "success",
                   });
+                })
+                .catch(function (error) {
+                  setSubmitting(false);
+                  enqueueSnackbar(give_error_message(error.response), {
+                    variant: "error",
+                  });
                 });
             })
             .catch(function (error) {

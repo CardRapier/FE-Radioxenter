@@ -42,10 +42,10 @@ export default function ReceiptServiceTable(props) {
             ) : (
               servicesSelected.map((service, index) => (
                 <TableRow key={`${index}-row`}>
-                  <TableCell key={`${index}-name`}>
+                  <TableCell style={{ width: "30%" }} key={`${index}-name`}>
                     {service.nombre_servicio}
                   </TableCell>
-                  <TableCell key={`${index}-quantity`}>
+                  <TableCell style={{ width: "20%" }} key={`${index}-quantity`}>
                     <TextField
                       label=""
                       value={service.cantidad}
@@ -53,10 +53,10 @@ export default function ReceiptServiceTable(props) {
                       size="small"
                     />
                   </TableCell>
-                  <TableCell key={`${index}-iva`}>
+                  <TableCell style={{ width: "20%" }} key={`${index}-iva`}>
                     {service.iva_servicio} %
                   </TableCell>
-                  <TableCell key={`${index}-data`}>
+                  <TableCell style={{ width: "20%" }} key={`${index}-data`}>
                     <Grid container alignItems="center">
                       <Grid item xs={9}>
                         {service.precio_servicio}
