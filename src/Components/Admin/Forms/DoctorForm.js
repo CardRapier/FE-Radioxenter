@@ -75,13 +75,13 @@ export default function DoctorForm(props) {
         let send_values = { ...values };
         delete send_values.cod_departamento;
         if (data === undefined) {
-          values.documento_doctor =
-            values.documento_doctor.trim() === ""
+          send_values.documento_doctor =
+            send_values.documento_doctor.trim() === ""
               ? `1`
-              : values.documento_doctor;
+              : send_values.documento_doctor;
           setSubmitting(true);
           api_doctors
-            .post("/", values)
+            .post("/", send_values)
             .then(function (response) {
               setSubmitting(false);
               enqueueSnackbar("Se ha creado exitosamente!", {
