@@ -105,16 +105,6 @@ export default function EntityForm(props) {
           api_entities
             .post("/", send_values)
             .then(function (response) {
-              let entities = [];
-              api_entities.get("/").then((res) => {
-                entities = res.data.respuesta;
-              });
-              let entity = entities.filter(
-                (e) => e.nit_entidad === values.nit_entidad
-              );
-              api_entities.put(`${entity.cod_entidad}/doctores`, {
-                doctores_entidad: doctores_entidad,
-              });
               setSubmitting(false);
               enqueueSnackbar("Se ha creado exitosamente!", {
                 variant: "success",
@@ -374,7 +364,7 @@ export default function EntityForm(props) {
                   className={classes.services}
                 >
                   <Grid item xs={12}>
-                    {doctors.length !== 0 ? (
+                    {doctors.length !== 0 && data !== undefined ? (
                       <div>
                         <InputLabel id="doctors_label">Doctores</InputLabel>
                         <Field

@@ -1,11 +1,13 @@
 import { Field, Form, Formik } from "formik";
 import { MenuItem, TextField } from "@material-ui/core";
+
 import {
+  api_departments,
   api_doctors,
   api_type_document,
   api_type_shipment,
 } from "../../../api_app";
-
+import { Switch } from "formik-material-ui";
 import BackDropLoading from "../../BackDropLoading";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -21,12 +23,14 @@ import { doctor_schema } from "./validation_schemas_admin";
 import { give_error_message } from "../../../utils";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 export default function DoctorForm(props) {
   const classes = useStyles();
   const [data, setData] = React.useState(undefined);
   const [type_shipment, setTypeShipment] = React.useState([]);
   const [type_document, setTypeDocument] = React.useState([]);
+  const [departments, setDepartments] = React.useState([]);
   const { enqueueSnackbar } = useSnackbar();
   React.useEffect(() => {
     api_type_shipment.get("/").then((res) => {
@@ -35,6 +39,10 @@ export default function DoctorForm(props) {
 
     api_type_document.get("/").then((res) => {
       setTypeDocument(res.data.respuesta);
+    });
+
+    api_departments.get("/").then((res) => {
+      setDepartments(res.data.respuesta);
     });
   }, []);
   React.useEffect(() => {
@@ -65,6 +73,10 @@ export default function DoctorForm(props) {
       onSubmit={(values, { setSubmitting, resetForm }) => {
         values.documento_doctor = `${values.documento_doctor}`;
         if (data === undefined) {
+          values.documento_doctor =
+            values.documento_doctor.trim() === ""
+              ? `1`
+              : values.documento_doctor;
           setSubmitting(true);
           api_doctors
             .post("/", values)
@@ -100,7 +112,7 @@ export default function DoctorForm(props) {
         }
       }}
     >
-      {({ resetForm, isSubmitting, values }) => (
+      {({ resetForm, isSubmitting, values, setFieldValue }) => (
         <Form>
           <Grid container direction="column">
             <Container
@@ -136,7 +148,6 @@ export default function DoctorForm(props) {
                 <Grid item container spacing={3}>
                   <Grid item xs={6}>
                     <Field
-                      required
                       label="Dirección"
                       name="direccion_doctor"
                       component={TextFormField}
@@ -145,7 +156,6 @@ export default function DoctorForm(props) {
 
                   <Grid item xs={6}>
                     <Field
-                      required
                       label="Teléfono"
                       name="telefono_doctor"
                       component={TextFormField}
@@ -196,11 +206,11 @@ export default function DoctorForm(props) {
 
                   <Grid item xs={6}>
                     <Field
-                      required
                       label="Documento"
                       name="documento_doctor"
                       component={TextFormField}
                       type="number"
+                      tooltip="En caso de ser particular o no conocer el documento, dejarlo en blanco."
                     />
                   </Grid>
                 </Grid>
@@ -246,7 +256,94 @@ export default function DoctorForm(props) {
                       label="Correo"
                       name="correo_doctor"
                       component={TextFormField}
+                      tooltip="En caso de no conocer el correo o no ser necesario, diligenciaron como: na@na.com"
                     />
+                  </Grid>
+                </Grid>
+
+                <Grid item container spacing={3}>
+                  <Grid item xs={6}>
+                    {departments.length !== 0 ? (
+                      <Field
+                        component={TextFormField}
+                        label="Departamento"
+                        name="cod_departamento"
+                        fullWidth
+                        onChange={(e) => {
+                          let cod_departamento = e.target.value;
+                          setFieldValue("cod_departamento", cod_departamento);
+                          setFieldValue(
+                            "cod_ciudad",
+                            departments.find(
+                              (e) => e.cod_departamento === cod_departamento
+                            ).Ciudads[0].cod_ciudad
+                          );
+                        }}
+                        select
+                      >
+                        {departments.map((department) => (
+                          <MenuItem
+                            key={department.cod_departamento}
+                            value={department.cod_departamento}
+                          >
+                            {department.nom_departamento}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    ) : (
+                      ""
+                    )}
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    {departments.length !== 0 ? (
+                      <Field
+                        component={TextFormField}
+                        label="Ciudad"
+                        name="cod_ciudad"
+                        fullWidth
+                        select
+                      >
+                        {departments
+                          .find(
+                            (department) =>
+                              department.cod_departamento ===
+                              values.cod_departamento
+                          )
+                          .Ciudads.map((city) => (
+                            <MenuItem
+                              key={city.cod_ciudad}
+                              value={city.cod_ciudad}
+                            >
+                              {city.nom_ciudad}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    ) : (
+                      ""
+                    )}
+                  </Grid>
+
+                  <Grid
+                    item
+                    container
+                    spacing={3}
+                    justify="flex-end"
+                    alignItems="center"
+                  >
+                    <Grid item>
+                      <FormControlLabel
+                        control={
+                          <Field
+                            component={Switch}
+                            type="checkbox"
+                            color="primary"
+                            name="esParticular"
+                          />
+                        }
+                        label="¿Es particular?"
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
               </CardContent>

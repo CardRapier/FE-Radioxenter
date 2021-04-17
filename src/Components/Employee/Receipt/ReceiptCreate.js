@@ -422,7 +422,7 @@ export default function ReceiptCreate(props) {
                       xs={6}
                     >
                       <InputLabel htmlFor="test">
-                        ¿Paga el cliente el convenio?
+                        ¿Paga el usuario el convenio?
                       </InputLabel>
                       <Field
                         component={Switch}

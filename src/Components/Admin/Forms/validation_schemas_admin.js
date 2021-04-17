@@ -108,12 +108,11 @@ export const agreement_schema = yup.object({
 export const doctor_schema = yup.object({
   nombres_doctor: yup.string().trim().required("Campo requerido"),
   apellidos_doctor: yup.string().trim().required("Campo requerido"),
-  direccion_doctor: yup.string().trim().required("Campo requerido"),
-  telefono_doctor: yup.string().trim().required("Campo requerido"),
+  direccion_doctor: yup.string().trim(),
+  telefono_doctor: yup.string().trim(),
   documento_doctor: yup
     .number()
     .integer("Debe ser un numero entero")
-    .required("Campo requerido")
     .positive("Debe ser positivo"),
   correo_doctor: yup
     .string()

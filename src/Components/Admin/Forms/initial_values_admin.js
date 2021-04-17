@@ -57,6 +57,9 @@ export const doctor_initial_values = {
   cod_tipo_documento: 1,
   cod_tipo_pref_entrega: 1,
   correo_doctor: "",
+  esParticular: false,
+  cod_departamento: 1,
+  cod_ciudad: 1,
 };
 
 export const employee_initial_values = {

@@ -37,7 +37,7 @@ export const receipt_initial_values = {
   cod_entidad_doctor: 0,
   servicios: [],
   consentimiento: {},
-  paga_cliente: true,
+  paga_cliente: false,
 };
 
 export const satisfaction_initial_values = {
