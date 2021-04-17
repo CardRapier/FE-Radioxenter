@@ -34,6 +34,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import publicIp from "public-ip";
 import { receipt_initial_values } from "../Forms/initial_values_employee";
 import { useSnackbar } from "notistack";
+import update from "immutability-helper";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -73,6 +74,17 @@ export default function ReceiptCreate(props) {
   const [entitiesAgreements, setEntitiesAgreements] = React.useState([]);
   const [typeConsent, setTypeConsent] = React.useState([]);
 
+  const handleQuantity = (service, value) => {
+    let element = servicesSelected.findIndex(
+      (x) => x.cod_servicio === service.cod_servicio
+    );
+    setServicesSelected(
+      update(servicesSelected, {
+        [element]: { cantidad: { $set: value } },
+      })
+    );
+  };
+
   function add_service(service) {
     if (service !== null) {
       let service_aux = servicesSelected.filter(
@@ -80,7 +92,10 @@ export default function ReceiptCreate(props) {
       );
 
       service_aux.length === 0
-        ? setServicesSelected(() => [...servicesSelected, service])
+        ? setServicesSelected(() => [
+            ...servicesSelected,
+            { ...service, cantidad: 1 },
+          ])
         : enqueueSnackbar("No puede seleccionar un servicio mas de una vez", {
             variant: "error",
           });
@@ -113,7 +128,12 @@ export default function ReceiptCreate(props) {
   function evaluate_total_value() {
     let sum = 0;
     for (let i in servicesSelected) {
-      sum = sum + servicesSelected[i].precio_servicio;
+      sum =
+        sum +
+        (servicesSelected[i].precio_servicio +
+          servicesSelected[i].precio_servicio *
+            (servicesSelected[i].iva_servicio / 100)) *
+          servicesSelected[i].cantidad;
     }
 
     return sum;
@@ -220,14 +240,6 @@ export default function ReceiptCreate(props) {
           setServices(filter_services(res.data.respuesta, "SE-"));
           setPackages(filter_services(res.data.respuesta, "PA-"));
           setAgreements(res.data.respuesta);
-
-          api_doctors.get("/").then((res) => setDoctors(res.data.respuesta));
-          api_entities
-            .get("/convenios")
-            .then((res) => setEntitiesAgreements(res.data.respuesta));
-          api_type_consent
-            .get("/")
-            .then((res) => setTypeConsent(res.data.respuesta));
         })
         .catch((error) => {
           enqueueSnackbar(
@@ -237,6 +249,13 @@ export default function ReceiptCreate(props) {
             }
           );
         });
+      api_doctors.get("/").then((res) => setDoctors(res.data.respuesta));
+      api_entities
+        .get("/convenios")
+        .then((res) => setEntitiesAgreements(res.data.respuesta));
+      api_type_consent
+        .get("/")
+        .then((res) => setTypeConsent(res.data.respuesta));
     },
     [props.location, enqueueSnackbar],
     []
@@ -263,7 +282,7 @@ export default function ReceiptCreate(props) {
                     ? evaluate_entity_doctor(values.entity, values.doctor)
                         .cod_entidad_doctor
                     : null,
-                motivo: motive,
+                motivo_transaccion: motive,
                 ipv4: ipv4,
                 servicios: servicesSelected,
               };
@@ -399,12 +418,10 @@ export default function ReceiptCreate(props) {
                       />
                     </Grid>
                   </Grid>
-
                   <Grid item container spacing={3}>
                     <Grid item xs={12}>
                       <MuiTextField
                         value={motive}
-                        required
                         onChange={handleChange}
                         fullWidth
                         label="Motivo del procedimiento"
@@ -412,7 +429,6 @@ export default function ReceiptCreate(props) {
                       />
                     </Grid>
                   </Grid>
-
                   <Grid item container spacing={3}>
                     <Grid
                       container
@@ -460,7 +476,6 @@ export default function ReceiptCreate(props) {
                       </FormLabel>
                     </Grid>
                   </Grid>
-
                   <Grid item container spacing={3}>
                     <Grid item xs={12} sm={6}>
                       <Field
@@ -534,6 +549,8 @@ export default function ReceiptCreate(props) {
                         servicesSelected={servicesSelected}
                         remove_service={remove_service}
                         evaluate_total_value={evaluate_total_value}
+                        setState={setServicesSelected}
+                        handleQuantity={handleQuantity}
                       />
                     </Grid>
                   </Grid>

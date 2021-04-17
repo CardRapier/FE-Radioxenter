@@ -9,9 +9,16 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import TextField from "@material-ui/core/TextField";
 
 export default function ReceiptServiceTable(props) {
-  const { servicesSelected, remove_service, evaluate_total_value } = props;
+  const {
+    servicesSelected,
+    remove_service,
+    evaluate_total_value,
+    handleQuantity,
+  } = props;
+
   return (
     <React.Fragment>
       <TableContainer component={Paper} elevation={3}>
@@ -19,13 +26,15 @@ export default function ReceiptServiceTable(props) {
           <TableHead>
             <TableRow>
               <TableCell key={"Servicio"}>Servicio</TableCell>
+              <TableCell key={"Cantidad"}>Cantidad</TableCell>
+              <TableCell key={"Iva"}>Iva</TableCell>
               <TableCell key={"valor"}>Valor</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {servicesSelected.length === 0 ? (
               <TableRow>
-                <TableCell key={"single-row"}>
+                <TableCell colSpan={3} key={"single-row"}>
                   No hay servicios seleccionados
                 </TableCell>
                 <TableCell />
@@ -36,12 +45,23 @@ export default function ReceiptServiceTable(props) {
                   <TableCell key={`${index}-name`}>
                     {service.nombre_servicio}
                   </TableCell>
+                  <TableCell key={`${index}-quantity`}>
+                    <TextField
+                      label=""
+                      value={service.cantidad}
+                      onChange={(e) => handleQuantity(service, e.target.value)}
+                      size="small"
+                    />
+                  </TableCell>
+                  <TableCell key={`${index}-iva`}>
+                    {service.iva_servicio} %
+                  </TableCell>
                   <TableCell key={`${index}-data`}>
                     <Grid container alignItems="center">
-                      <Grid item xs={10}>
+                      <Grid item xs={9}>
                         {service.precio_servicio}
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={3}>
                         <IconButton
                           onClick={() => remove_service(service.cod_servicio)}
                         >
@@ -54,7 +74,7 @@ export default function ReceiptServiceTable(props) {
               ))
             )}
             <TableRow>
-              <TableCell>Total a pagar: </TableCell>
+              <TableCell colSpan={3}>Total a pagar: </TableCell>
               <TableCell>{evaluate_total_value()}</TableCell>
             </TableRow>
           </TableBody>
