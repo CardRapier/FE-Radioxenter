@@ -94,7 +94,6 @@ export default function ServiceForm(props) {
                 </Grid>
                 <Grid item container>
                   <Field
-                    required
                     multiline
                     label="Descripción del Servicio"
                     name="descripcion_servicio"

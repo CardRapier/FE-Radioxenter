@@ -31,7 +31,7 @@ export const entity_schema = yup.object({
 
 export const service_schema = yup.object({
   nombre_servicio: yup.string().trim().required("Campo requerido"),
-  descripcion_servicio: yup.string().trim().required("Campo requerido"),
+  descripcion_servicio: yup.string(),
   precio_servicio: yup
     .number()
     .required("Campo requerido")

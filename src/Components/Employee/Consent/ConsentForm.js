@@ -72,6 +72,12 @@ const validate_empty = (conditions, covid, true_values) => {
   return "true";
 };
 
+const get_initials_name = (data) => {
+  return `${data.nombres_usuario
+    .trim()
+    .charAt(0)}${data.apellidos_usuario.trim().charAt(0)}`;
+};
+
 export default function ConsentForm(props) {
   let { data, tutor, transaction } = props.location;
 
@@ -79,16 +85,29 @@ export default function ConsentForm(props) {
     condicion_intraoral: "",
     condicion_extraoral: "",
   });
-  const [covid, setCovid] = React.useState({
-    riesgo_elevado: "",
-    informado_directrices: "",
-    confirmacion_solicitud: "",
-    confirmacion_sintomas: "",
-    declaracion_contacto: "",
-    presentado_covid: false,
-    cuarentena: false,
-    entender_distancia: "",
-  });
+  const [covid, setCovid] = React.useState(
+    data === undefined
+      ? {
+          riesgo_elevado: "",
+          informado_directrices: "",
+          confirmacion_solicitud: "",
+          confirmacion_sintomas: "",
+          declaracion_contacto: "",
+          presentado_covid: false,
+          cuarentena: false,
+          entender_distancia: "",
+        }
+      : {
+          riesgo_elevado: get_initials_name(data),
+          informado_directrices: get_initials_name(data),
+          confirmacion_solicitud: get_initials_name(data),
+          confirmacion_sintomas: get_initials_name(data),
+          declaracion_contacto: get_initials_name(data),
+          presentado_covid: false,
+          cuarentena: false,
+          entender_distancia: get_initials_name(data),
+        }
+  );
 
   const [responsibleSignature, setResponsibleSignature] = useState(1);
   const [typeConsent, setTypeConsent] = React.useState([]);

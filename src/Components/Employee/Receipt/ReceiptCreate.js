@@ -156,7 +156,9 @@ export default function ReceiptCreate(props) {
   const filter_entities = (doctor) => {
     let filtered_entities = doctor.Entidad_doctors.map((entity_doctor) =>
       entitiesAgreements.find(
-        (entity) => entity.cod_entidad === entity_doctor.cod_entidad
+        (entity) =>
+          entity.cod_entidad === entity_doctor.cod_entidad &&
+          entity_doctor.activo === true
       )
     ).filter((e) => e !== undefined);
     return filtered_entities;
@@ -223,7 +225,7 @@ export default function ReceiptCreate(props) {
             (element) =>
               entitiesAgreements.find(
                 (entity) => entity.cod_entidad === element.cod_entidad
-              ) !== undefined
+              ) !== undefined && element.activo === true
           ).length !== 0
       );
     }
@@ -383,11 +385,7 @@ export default function ReceiptCreate(props) {
                           `${option.nombres_doctor} ${option.apellidos_doctor}`
                         }
                         onChange={(value, setFieldValue) => {
-                          let entity = entitiesAgreements.find(
-                            (e) =>
-                              e.cod_entidad ===
-                              value.Entidad_doctors[0].cod_entidad
-                          );
+                          let entity = filter_entities(value)[0];
                           setFieldValue("entity", entity);
                           if (values.tipo_compra === "Convenio") {
                             setFieldValue(

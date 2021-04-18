@@ -11,15 +11,11 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
-import Chip from "@material-ui/core/Chip";
 import Container from "@material-ui/core/Container";
 import FormButtons from "../../FormButtons";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import Grid from "@material-ui/core/Grid";
-import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
-import { Select } from "formik-material-ui";
 import TextField from "@material-ui/core/TextField";
 import TextFormField from "../../Form/TextFormField";
 import { entity_initial_values } from "./initial_values_admin";
@@ -27,13 +23,14 @@ import { entity_schema } from "./validation_schemas_admin";
 import { give_error_message } from "../../../utils.js";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
+import DoctorEntityTable from "./DoctorEntityTable.js";
 
 export default function EntityForm(props) {
   const classes = useStyles();
   var data = undefined;
   const [type_payments, setTypePayments] = React.useState([]);
   const [type_receipts, setTypeReceipts] = React.useState([]);
-
+  const [query, setQuery] = React.useState("");
   const [doctors, setDoctors] = React.useState([]);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -64,6 +61,8 @@ export default function EntityForm(props) {
     data = props.location.data;
   }
 
+  const handleChangeActive = () => {};
+
   return (
     <Formik
       enableReinitialize
@@ -71,7 +70,7 @@ export default function EntityForm(props) {
       initialValues={
         data === undefined
           ? entity_initial_values
-          : data.Entidad_doctors !== undefined
+          : data.Entidad_doctors !== undefined && doctors.length !== 0
           ? {
               razon_social_entidad: data.razon_social_entidad,
               nombre_comercial_entidad: data.nombre_comercial_entidad,
@@ -89,7 +88,13 @@ export default function EntityForm(props) {
               cod_forma_de_pago_entidad: data.cod_forma_de_pago_entidad,
               cod_tipo_facturacion: data.cod_tipo_facturacion,
               cod_entidad: data.cod_entidad,
-              doctores_entidad: data.Entidad_doctors.map((e) => e.cod_doctor),
+              doctores_entidad: data.Entidad_doctors.map((e) => {
+                let doctor_aux = doctors.find(
+                  (el) => el.cod_doctor === e.cod_doctor
+                );
+                doctor_aux.activo = e.activo;
+                return doctor_aux;
+              }),
             }
           : entity_initial_values
       }
@@ -97,10 +102,9 @@ export default function EntityForm(props) {
         values.cedula_representante = `${values.cedula_representante}`;
         values.cedula_contacto = `${values.cedula_contacto}`;
         let send_values = { ...values };
-        let doctores_entidad = [...values.doctores_entidad];
-        delete send_values.doctores_entidad;
 
         if (data === undefined) {
+          delete send_values.doctores_entidad;
           setSubmitting(true);
           api_entities
             .post("/", send_values)
@@ -122,7 +126,8 @@ export default function EntityForm(props) {
           api_entities
             .put("/", send_values)
             .then(function (response) {
-              api_entities
+              /**
+               api_entities
                 .put(`${data.cod_entidad}/doctores`, {
                   doctores_entidad: doctores_entidad,
                 })
@@ -133,13 +138,16 @@ export default function EntityForm(props) {
                   });
                 })
                 .catch(function (error) {
+                  console.log(error, "second put");
                   setSubmitting(false);
                   enqueueSnackbar(give_error_message(error.response), {
                     variant: "error",
                   });
                 });
+               */
             })
             .catch(function (error) {
+              console.log(error, "first put");
               setSubmitting(false);
               enqueueSnackbar(give_error_message(error.response), {
                 variant: "error",
@@ -148,7 +156,7 @@ export default function EntityForm(props) {
         }
       }}
     >
-      {({ resetForm, isSubmitting, values, errors }) => (
+      {({ resetForm, isSubmitting, values, setFieldValue }) => (
         <Form>
           <Grid container direction="column">
             <Container
@@ -363,60 +371,46 @@ export default function EntityForm(props) {
                   </Grid>
                 </Grid>
 
-                <Grid
-                  item
-                  container
-                  justify="center"
-                  className={classes.services}
-                >
-                  <Grid item xs={12}>
-                    {doctors.length !== 0 && data !== undefined ? (
-                      <div>
-                        <InputLabel id="doctors_label">Doctores</InputLabel>
-                        <Field
-                          name={`doctores_entidad`}
-                          type="select"
-                          component={Select}
-                          label_id="doctors_label"
-                          multiple
-                          fullWidth
-                          renderValue={(selected) => (
-                            <div className={classes.chips}>
-                              {selected.map((value, index) => (
-                                <Chip
-                                  key={`${value}-${index}`}
-                                  label={doctors
-                                    .filter(
-                                      (doctor) => doctor.cod_doctor === value
-                                    )
-                                    .map(
-                                      (x) =>
-                                        `${x.nombres_doctor} ${x.apellidos_doctor}`
-                                    )}
-                                  className={classes.chip}
-                                />
-                              ))}
-                            </div>
-                          )}
-                        >
-                          {doctors.map((doctor, index) => (
-                            <MenuItem
-                              key={`menu-${index}`}
-                              value={doctor.cod_doctor}
-                            >
-                              {`${doctor.nombres_doctor} ${doctor.apellidos_doctor}`}
-                            </MenuItem>
-                          ))}
-                        </Field>
-                        <FormHelperText>
-                          {errors.doctores_entidad}
-                        </FormHelperText>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </Grid>
-                </Grid>
+                {data !== undefined &&
+                  data.Entidad_doctors.length !== 0 &&
+                  doctors.length !== 0 && (
+                    <div>
+                      <Grid item container justify="center" spacing={3}>
+                        <Grid item xs={6}>
+                          <TextField
+                            fullWidth
+                            label="Filtro"
+                            value={query}
+                            size="small"
+                            type="search"
+                            onChange={(event, index, value) =>
+                              setQuery(event.target.value)
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          Lmao
+                        </Grid>
+                      </Grid>
+
+                      <Grid
+                        item
+                        container
+                        justify="center"
+                        className={classes.services}
+                      >
+                        <Grid item xs={12}>
+                          <DoctorEntityTable
+                            doctors={values.doctores_entidad}
+                            query={query}
+                            handleChange={setFieldValue}
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  )}
+
+                <pre>{JSON.stringify(values, null, 2)}</pre>
               </CardContent>
               <CardActions disableSpacing>
                 <Grid
