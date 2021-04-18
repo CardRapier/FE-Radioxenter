@@ -24,6 +24,9 @@ import { give_error_message } from "../../../utils.js";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
 import DoctorEntityTable from "./DoctorEntityTable.js";
+import AutocompleteForm from "../../Form/AutocompleteForm";
+import IconButton from "@material-ui/core/IconButton";
+import AddIcon from "@material-ui/icons/Add";
 
 export default function EntityForm(props) {
   const classes = useStyles();
@@ -61,7 +64,26 @@ export default function EntityForm(props) {
     data = props.location.data;
   }
 
-  const handleChangeActive = () => {};
+  const add_doctor = (doctor, doctors, setChange) => {
+    if (doctor !== null) {
+      let doctor_aux = doctors.filter(
+        (element) => element.cod_doctor === doctor.cod_doctor
+      );
+
+      doctor_aux.length === 0
+        ? setChange("doctores_entidad", [
+            ...doctors,
+            { ...doctor, activo: true },
+          ])
+        : enqueueSnackbar("No puede seleccionar un doctor mas de una vez", {
+            variant: "error",
+          });
+    } else {
+      enqueueSnackbar("Seleccione un doctor para poder agregarlo", {
+        variant: "error",
+      });
+    }
+  };
 
   return (
     <Formik
@@ -88,6 +110,13 @@ export default function EntityForm(props) {
               cod_forma_de_pago_entidad: data.cod_forma_de_pago_entidad,
               cod_tipo_facturacion: data.cod_tipo_facturacion,
               cod_entidad: data.cod_entidad,
+              doctor: data.Entidad_doctors.map((e) => {
+                let doctor_aux = doctors.find(
+                  (el) => el.cod_doctor === e.cod_doctor
+                );
+                doctor_aux.activo = e.activo;
+                return doctor_aux;
+              })[0],
               doctores_entidad: data.Entidad_doctors.map((e) => {
                 let doctor_aux = doctors.find(
                   (el) => el.cod_doctor === e.cod_doctor
@@ -102,7 +131,7 @@ export default function EntityForm(props) {
         values.cedula_representante = `${values.cedula_representante}`;
         values.cedula_contacto = `${values.cedula_contacto}`;
         let send_values = { ...values };
-
+        delete send_values.doctor;
         if (data === undefined) {
           delete send_values.doctores_entidad;
           setSubmitting(true);
@@ -122,14 +151,15 @@ export default function EntityForm(props) {
               });
             });
         } else {
+          let doctores = send_values.doctores_entidad;
+          delete send_values.doctores_entidad;
           setSubmitting(true);
           api_entities
             .put("/", send_values)
             .then(function (response) {
-              /**
-               api_entities
+              api_entities
                 .put(`${data.cod_entidad}/doctores`, {
-                  doctores_entidad: doctores_entidad,
+                  doctores_entidad: doctores,
                 })
                 .then(function (response) {
                   setSubmitting(false);
@@ -138,16 +168,13 @@ export default function EntityForm(props) {
                   });
                 })
                 .catch(function (error) {
-                  console.log(error, "second put");
                   setSubmitting(false);
                   enqueueSnackbar(give_error_message(error.response), {
                     variant: "error",
                   });
                 });
-               */
             })
             .catch(function (error) {
-              console.log(error, "first put");
               setSubmitting(false);
               enqueueSnackbar(give_error_message(error.response), {
                 variant: "error",
@@ -375,7 +402,7 @@ export default function EntityForm(props) {
                   data.Entidad_doctors.length !== 0 &&
                   doctors.length !== 0 && (
                     <div>
-                      <Grid item container justify="center" spacing={3}>
+                      <Grid item container spacing={3}>
                         <Grid item xs={6}>
                           <TextField
                             fullWidth
@@ -388,8 +415,29 @@ export default function EntityForm(props) {
                             }
                           />
                         </Grid>
-                        <Grid item xs={6}>
-                          Lmao
+                        <Grid item xs={5}>
+                          <Field
+                            name="doctor"
+                            label="Doctor"
+                            component={AutocompleteForm}
+                            options={doctors}
+                            getOptionLabel={(option) =>
+                              `${option.nombres_doctor} ${option.apellidos_doctor}`
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <IconButton
+                            onClick={() =>
+                              add_doctor(
+                                values.doctor,
+                                values.doctores_entidad,
+                                setFieldValue
+                              )
+                            }
+                          >
+                            <AddIcon></AddIcon>
+                          </IconButton>
                         </Grid>
                       </Grid>
 
@@ -409,8 +457,6 @@ export default function EntityForm(props) {
                       </Grid>
                     </div>
                   )}
-
-                <pre>{JSON.stringify(values, null, 2)}</pre>
               </CardContent>
               <CardActions disableSpacing>
                 <Grid

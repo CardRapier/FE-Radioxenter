@@ -1,5 +1,3 @@
-import CheckboxMUI from "@material-ui/core/Checkbox";
-import update from "immutability-helper";
 import React from "react";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
@@ -24,9 +22,7 @@ const useRowStyles = makeStyles((theme) => ({
 }));
 
 export default function UserRow(props) {
-  let { row, handleChange, doctors } = props;
-
-  const [open, setOpen] = React.useState(false);
+  let { row, doctors } = props;
   const classes = useRowStyles();
 
   return (
@@ -45,9 +41,10 @@ export default function UserRow(props) {
             type="checkbox"
             color="primary"
             name={`doctores_entidad.${doctors.findIndex(
-              (e) => e.cod_doctor
+              (e) => e.cod_doctor === row.cod_doctor
             )}.activo`}
           />
+          {doctors.findIndex((e) => e.cod_doctor === row.cod_doctor)}
         </TableCell>
       </TableRow>
       <TableRow>

@@ -11,21 +11,10 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow";
 import DoctorEntityRow from "./DoctorEntityRow";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles((theme) => ({
-  table: {
-    minWidth: 700,
-  },
-  smallTableCell: {
-    width: 50,
-  },
-}));
 
 export default function UserDatatable(props) {
-  const classes = useStyles();
   const [page, setPage] = React.useState(0);
-  let { doctors, data, query, handleChange } = props;
+  let { doctors, query, handleChange } = props;
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, doctors.length - page * rowsPerPage);

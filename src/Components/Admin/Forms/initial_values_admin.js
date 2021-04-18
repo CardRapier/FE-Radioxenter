@@ -16,6 +16,7 @@ export const entity_initial_values = {
   correo_contacto: "",
   cod_forma_de_pago_entidad: 1,
   cod_tipo_facturacion: 1,
+  doctor: {},
   doctores_entidad: [],
 };
 
