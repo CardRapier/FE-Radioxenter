@@ -432,7 +432,7 @@ export default function ReceiptCreate(props) {
                       <Field
                         component={TextFormField}
                         required
-                        label="Tipo de documento"
+                        label="Forma de pago"
                         name="forma_de_pago"
                         fullWidth
                         select

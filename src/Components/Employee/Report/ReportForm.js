@@ -16,6 +16,7 @@ import { KeyboardDatePicker } from "formik-material-ui-pickers";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import moment from "moment";
+import { report_schema } from "../Forms/validation_schemas_employee";
 
 export const ReportForm = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -23,11 +24,19 @@ export const ReportForm = () => {
   return (
     <Formik
       enableReinitialize
+      validationSchema={report_schema}
       initialValues={{ fecha_inicial: moment(), fecha_final: moment() }}
       onSubmit={(values, { setSubmitting, resetForm }) => {
+        let send_values = { ...values };
+        send_values.fecha_inicial = moment(send_values.fecha_inicial).format(
+          "yyyy-MM-DD"
+        );
+        send_values.fecha_final = moment(send_values.fecha_final).format(
+          "yyyy-MM-DD"
+        );
         setSubmitting(true);
         api_report
-          .post("generarReporte", values)
+          .post("generarReporte", send_values)
           .then((response) => {
             setSubmitting(false);
             enqueueSnackbar("Se ha actualizado exitosamente!", {
@@ -60,7 +69,7 @@ export const ReportForm = () => {
                         fullWidth
                         format="DD/MM/yyyy"
                         component={KeyboardDatePicker}
-                        label="label"
+                        label="Fecha inicial"
                         name="fecha_inicial"
                       />
                     </Grid>
@@ -69,7 +78,7 @@ export const ReportForm = () => {
                         fullWidth
                         format="DD/MM/yyyy"
                         component={KeyboardDatePicker}
-                        label="label"
+                        label="Fecha final"
                         name="fecha_final"
                       />
                     </Grid>

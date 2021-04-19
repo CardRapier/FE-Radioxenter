@@ -24,3 +24,15 @@ export const tutor_schema = yup.object({
     .required("Campo requerido")
     .positive("Debe ser positivo"),
 });
+
+export const report_schema = yup.object({
+  fecha_inicial: yup.date(),
+  fecha_final: yup
+    .date()
+    .when(
+      "fecha_inicial",
+      (fecha_inicial, yup) =>
+        fecha_inicial &&
+        yup.min(fecha_inicial, "La fecha final debe ser después de la inicial")
+    ),
+});
