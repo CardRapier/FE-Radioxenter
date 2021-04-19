@@ -1,5 +1,4 @@
 import {
-  api_cities,
   api_departments,
   api_sex,
   api_type_document,
@@ -56,14 +55,6 @@ export default function UserShow() {
         data: {
           ...prevState.data,
           type_document: res.data.respuesta,
-        },
-      }));
-    });
-    api_cities.get("/").then((res) => {
-      setData((prevState) => ({
-        data: {
-          ...prevState.data,
-          cities: res.data.respuesta,
         },
       }));
     });

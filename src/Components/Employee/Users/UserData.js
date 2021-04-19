@@ -78,7 +78,7 @@ export default function UserData(props) {
               disabled
               id="component-cities"
               value={
-                fetched_data.data.cities.find(
+                city_department.Ciudads.find(
                   (element) => element.cod_ciudad === row.cod_ciudad
                 ).nom_ciudad
               }
@@ -117,7 +117,7 @@ export default function UserData(props) {
             <Input
               disabled
               id="component-departments"
-              value={city_department.Departamento.nom_departamento}
+              value={city_department.nom_departamento}
             />
           </Grid>
         </Grid>

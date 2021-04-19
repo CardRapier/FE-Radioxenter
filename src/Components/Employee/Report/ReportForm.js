@@ -17,9 +17,11 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import moment from "moment";
 import { report_schema } from "../Forms/validation_schemas_employee";
+import { Button } from "@material-ui/core";
 
 export const ReportForm = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const [excel, setExcel] = React.useState("");
 
   return (
     <Formik
@@ -39,6 +41,7 @@ export const ReportForm = () => {
           .post("generarReporte", send_values)
           .then((response) => {
             setSubmitting(false);
+            setExcel(response.data);
             enqueueSnackbar("Se ha actualizado exitosamente!", {
               variant: "success",
             });
@@ -87,6 +90,22 @@ export const ReportForm = () => {
 
                 <CardActions disableSpacing>
                   <Grid item container justify="flex-end" spacing={3}>
+                    {excel !== "" && (
+                      <Grid item>
+                        <Button
+                          color="primary"
+                          size="small"
+                          variant="contained"
+                          href={`${
+                            process.env.REACT_APP_API_ROUTE
+                          }/files/xlsx/${excel.split("/").pop()}`}
+                          target="_blank"
+                        >
+                          Ver Reporte
+                        </Button>
+                      </Grid>
+                    )}
+
                     <FormButtons
                       to={"/Empleado/"}
                       data="Guardar"

@@ -234,6 +234,10 @@ export default function ReceiptCreate(props) {
     return doctors_agreements;
   };
 
+  const get_doctors = async () => {
+    api_doctors.get("/").then((res) => setDoctors(res.data.respuesta));
+  };
+
   React.useEffect(
     () => {
       publicIp.v4().then((e) => setIpv4(e));
@@ -576,6 +580,15 @@ export default function ReceiptCreate(props) {
                   justify="flex-end"
                   className={classes.buttons}
                 >
+                  <Button
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => get_doctors()}
+                  >
+                    Recargar Doctores
+                  </Button>
                   <Button
                     component={Link}
                     to={"/Empleado/"}

@@ -35,13 +35,11 @@ export default function UserRow(props) {
   let city_department = undefined;
   if (
     fetched_data.data !== undefined &&
-    fetched_data.data.hasOwnProperty("departments") &&
-    fetched_data.data.hasOwnProperty("cities")
+    fetched_data.data.hasOwnProperty("departments")
   ) {
-    city_department = fetched_data.data.cities.find(
-      (element) => element.cod_ciudad === row.cod_ciudad
+    city_department = fetched_data.data.departments.find((e) =>
+      e.Ciudads.find((element) => element.cod_ciudad === row.cod_ciudad)
     );
-
     row.cod_departamento = city_department.cod_departamento;
   }
   const [open, setOpen] = React.useState(false);
@@ -74,11 +72,13 @@ export default function UserRow(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
-              <UserData
-                row={row}
-                fetched_data={fetched_data}
-                city_department={city_department}
-              />
+              {city_department !== undefined && (
+                <UserData
+                  row={row}
+                  fetched_data={fetched_data}
+                  city_department={city_department}
+                />
+              )}
             </Box>
             <Divider />
             <Box margin={1}>
