@@ -110,13 +110,7 @@ export default function EntityForm(props) {
               cod_forma_de_pago_entidad: data.cod_forma_de_pago_entidad,
               cod_tipo_facturacion: data.cod_tipo_facturacion,
               cod_entidad: data.cod_entidad,
-              doctor: data.Entidad_doctors.map((e) => {
-                let doctor_aux = doctors.find(
-                  (el) => el.cod_doctor === e.cod_doctor
-                );
-                doctor_aux.activo = e.activo;
-                return doctor_aux;
-              })[0],
+              doctor: doctors[0],
               doctores_entidad: data.Entidad_doctors.map((e) => {
                 let doctor_aux = doctors.find(
                   (el) => el.cod_doctor === e.cod_doctor
@@ -398,65 +392,61 @@ export default function EntityForm(props) {
                   </Grid>
                 </Grid>
 
-                {data !== undefined &&
-                  data.Entidad_doctors.length !== 0 &&
-                  doctors.length !== 0 && (
-                    <div>
-                      <Grid item container spacing={3}>
-                        <Grid item xs={6}>
-                          <TextField
-                            fullWidth
-                            label="Filtro"
-                            value={query}
-                            size="small"
-                            type="search"
-                            onChange={(event, index, value) =>
-                              setQuery(event.target.value)
-                            }
-                          />
-                        </Grid>
-                        <Grid item xs={5}>
-                          <Field
-                            name="doctor"
-                            label="Doctor"
-                            component={AutocompleteForm}
-                            options={doctors}
-                            getOptionLabel={(option) =>
-                              `${option.nombres_doctor} ${option.apellidos_doctor}`
-                            }
-                          />
-                        </Grid>
-                        <Grid item xs={1}>
-                          <IconButton
-                            onClick={() =>
-                              add_doctor(
-                                values.doctor,
-                                values.doctores_entidad,
-                                setFieldValue
-                              )
-                            }
-                          >
-                            <AddIcon></AddIcon>
-                          </IconButton>
-                        </Grid>
+                {data !== undefined && doctors.length !== 0 && (
+                  <div>
+                    <Grid item container spacing={3}>
+                      <Grid item xs={6}>
+                        <TextField
+                          fullWidth
+                          label="Filtro"
+                          value={query}
+                          size="small"
+                          type="search"
+                          onChange={(event) => setQuery(event.target.value)}
+                        />
                       </Grid>
+                      <Grid item xs={5}>
+                        <Field
+                          name="doctor"
+                          label="Doctor"
+                          component={AutocompleteForm}
+                          options={doctors}
+                          getOptionLabel={(option) =>
+                            `${option.nombres_doctor} ${option.apellidos_doctor}`
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={1}>
+                        <IconButton
+                          onClick={() =>
+                            add_doctor(
+                              values.doctor,
+                              values.doctores_entidad,
+                              setFieldValue
+                            )
+                          }
+                        >
+                          <AddIcon></AddIcon>
+                        </IconButton>
+                      </Grid>
+                    </Grid>
 
-                      <Grid
-                        item
-                        container
-                        justify="center"
-                        className={classes.services}
-                      >
-                        <Grid item xs={12}>
-                          <DoctorEntityTable
-                            doctors={values.doctores_entidad}
-                            query={query}
-                            handleChange={setFieldValue}
-                          />
-                        </Grid>
+                    <Grid
+                      item
+                      container
+                      justify="center"
+                      className={classes.services}
+                    >
+                      <Grid item xs={12}>
+                        <DoctorEntityTable
+                          doctors={values.doctores_entidad}
+                          query={query}
+                          handleChange={setFieldValue}
+                        />
                       </Grid>
-                    </div>
-                  )}
+                    </Grid>
+                  </div>
+                )}
               </CardContent>
               <CardActions disableSpacing>
                 <Grid

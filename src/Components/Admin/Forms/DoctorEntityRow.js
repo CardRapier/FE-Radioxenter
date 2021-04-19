@@ -44,7 +44,6 @@ export default function UserRow(props) {
               (e) => e.cod_doctor === row.cod_doctor
             )}.activo`}
           />
-          {doctors.findIndex((e) => e.cod_doctor === row.cod_doctor)}
         </TableCell>
       </TableRow>
       <TableRow>

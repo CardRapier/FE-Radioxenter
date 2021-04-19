@@ -14,6 +14,7 @@ import React from "react";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import { useTheme } from "@material-ui/core/styles";
+import AssessmentIcon from "@material-ui/icons/Assessment";
 
 export default function EmployeeDrawer(props) {
   const classes = props.classes;
@@ -67,6 +68,18 @@ export default function EmployeeDrawer(props) {
               <ClearAllIcon />
             </ListItemIcon>
             <ListItemText primary={"Procesos"} />
+          </ListItem>
+
+          <ListItem
+            button
+            component={Link}
+            key={"Reporte"}
+            to="/Empleado/Reporte"
+          >
+            <ListItemIcon>
+              <AssessmentIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Reporte"} />
           </ListItem>
 
           {localStorage.getItem("redirect") === "/Administrador" ? (
