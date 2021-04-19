@@ -137,3 +137,8 @@ export const api_consents = axios.create({
   baseURL: process.env.REACT_APP_API_ROUTE + "/api/consentimientos/",
   headers: headers,
 });
+
+export const api_report = axios.create({
+  baseURL: process.env.REACT_APP_API_ROUTE + "/api/transacciones/",
+  headers: headers,
+});

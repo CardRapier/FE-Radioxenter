@@ -38,6 +38,7 @@ export const receipt_initial_values = {
   servicios: [],
   consentimiento: {},
   paga_cliente: false,
+  forma_de_pago: "Efectivo",
 };
 
 export const satisfaction_initial_values = {

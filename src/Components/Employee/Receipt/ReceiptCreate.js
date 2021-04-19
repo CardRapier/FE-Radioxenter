@@ -22,7 +22,8 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/Button";
-import { InputLabel } from "@material-ui/core";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
 import { KeyboardDatePicker } from "formik-material-ui-pickers";
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -35,6 +36,7 @@ import publicIp from "public-ip";
 import { receipt_initial_values } from "../Forms/initial_values_employee";
 import { useSnackbar } from "notistack";
 import update from "immutability-helper";
+import TextFormField from "../../Form/TextFormField";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -417,7 +419,7 @@ export default function ReceiptCreate(props) {
                     </Grid>
                   </Grid>
                   <Grid item container spacing={3}>
-                    <Grid item xs={12}>
+                    <Grid item xs={6}>
                       <MuiTextField
                         value={motive}
                         onChange={handleChange}
@@ -425,6 +427,19 @@ export default function ReceiptCreate(props) {
                         label="Motivo del procedimiento"
                         multiline
                       />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Field
+                        component={TextFormField}
+                        required
+                        label="Tipo de documento"
+                        name="forma_de_pago"
+                        fullWidth
+                        select
+                      >
+                        <MenuItem value="Efectivo">Efectivo</MenuItem>
+                        <MenuItem value="Tarjeta">Tarjeta</MenuItem>
+                      </Field>
                     </Grid>
                   </Grid>
                   <Grid item container spacing={3}>

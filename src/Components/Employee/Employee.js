@@ -24,6 +24,7 @@ import auth from "../Auth/auth";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import socketIOClient from "socket.io-client";
+import { ReportForm } from "./Report/ReportForm";
 
 const drawerWidth = 150;
 
@@ -215,6 +216,7 @@ export default function Employee() {
               path="/Empleado/Consentimiento"
               component={ConsentForm}
             />
+            <Route exact path="/Empleado/Reporte" component={ReportForm} />
           </Grid>
 
           <Grid item xs={false} sm={1} md={3}></Grid>
