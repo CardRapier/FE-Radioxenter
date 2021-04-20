@@ -12,7 +12,6 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow";
 import { makeStyles } from "@material-ui/core/styles";
-import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -69,10 +68,7 @@ export default function ReceiptTable(props) {
                       .includes(filter.document.toLowerCase())
                   )
                   .filter((row) =>
-                    moment(row.fecha_factura)
-                      .format("DD-MM-YYYY HH:mm:ss")
-                      .toString()
-                      .includes(filter.date)
+                    row.fecha_factura.toString().includes(filter.date)
                   )
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : receipts

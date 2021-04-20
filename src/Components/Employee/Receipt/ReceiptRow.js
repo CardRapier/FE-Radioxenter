@@ -7,7 +7,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import { give_error_message } from "../../../utils";
 import { makeStyles } from "@material-ui/core/styles";
-import moment from "moment";
 import { useSnackbar } from "notistack";
 
 const useRowStyles = makeStyles((theme) => ({
@@ -72,9 +71,7 @@ export default function ReceiptRow(props) {
           {row.numero_factura}
         </TableCell>
         <TableCell align="center">{row.documento_usuario}</TableCell>
-        <TableCell align="center">
-          {moment(row.fecha_factura).format("DD-MM-YYYY HH:mm:ss")}
-        </TableCell>
+        <TableCell align="center">{row.fecha_factura}</TableCell>
         <TableCell align="center">{row.resumen_factura}</TableCell>
         <TableCell align="center">{row.valor_total_factura}</TableCell>
         <TableCell align="center">

@@ -4,9 +4,11 @@ import BackDropLoading from "../../BackDropLoading";
 import Grid from "@material-ui/core/Grid";
 import ReceiptTable from "./ReceiptTable";
 import TextField from "@material-ui/core/TextField";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import { api_receipts } from "../../../api_app";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   titlebutton: {
@@ -33,7 +35,14 @@ export default function Receipts() {
     api_receipts
       .get("/")
       .then((res) => {
-        setReceipts(res.data.respuesta);
+        setReceipts(
+          res.data.respuesta.map((e) => ({
+            ...e,
+            fecha_factura: moment(e.fecha_factura).format(
+              "DD-MM-YYYY HH:mm:ss"
+            ),
+          }))
+        );
         setLoaded(true);
       })
       .catch((error) => {
@@ -90,20 +99,25 @@ export default function Receipts() {
             />
           </Grid>
           <Grid item xs={5}>
-            <TextField
-              id="date"
-              label="Fecha"
-              variant="outlined"
-              size="small"
-              type="search"
-              value={query.date}
-              onChange={(event) =>
-                setQuery((query) => ({
-                  ...query,
-                  date: event.target.value,
-                }))
-              }
-            />
+            <Tooltip
+              placement="top"
+              title="El número ingresado sera comparado con día, mes, año y hora, si se desea una fecha en específico siga el formato: DD-MM-YYYY, ejemplo: 21-02-2021"
+            >
+              <TextField
+                id="date"
+                label="Fecha"
+                variant="outlined"
+                size="small"
+                type="search"
+                value={query.date}
+                onChange={(event) =>
+                  setQuery((query) => ({
+                    ...query,
+                    date: event.target.value,
+                  }))
+                }
+              />
+            </Tooltip>
           </Grid>
         </Grid>
         <Grid container item spacing={4} justify="center" alignItems="center">
