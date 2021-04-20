@@ -50,7 +50,6 @@ export default function DoctorForm(props) {
       setData(props.location.data);
     }
   }, [props.location]);
-  console.log(data);
   return (
     <Formik
       enableReinitialize

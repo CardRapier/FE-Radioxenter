@@ -92,7 +92,7 @@ export default function EntityForm(props) {
       initialValues={
         data === undefined
           ? entity_initial_values
-          : data.Entidad_doctors !== undefined && doctors.length !== 0
+          : doctors.length !== 0
           ? {
               razon_social_entidad: data.razon_social_entidad,
               nombre_comercial_entidad: data.nombre_comercial_entidad,
@@ -111,15 +111,37 @@ export default function EntityForm(props) {
               cod_tipo_facturacion: data.cod_tipo_facturacion,
               cod_entidad: data.cod_entidad,
               doctor: doctors[0],
-              doctores_entidad: data.Entidad_doctors.map((e) => {
-                let doctor_aux = doctors.find(
-                  (el) => el.cod_doctor === e.cod_doctor
-                );
-                doctor_aux.activo = e.activo;
-                return doctor_aux;
-              }),
+              doctores_entidad:
+                data.Entidad_doctors.length !== 0
+                  ? data.Entidad_doctors.map((e) => {
+                      let doctor_aux = doctors.find(
+                        (el) => el.cod_doctor === e.cod_doctor
+                      );
+                      doctor_aux.activo = e.activo;
+                      return doctor_aux;
+                    })
+                  : [],
             }
-          : entity_initial_values
+          : {
+              razon_social_entidad: data.razon_social_entidad,
+              nombre_comercial_entidad: data.nombre_comercial_entidad,
+              nit_entidad: data.nit_entidad,
+              direccion_entidad: data.direccion_entidad,
+              telefono_entidad: data.telefono_entidad,
+              nombre_representante: data.nombre_representante,
+              cedula_representante: data.cedula_representante,
+              telefono_representante: data.telefono_representante,
+              correo_representante: data.correo_representante,
+              nombre_contacto: data.nombre_contacto,
+              cedula_contacto: data.cedula_contacto,
+              telefono_contacto: data.telefono_contacto,
+              correo_contacto: data.correo_contacto,
+              cod_forma_de_pago_entidad: data.cod_forma_de_pago_entidad,
+              cod_tipo_facturacion: data.cod_tipo_facturacion,
+              cod_entidad: data.cod_entidad,
+              doctor: {},
+              doctores_entidad: [],
+            }
       }
       onSubmit={(values, { setSubmitting, resetForm }) => {
         values.cedula_representante = `${values.cedula_representante}`;

@@ -283,6 +283,8 @@ export default function ReceiptCreate(props) {
               let petitionData = { ...values };
               let final_data = {
                 ...petitionData,
+                paga_cliente:
+                  values.entity.cod_entidad === 1 ? true : values.paga_cliente,
                 documento_usuario: `${data.documento_usuario}`,
                 valor_transaccion: evaluate_total_value(),
                 cod_entidad_doctor:
