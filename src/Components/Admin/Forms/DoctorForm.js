@@ -50,7 +50,7 @@ export default function DoctorForm(props) {
       setData(props.location.data);
     }
   }, [props.location]);
-
+  console.log(data);
   return (
     <Formik
       enableReinitialize
@@ -68,6 +68,9 @@ export default function DoctorForm(props) {
               cod_tipo_pref_entrega: data.cod_tipo_pref_entrega,
               correo_doctor: data.correo_doctor,
               cod_doctor: data.cod_doctor,
+              cod_ciudad: data.Ciudad.cod_ciudad,
+              cod_departamento: data.Ciudad.cod_departamento,
+              esParticular: data.esParticular,
             }
       }
       onSubmit={(values, { setSubmitting, resetForm }) => {
