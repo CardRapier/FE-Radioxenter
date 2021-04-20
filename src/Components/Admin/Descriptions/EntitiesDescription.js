@@ -21,7 +21,7 @@ export default function EntitiesDescription(props) {
 
   React.useEffect(() => {
     let filtered_data = [];
-    if (subdata.doctor_entity !== undefined) {
+    if (subdata !== undefined && subdata.doctor_entity !== undefined) {
       filtered_data = subdata.doctor_entity.filter(
         (element) => element.cod_entidad === row.cod_entidad
       );
