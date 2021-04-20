@@ -89,7 +89,7 @@ export default function ReceiptEntityForm(props) {
                   </ListItemIcon>
                   <ListItemText
                     id={`checkbox-list-label-${index}`}
-                    primary={`Transacción Numero ${value.numero_transaccion} de valor $${value.valor_transaccion} del ${value.fecha_transaccion}. `}
+                    primary={`Transacción Número ${value.numero_transaccion} de valor $${value.valor_transaccion} del ${value.fecha_transaccion}. `}
                     secondary={
                       <Typography
                         component="span"

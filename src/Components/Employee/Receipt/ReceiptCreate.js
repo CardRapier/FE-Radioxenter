@@ -22,21 +22,21 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/Button";
-import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import { KeyboardDatePicker } from "formik-material-ui-pickers";
+import MenuItem from "@material-ui/core/MenuItem";
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MuiTextField from "@material-ui/core/TextField";
 import React from "react";
 import ReceiptServiceTable from "./ReceiptServiceTable";
+import TextFormField from "../../Form/TextFormField";
 import { give_error_message } from "../../../utils";
 import { makeStyles } from "@material-ui/core/styles";
 import publicIp from "public-ip";
 import { receipt_initial_values } from "../Forms/initial_values_employee";
-import { useSnackbar } from "notistack";
 import update from "immutability-helper";
-import TextFormField from "../../Form/TextFormField";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -88,7 +88,8 @@ export default function ReceiptCreate(props) {
   };
 
   function add_service(service) {
-    if (service !== null) {
+    console.log(service);
+    if (service !== null && service !== undefined) {
       let service_aux = servicesSelected.filter(
         (element) => element.cod_servicio === service.cod_servicio
       );

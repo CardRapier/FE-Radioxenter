@@ -1,3 +1,4 @@
+import DoctorEntityRow from "./DoctorEntityRow";
 import { Grid } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
@@ -10,7 +11,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "../../TablePaginationActions";
 import TableRow from "@material-ui/core/TableRow";
-import DoctorEntityRow from "./DoctorEntityRow";
 
 export default function UserDatatable(props) {
   const [page, setPage] = React.useState(0);
@@ -43,7 +43,7 @@ export default function UserDatatable(props) {
             <TableRow>
               <TableCell key={"single-row"} colSpan={6}>
                 <Grid container justify="center" alignItems="center">
-                  No hay usuarios seleccionados
+                  No hay doctores seleccionados
                 </Grid>
               </TableCell>
             </TableRow>
