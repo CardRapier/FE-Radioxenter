@@ -23,6 +23,7 @@ export default function TransactionsRow(props) {
           {row.numero_transaccion}
         </TableCell>
         <TableCell align="center">{row.documento_usuario}</TableCell>
+        <TableCell align="center">{row.usuario}</TableCell>
         <TableCell align="center">{row.fecha_transaccion}</TableCell>
         <TableCell align="center">{row.valor_transaccion}</TableCell>
         <TableCell align="center">{`${doctor.nombres_doctor} ${doctor.apellidos_doctor}`}</TableCell>

@@ -72,6 +72,7 @@ export default function TransactionsEntity(props) {
             <TableRow>
               <TableCell align="center">Número</TableCell>
               <TableCell align="center">Documento</TableCell>
+              <TableCell align="center">Usuario</TableCell>
               <TableCell align="center">Fecha</TableCell>
               <TableCell align="center">Valor</TableCell>
               <TableCell align="center">Doctor</TableCell>
@@ -104,7 +105,7 @@ export default function TransactionsEntity(props) {
 
             {emptyRows > 0 && emptyRows !== 5 && (
               <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={4} />
+                <TableCell colSpan={6} />
               </TableRow>
             )}
           </TableBody>

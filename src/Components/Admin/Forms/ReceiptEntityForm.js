@@ -59,7 +59,7 @@ export default function ReceiptEntityForm(props) {
         />
         <CardContent>
           <List>
-            {transactionsSelected.length === 0 ? (
+            {subdata.length === 0 ? (
               <Grid container justify="center" alignItems="center">
                 <Typography variant="h6">
                   No hay transacción a facturar
@@ -91,25 +91,34 @@ export default function ReceiptEntityForm(props) {
                     id={`checkbox-list-label-${index}`}
                     primary={`Transacción Número ${value.numero_transaccion} de valor $${value.valor_transaccion} del ${value.fecha_transaccion}. `}
                     secondary={
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        color="textPrimary"
-                      >
-                        {`Doctor ${
-                          subdata.doctor_entity.find(
-                            (element) =>
-                              element.cod_entidad_doctor ===
-                              value.cod_entidad_doctor
-                          ).Doctor.nombres_doctor
-                        } ${
-                          subdata.doctor_entity.find(
-                            (element) =>
-                              element.cod_entidad_doctor ===
-                              value.cod_entidad_doctor
-                          ).Doctor.apellidos_doctor
-                        }`}
-                      </Typography>
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {`Doctor ${
+                            subdata.doctor_entity.find(
+                              (element) =>
+                                element.cod_entidad_doctor ===
+                                value.cod_entidad_doctor
+                            ).Doctor.nombres_doctor
+                          } ${
+                            subdata.doctor_entity.find(
+                              (element) =>
+                                element.cod_entidad_doctor ===
+                                value.cod_entidad_doctor
+                            ).Doctor.apellidos_doctor
+                          }`}
+                        </Typography>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {` - Usuario ${value.usuario}`}
+                        </Typography>
+                      </React.Fragment>
                     }
                   />
                 </ListItem>

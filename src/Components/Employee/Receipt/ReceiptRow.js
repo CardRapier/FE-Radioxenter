@@ -23,10 +23,14 @@ export default function ReceiptRow(props) {
   const { enqueueSnackbar } = useSnackbar();
   const [modalState, setModalState] = React.useState(false);
 
-  const create_nota_credito = async () => {
+  const create_nota_credito = async (motive) => {
     setLoaded(false);
     api_nota_credito
-      .post("/", { cod_factura: row.cod_factura })
+      .post("/", {
+        cod_factura: row.cod_factura,
+        motivo: motive,
+        cod_empleado: JSON.parse(localStorage.getItem("user")).cod_empleado,
+      })
       .then((res) => {
         fetch_receipts();
         setLoaded(true);

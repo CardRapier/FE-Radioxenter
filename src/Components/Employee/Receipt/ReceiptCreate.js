@@ -80,15 +80,20 @@ export default function ReceiptCreate(props) {
     let element = servicesSelected.findIndex(
       (x) => x.cod_servicio === service.cod_servicio
     );
-    setServicesSelected(
-      update(servicesSelected, {
-        [element]: { cantidad: { $set: value } },
-      })
-    );
+    if (value === "" || value > 0) {
+      setServicesSelected(
+        update(servicesSelected, {
+          [element]: { cantidad: { $set: value } },
+        })
+      );
+    } else {
+      enqueueSnackbar("La cantidad debe ser mayor a 0", {
+        variant: "error",
+      });
+    }
   };
 
   function add_service(service) {
-    console.log(service);
     if (service !== null && service !== undefined) {
       let service_aux = servicesSelected.filter(
         (element) => element.cod_servicio === service.cod_servicio
@@ -285,7 +290,9 @@ export default function ReceiptCreate(props) {
               let final_data = {
                 ...petitionData,
                 paga_cliente:
-                  values.entity.cod_entidad === 1 ? true : values.paga_cliente,
+                  values.entity !== null && values.entity.cod_entidad === 1
+                    ? true
+                    : values.paga_cliente,
                 documento_usuario: `${data.documento_usuario}`,
                 valor_transaccion: evaluate_total_value(),
                 cod_entidad_doctor:
@@ -303,7 +310,11 @@ export default function ReceiptCreate(props) {
               delete final_data.service;
 
               api_process
-                .post("agregarTransaccion", final_data)
+                .post("agregarTransaccion", {
+                  ...final_data,
+                  cod_empleado: JSON.parse(localStorage.getItem("user"))
+                    .cod_empleado,
+                })
                 .then(function (response) {
                   setSubmitting(false);
                   enqueueSnackbar(

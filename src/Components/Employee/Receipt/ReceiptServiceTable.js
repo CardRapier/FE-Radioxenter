@@ -48,6 +48,8 @@ export default function ReceiptServiceTable(props) {
                   <TableCell style={{ width: "20%" }} key={`${index}-quantity`}>
                     <TextField
                       label=""
+                      required
+                      type="number"
                       value={service.cantidad}
                       onChange={(e) => handleQuantity(service, e.target.value)}
                       size="small"
