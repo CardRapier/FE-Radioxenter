@@ -351,7 +351,6 @@ export default function DoctorForm(props) {
                     </Grid>
                   </Grid>
                 </Grid>
-                {JSON.stringify(values, null, 2)}
               </CardContent>
               <CardActions disableSpacing>
                 <Grid
