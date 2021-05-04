@@ -1,13 +1,12 @@
 import { Field, Form, Formik } from "formik";
 import { MenuItem, TextField } from "@material-ui/core";
-
 import {
   api_departments,
   api_doctors,
   api_type_document,
   api_type_shipment,
 } from "../../../api_app";
-import { Switch } from "formik-material-ui";
+
 import BackDropLoading from "../../BackDropLoading";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -15,15 +14,16 @@ import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 import Container from "@material-ui/core/Container";
 import FormButtons from "../../FormButtons";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
+import { Switch } from "formik-material-ui";
 import TextFormField from "../../Form/TextFormField";
 import { doctor_initial_values } from "./initial_values_admin";
 import { doctor_schema } from "./validation_schemas_admin";
 import { give_error_message } from "../../../utils";
 import { useSnackbar } from "notistack";
 import { useStyles } from "./styles";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 export default function DoctorForm(props) {
   const classes = useStyles();
@@ -50,6 +50,7 @@ export default function DoctorForm(props) {
       setData(props.location.data);
     }
   }, [props.location]);
+
   return (
     <Formik
       enableReinitialize
@@ -100,7 +101,7 @@ export default function DoctorForm(props) {
         } else {
           setSubmitting(true);
           api_doctors
-            .put("/", values)
+            .put("/", send_values)
             .then(function (response) {
               setSubmitting(false);
               enqueueSnackbar("Los cambios han sido exitosos!", {
