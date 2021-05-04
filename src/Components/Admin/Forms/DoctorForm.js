@@ -70,7 +70,7 @@ export default function DoctorForm(props) {
               cod_doctor: data.cod_doctor,
               cod_ciudad: data.Ciudad.cod_ciudad,
               cod_departamento: data.Ciudad.cod_departamento,
-              esParticular: data.esParticular,
+              esParticular: data.esParticular === "true",
             }
       }
       onSubmit={(values, { setSubmitting, resetForm }) => {
@@ -351,6 +351,7 @@ export default function DoctorForm(props) {
                     </Grid>
                   </Grid>
                 </Grid>
+                {JSON.stringify(values, null, 2)}
               </CardContent>
               <CardActions disableSpacing>
                 <Grid
