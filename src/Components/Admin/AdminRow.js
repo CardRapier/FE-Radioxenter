@@ -43,6 +43,7 @@ export default function AdminRow(props) {
   const [stateReceipts, setStateReceipts] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   let validated = false;
+
   React.useEffect(() => {
     if (data.title === "Entidades") {
       api_period_payments.get("/").then((res) => {
@@ -87,7 +88,6 @@ export default function AdminRow(props) {
   if (subdata !== undefined && subdata.hasOwnProperty("transactions")) {
     validated = true;
   }
-
   return (
     <React.Fragment>
       <TableRow className={classes.root}>

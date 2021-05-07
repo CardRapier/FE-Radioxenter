@@ -46,7 +46,6 @@ export default function ReceiptEntityForm(props) {
         .then((res) => setTransactionsSelected(res.data.respuesta));
     }
   }, [data]);
-
   return (
     <Grid container direction="column">
       <Container className="form-paper" elevation={3} component={Card} fixed>
@@ -59,7 +58,7 @@ export default function ReceiptEntityForm(props) {
         />
         <CardContent>
           <List>
-            {subdata.length === 0 ? (
+            {transactionsSelected.length === 0 ? (
               <Grid container justify="center" alignItems="center">
                 <Typography variant="h6">
                   No hay transacción a facturar
