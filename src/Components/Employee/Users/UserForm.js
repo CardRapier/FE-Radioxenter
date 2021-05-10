@@ -480,7 +480,6 @@ export default function UserForm(props) {
                 </CardActions>
               </Container>
             </Grid>
-            <pre>{typeof values.tiempo_inicial}</pre>
             <BackDropLoading isSubmitting={isSubmitting} />
             {renderRedirect(values)}
           </Form>
