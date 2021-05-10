@@ -458,6 +458,7 @@ export default function ReceiptCreate(props) {
                         <MenuItem value="Efectivo">Efectivo</MenuItem>
                         <MenuItem value="Tarjeta">Tarjeta</MenuItem>
                         <MenuItem value="Otro">Otro</MenuItem>
+                        <MenuItem value="Entidad">Entidad</MenuItem>
                       </Field>
                     </Grid>
                   </Grid>
