@@ -89,11 +89,12 @@ export default function UserForm(props) {
                 ...data,
                 esNuevo: false,
                 tutor: false,
+                tiempo_inicial: Date.now(),
               }
         }
         onSubmit={(values, { setSubmitting, resetForm }) => {
           values.documento_usuario = `${values.documento_usuario}`;
-          let send_values = { ...values };
+          let send_values = { ...values, tiempo_final: Date.now() };
           delete send_values.cod_departamento;
 
           if (data === undefined) {
@@ -479,7 +480,7 @@ export default function UserForm(props) {
                 </CardActions>
               </Container>
             </Grid>
-
+            <pre>{typeof values.tiempo_inicial}</pre>
             <BackDropLoading isSubmitting={isSubmitting} />
             {renderRedirect(values)}
           </Form>
