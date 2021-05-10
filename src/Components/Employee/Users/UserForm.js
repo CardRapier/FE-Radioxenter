@@ -137,6 +137,8 @@ export default function UserForm(props) {
             } else {
               delete send_values.esNuevo;
               delete send_values.tutor;
+              delete send_values.tiempo_inicial;
+              delete send_values.tiempo_final;
               setSubmitting(true);
               api_users
                 .put("/", send_values)
