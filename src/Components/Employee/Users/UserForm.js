@@ -84,7 +84,7 @@ export default function UserForm(props) {
         validationSchema={user_schema}
         initialValues={
           data === undefined
-            ? user_initial_values
+            ? { ...user_initial_values, tiempo_inicial: Date.now() }
             : {
                 ...data,
                 esNuevo: false,
