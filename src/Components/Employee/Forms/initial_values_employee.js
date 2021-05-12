@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export const user_initial_values = {
+export let user_initial_values = {
   nombres_usuario: "",
   apellidos_usuario: "",
   telefono_usuario: "",
@@ -18,7 +18,6 @@ export const user_initial_values = {
   cod_ciudad: 1,
   cod_tipo_pref_entrega: 1,
   esNuevo: true,
-  tiempo_inicial: moment(),
 };
 
 export const tutor_initial_values = {
