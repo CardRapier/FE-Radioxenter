@@ -84,17 +84,16 @@ export default function UserForm(props) {
         validationSchema={user_schema}
         initialValues={
           data === undefined
-            ? { ...user_initial_values, tiempo_inicial: Date.now() }
+            ? user_initial_values
             : {
                 ...data,
                 esNuevo: false,
                 tutor: false,
-                tiempo_inicial: Date.now(),
               }
         }
         onSubmit={(values, { setSubmitting, resetForm }) => {
           values.documento_usuario = `${values.documento_usuario}`;
-          let send_values = { ...values, tiempo_final: Date.now() };
+          let send_values = { ...values };
           delete send_values.cod_departamento;
 
           if (data === undefined) {
